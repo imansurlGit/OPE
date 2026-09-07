@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   OPE Agadez — Design Tokens (Variables de couleurs centralisées)
+   Modifier ces 3 valeurs pour changer le thème de toute l'application
+   ============================================================ */
+:root {
+  /* ── Palette de marque OPE ─────────────────────────── */
+  --color-primary:      #2f6084;   /* Bleu OPE principal              → ope-primary */
+  --color-primary-dark: #245070;   /* Bleu foncé (hover)               */
+  --color-primary-light:#4a80a8;   /* Bleu clair (accents légers)      */
+  --color-yellow:#ebd800;   /* Bleu clair (accents légers)      */
+  --color-orange:       #f15b29;   /* Orange OPE                       → ope-orange */
+  --color-orange-dark:  #d44d1f;   /* Orange foncé (hover)             */
+  --color-white:        #ffffff;   /* Blanc                            → ope-white  */
+
+  /* ── Dérivés fonctionnels (calculés à partir des 3 couleurs de marque) ── */
+  --color-bg:           #f4f8fb;   /* Fond global : bleu très clair    */
+  --color-bg-card:      #ffffff;   /* Fond des cartes                  */
+  --color-footer-bg:    #1b3a4f;   /* Footer : bleu très sombre        */
+  --color-text:         #1b3a4f;   /* Texte principal : bleu nuit      */
+  --color-text-muted:   #557a96;   /* Texte secondaire : bleu-gris     */
+  --color-border:       #d0e4f0;   /* Bordures : bleu très clair       */
+  --color-shadow:       rgba(47, 96, 132, 0.20);
+
+  /* ── Countdown ───────────────────────────────────────── */
+  --color-count-bg:     #e8f3f9;   /* Fond des cases : bleu pâle       */
+  --color-count-border: #c4dced;   /* Bordure des cases                */
+  --color-count-text:   #2f6084;   /* Chiffres : bleu OPE primaire     */
+  --color-count-label:  #557a96;   /* Labels JOURS/HEURES/MIN          */
+
+  /* ── Chat ────────────────────────────────────────────── */
+  --color-chat:         #27CAEB;   /* Bouton chat teal (fidèle maquette) */
+}
+
+/* ============================================================
+   Base globale
+   ============================================================ */
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply m-0 p-0;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  #root {
+    @apply min-h-screen flex flex-col;
+  }
+}
+
+/* ============================================================
+   Composants réutilisables
+   ============================================================ */
+@layer components {
+  /* Bouton primaire — bleu OPE */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-white
+           transition-all duration-200 hover:scale-105 active:scale-95;
+    background-color: var(--color-primary);
+    box-shadow: 0 4px 20px var(--color-shadow);
+  }
+  .btn-primary:hover {
+    background-color: var(--color-primary-dark);
+  }
+
+  /* Bouton secondaire — fond sombre, bordure blanche */
+  .btn-outline {
+    @apply inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold
+           border border-white/40 text-white
+           transition-all duration-200 active:scale-95;
+    background: rgba(27, 58, 79, 0.45);
+  }
+  .btn-outline:hover {
+    background: rgba(27, 58, 79, 0.65);
+  }
+
+  /* Badge pill */
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider;
+  }
+}
+
+/* ============================================================
+   Flip Card 3D — Animation au clic (Ultra-fluide & sans latence)
+   ============================================================ */
+.flip-card-scene {
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.flip-card-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 0.75rem;
+  transform: rotateY(0deg) translateZ(1px);
+}
+
+.flip-card-back-desktop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 230px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateY(180deg) translateZ(1px);
+  border-radius: 0.85rem;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.flip-card-inner.is-flipped .flip-card-back-desktop {
+  pointer-events: auto;
+}
+
+@keyframes popModalIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85) rotateY(25deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotateY(0deg);
+  }
+}
+
+.animate-pop-modal {
+  animation: popModalIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
