@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { contactService } from "../services";
 
 export default function Contact() {
     const { t } = useTranslation();
@@ -12,16 +13,21 @@ export default function Contact() {
 
     const [envoye, setEnvoye] = useState(false);
     const [chargement, setChargement] = useState(false);
+    const [erreur, setErreur] = useState<string | null>(null);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setChargement(true);
-        // Simulation d'envoi
-        setTimeout(() => {
-            setChargement(false);
+        setErreur(null);
+        try {
+            await contactService.envoyerMessage(formData);
             setEnvoye(true);
             setFormData({ nom: "", email: "", sujet: "", message: "" });
-        }, 800);
+        } catch (err: any) {
+            setErreur(err?.message || "Une erreur est survenue lors de l'envoi de votre message. Veuillez réessayer.");
+        } finally {
+            setChargement(false);
+        }
     };
 
     return (
@@ -30,10 +36,10 @@ export default function Contact() {
                 {/* ── En-tête de la page ────────────────────────────── */}
                 <div className="mb-12">
                     <h1 className="text-3xl sm:text-4xl font-extrabold text-ope-text mb-3 tracking-tight">
-                        {t("contact.title")}
+                        {t("contact.title", "Contactez-nous")}
                     </h1>
                     <p className="text-xs sm:text-sm md:text-base text-ope-text-muted leading-relaxed max-w-2xl">
-                        {t("contact.subtitle")}
+                        {t("contact.subtitle", "Une question sur le camp, un partenariat ou une candidature ? Notre équipe vous répond avec plaisir.")}
                     </p>
                 </div>
 
@@ -42,8 +48,17 @@ export default function Contact() {
                     {/* ── Colonne Gauche : Formulaire de Message (7/12) ── */}
                     <div className="lg:col-span-7 bg-ope-white rounded-3xl p-7 sm:p-10 border border-ope-border shadow-2xs">
                         <h2 className="text-lg sm:text-xl font-extrabold text-ope-text mb-6 tracking-tight">
-                            {t("contact.form_title")}
+                            {t("contact.form_title", "Envoyer un message")}
                         </h2>
+
+                        {erreur && (
+                            <div className="mb-5 p-4 rounded-2xl bg-[#FEF2F2] border border-[#FECACA] text-xs text-[#B91C1C] flex items-center gap-3">
+                                <svg className="w-5 h-5 shrink-0 text-[#DC2626]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>{erreur}</span>
+                            </div>
+                        )}
 
                         {envoye ? (
                             <div className="p-6 rounded-2xl bg-[#F0FDF4] border border-[#BBF7D0] text-center my-4">
@@ -52,8 +67,8 @@ export default function Contact() {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                     </svg>
                                 </div>
-                                <h3 className="text-base font-bold text-[#15803D] mb-1">{t("contact.success_title")}</h3>
-                                <p className="text-xs text-[#166534] mb-4">{t("contact.success_desc")}</p>
+                                <h3 className="text-base font-bold text-[#15803D] mb-1">{t("contact.success_title", "Message envoyé avec succès !")}</h3>
+                                <p className="text-xs text-[#166534] mb-4">{t("contact.success_desc", "Merci de nous avoir contactés. Notre équipe reviendra vers vous dans les plus brefs délais.")}</p>
                                 <button
                                     onClick={() => setEnvoye(false)}
                                     className="text-xs font-bold text-[#15803D] underline cursor-pointer"
@@ -63,33 +78,31 @@ export default function Contact() {
                             </div>
                         ) : (
                             <form onSubmit={handleSubmit} className="space-y-5">
-                                {/* Ligne 1 : Nom complet & Email professionnel */}
+                                {/* Ligne 1 : Nom complet & Email */}
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
                                         <label className="block text-[11px] font-bold text-ope-text mb-1.5">
-                                            {t("contact.full_name")}
+                                            {t("full_name", "Nom complet")}
                                         </label>
                                         <input
                                             type="text"
                                             required
-                                            placeholder="Votre nom"
                                             value={formData.nom}
                                             onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
-                                            className="w-full bg-[#FAF5EE] border border-[#E8DEC8] text-ope-text text-xs sm:text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-ope-primary placeholder-[#A89A88] transition-colors"
+                                            className="w-full bg-[#FAF5EE] border border-[#E8DEC8] text-ope-text text-xs sm:text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-ope-primary transition-colors"
                                         />
                                     </div>
 
                                     <div>
                                         <label className="block text-[11px] font-bold text-ope-text mb-1.5">
-                                            {t("contact.email")}
+                                            {t("email", "Adresse e-mail")}
                                         </label>
                                         <input
                                             type="email"
                                             required
-                                            placeholder="votre@email.com"
                                             value={formData.email}
                                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                            className="w-full bg-[#FAF5EE] border border-[#E8DEC8] text-ope-text text-xs sm:text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-ope-primary placeholder-[#A89A88] transition-colors"
+                                            className="w-full bg-[#FAF5EE] border border-[#E8DEC8] text-ope-text text-xs sm:text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-ope-primary transition-colors"
                                         />
                                     </div>
                                 </div>
@@ -97,30 +110,28 @@ export default function Contact() {
                                 {/* Ligne 2 : Sujet */}
                                 <div>
                                     <label className="block text-[11px] font-bold text-ope-text mb-1.5">
-                                        {t("contact.subject")}
+                                        {t("subject", "Sujet")}
                                     </label>
                                     <input
                                         type="text"
                                         required
-                                        placeholder={t("contact.subject_placeholder")}
                                         value={formData.sujet}
                                         onChange={(e) => setFormData({ ...formData, sujet: e.target.value })}
-                                        className="w-full bg-[#FAF5EE] border border-[#E8DEC8] text-ope-text text-xs sm:text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-ope-primary placeholder-[#A89A88] transition-colors"
+                                        className="w-full bg-[#FAF5EE] border border-[#E8DEC8] text-ope-text text-xs sm:text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-ope-primary transition-colors"
                                     />
                                 </div>
 
                                 {/* Ligne 3 : Message */}
                                 <div>
                                     <label className="block text-[11px] font-bold text-ope-text mb-1.5">
-                                        {t("contact.message")}
+                                        {t("message", "Message")}
                                     </label>
                                     <textarea
                                         required
                                         rows={5}
-                                        placeholder={t("contact.message_placeholder")}
                                         value={formData.message}
                                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                        className="w-full bg-[#FAF5EE] border border-[#E8DEC8] text-ope-text text-xs sm:text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-ope-primary placeholder-[#A89A88] resize-none transition-colors"
+                                        className="w-full bg-[#FAF5EE] border border-[#E8DEC8] text-ope-text text-xs sm:text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-ope-primary resize-none transition-colors"
                                     />
                                 </div>
 
@@ -131,10 +142,17 @@ export default function Contact() {
                                         disabled={chargement}
                                         className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-xs sm:text-sm font-bold text-white bg-ope-orange hover:bg-ope-orange/90 active:scale-95 shadow-sm transition-all cursor-pointer disabled:opacity-50"
                                     >
-                                        <span>{chargement ? t("contact.sending") : t("contact.submit")}</span>
-                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                        </svg>
+                                        <span>{chargement ? t("contact.sending", "Envoi en cours...") : t("contact.submit", "Envoyer le message")}</span>
+                                        {chargement ? (
+                                            <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                                            </svg>
+                                        ) : (
+                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                            </svg>
+                                        )}
                                     </button>
                                 </div>
                             </form>
@@ -146,7 +164,7 @@ export default function Contact() {
                         {/* Carte Coordonnées */}
                         <div className="bg-ope-white rounded-3xl p-7 sm:p-8 border border-ope-border shadow-2xs">
                             <h2 className="text-lg font-extrabold text-ope-text mb-6 tracking-tight">
-                                Coordonnées
+                                {t("contact.info_title", "Coordonnées")}
                             </h2>
 
                             <div className="space-y-6">
@@ -159,11 +177,9 @@ export default function Contact() {
                                         </svg>
                                     </div>
                                     <div>
-                                        <p className="text-[11px] text-ope-text-muted font-medium mb-0.5">Adresse</p>
+                                        <p className="text-[11px] text-ope-text-muted font-medium mb-0.5">{t("contact.address_label", "Siège & Bureaux")}</p>
                                         <p className="text-xs sm:text-sm font-bold text-ope-text leading-snug">
-                                            Centre d'Innovation, Quartier Administratif
-                                            <br />
-                                            Agadez, Niger
+                                            {t("contact.address_val", "Agadez, République du Niger")}
                                         </p>
                                     </div>
                                 </div>
@@ -178,29 +194,26 @@ export default function Contact() {
                                     <div>
                                         <p className="text-[11px] text-ope-text-muted font-medium mb-0.5">Email</p>
                                         <a
-                                            href="mailto:contact@ope-agadez.org"
+                                            href="mailto:contact@ope.ne"
                                             className="text-xs sm:text-sm font-bold text-ope-text hover:text-ope-orange transition-colors"
                                         >
-                                            contact@ope-agadez.org
+                                            contact@ope.ne
                                         </a>
                                     </div>
                                 </div>
 
-                                {/* Téléphone */}
+                                {/* Permanence & Horaires */}
                                 <div className="flex items-start gap-4">
                                     <div className="w-10 h-10 rounded-xl bg-[#FDE9E2] text-[#BD5338] flex items-center justify-center shrink-0">
                                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                     </div>
                                     <div>
-                                        <p className="text-[11px] text-ope-text-muted font-medium mb-0.5">Téléphone</p>
-                                        <a
-                                            href="tel:+22700000000"
-                                            className="text-xs sm:text-sm font-bold text-ope-text hover:text-ope-orange transition-colors"
-                                        >
-                                            +227 00 00 00 00
-                                        </a>
+                                        <p className="text-[11px] text-ope-text-muted font-medium mb-0.5">{t("contact.hours_label", "Horaires")}</p>
+                                        <p className="text-xs sm:text-sm font-bold text-ope-text leading-snug">
+                                            {t("contact.hours_val", "Lun - Ven : 08h00 - 17h30")}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -212,7 +225,7 @@ export default function Contact() {
                                 Réseaux Sociaux
                             </h2>
                             <p className="text-xs text-ope-text-muted leading-relaxed mb-6">
-                                Suivez nos actualités et l'évolution de nos talents.
+                                Suivez nos actualités et l'évolution des talents OPE.
                             </p>
 
                             {/* Icônes Réseaux Sociaux */}

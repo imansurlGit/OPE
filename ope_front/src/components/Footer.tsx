@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import logoOpe from "../assets/logo_ope.jpeg";
-import logoEvent from "../assets/logo_event.jpeg";
+import logoOpe from "../assets/logo_ope.png";
+import logoEvent from "../assets/logo_event.png";
 import logoIman from "../assets/logo_iman.png";
 
 export default function Footer() {
@@ -142,21 +142,21 @@ export default function Footer() {
                     </p>
 
                     {/* Logos partenaires & institutions en bas à droite */}
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center justify-center sm:justify-end gap-3 sm:gap-4 md:gap-5 flex-wrap shrink-0">
                         <img
                             src={logoOpe}
                             alt="OPE Logo"
-                            className="h-10 w-auto object-contain rounded-md shadow-xs bg-white p-0.5 border border-white/20"
+                            className="h-14 sm:h-20 md:h-28 lg:h-36 w-auto max-w-[140px] sm:max-w-none object-contain rounded-md shadow-xs transition-all duration-200"
                         />
                         <img
                             src={logoEvent}
                             alt="Camp National Citoyen"
-                            className="h-10 w-auto object-contain rounded-md shadow-xs bg-white p-0.5 border border-white/20"
+                            className="h-9 sm:h-12 md:h-16 lg:h-20 w-auto object-contain rounded-md shadow-xs transition-all duration-200"
                         />
                         <img
                             src={logoIman}
-                            alt="Camp National Citoyen"
-                            className="h-10 w-auto object-contain rounded-md shadow-xs bg-white p-0.5 border border-white/20"
+                            alt="Propulsé par e-IMAN"
+                            className="h-9 sm:h-12 md:h-16 lg:h-20 w-auto object-contain rounded-md shadow-xs transition-all duration-200"
                         />
                     </div>
                 </div>

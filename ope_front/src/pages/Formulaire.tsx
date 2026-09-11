@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import QRCode from "qrcode";
 import campNationalCitoyen from "../assets/camp_natio.png";
-import logoOpe from "../assets/logo_ope.jpeg";
-import logoEvent from "../assets/logo_event.jpeg";
+import api from "../services/api";
 
 export type DomainType = "STEAM" | "LP" | "MCC";
 
@@ -189,6 +188,8 @@ export default function Formulaire() {
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [rawFiles, setRawFiles] = useState<Record<string, File>>({});
 
   const age = calculateAge(data.dateNaissance);
   const isMinor = age !== null && age < 18;
@@ -373,39 +374,129 @@ export default function Formulaire() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateStep(5)) {
-      const randomId =
-        "CNCEIZ-2026-" + Math.floor(10000 + Math.random() * 90000);
-      setCandidateRef(randomId);
-
-      // Génération du QR Code contenant les données vérifiables du candidat
-      const qrPayload = JSON.stringify({
-        ref: randomId,
-        candidat: `${data.prenom} ${data.nom}`,
-        domaine: data.domaine,
-        house: data.houseVisee || data.domaine,
-        region: data.region,
-        ville: data.villeVillage,
-        date: new Date().toLocaleDateString("fr-FR"),
-        event: "CNCEIZ Agadez 2026",
-      });
+      setIsSubmitting(true);
+      setErrorMessage(null);
 
       try {
-        const url = await QRCode.toDataURL(qrPayload, {
-          width: 280,
-          margin: 1,
-          color: {
-            dark: "#193549",
-            light: "#FFFFFF",
-          },
-          errorCorrectionLevel: "M",
-        });
-        setQrCodeUrl(url);
-      } catch (err) {
-        console.error("Erreur génération QR code:", err);
-      }
+        const formData = new FormData();
 
-      setSubmitted(true);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+        // Étape 1 : Domaine
+        formData.append("domaine", data.domaine);
+
+        // Étape 2 : Identité
+        formData.append("nom", data.nom.trim());
+        formData.append("prenom", data.prenom.trim());
+        formData.append("date_naissance", data.dateNaissance);
+        formData.append("sexe", data.sexe);
+        formData.append("region", data.region);
+        formData.append("ville_village", data.villeVillage.trim());
+        formData.append("nationalite", data.nationalite.trim() || "Nigérienne");
+        formData.append("etablissement", data.etablissement.trim());
+        formData.append("classe", data.classe.trim());
+        formData.append("telephone_candidat", data.telephoneCandidat.trim());
+        formData.append("email", data.email.trim());
+        formData.append("telephone_tuteur", data.telephoneTuteur.trim());
+        formData.append("point_focal", data.pointFocal.trim());
+        formData.append("biographie", data.biographie.trim());
+
+        // Étape 3 : House & Projet
+        formData.append("house_visee", data.houseVisee);
+        formData.append("house_visee_autre", data.houseViseeAutre.trim());
+        formData.append("statut_projet", data.statutProjet);
+        formData.append("description_projet", data.descriptionProjet.trim());
+        formData.append("filiere", data.filiere.trim());
+        formData.append("moyenne_recente", data.moyenneRecente.trim());
+        formData.append("nom_recommandant", data.nomRecommandant.trim());
+        formData.append("tel_recommandant", data.telRecommandant.trim());
+        formData.append("frequence_engagement", data.frequenceEngagement);
+
+        // Étape 4 : Motivation & Numérique
+        formData.append("motivation", data.motivation.trim());
+        formData.append("acces_numerique", data.accesNumerique);
+
+        // Déclarations
+        formData.append("certification", String(data.certification));
+        formData.append("confirmation_parent", String(data.confirmationParent));
+
+        // Statut par défaut 'admis'
+        formData.append("statut", "admis");
+
+        // Fichiers binaires
+        if (rawFiles.photoIdentite) {
+          formData.append("photo_identite", rawFiles.photoIdentite);
+        }
+        if (rawFiles.pieceIdentite) {
+          formData.append("piece_identite", rawFiles.pieceIdentite);
+        }
+        if (rawFiles.bulletinsScolaires) {
+          formData.append("bulletins_scolaires", rawFiles.bulletinsScolaires);
+        }
+        if (rawFiles.autorisationParentale) {
+          formData.append("autorisation_parentale", rawFiles.autorisationParentale);
+        }
+        if (rawFiles.preuveProjet) {
+          formData.append("preuve_projet", rawFiles.preuveProjet);
+        }
+        if (rawFiles.lettreRecommandation) {
+          formData.append("lettre_recommandation", rawFiles.lettreRecommandation);
+        }
+
+        const saved = await api.post<{
+          id: number;
+          reference: string;
+          statut: string;
+          [key: string]: any;
+        }>("candidatures/", formData, { requiresAuth: false });
+
+        const finalRef = saved?.reference || "CNCEIZ-2026-" + Math.floor(10000 + Math.random() * 90000);
+        setCandidateRef(finalRef);
+
+        // Génération du QR Code contenant les données vérifiables du candidat
+        const qrPayload = JSON.stringify({
+          ref: finalRef,
+          candidat: `${data.prenom} ${data.nom}`,
+          domaine: data.domaine,
+          house: data.houseVisee || data.domaine,
+          region: data.region,
+          ville: data.villeVillage,
+          statut: saved?.statut || "admis",
+          date: new Date().toLocaleDateString("fr-FR"),
+          event: "CNCEIZ Agadez 2026",
+        });
+
+        try {
+          const url = await QRCode.toDataURL(qrPayload, {
+            width: 280,
+            margin: 1,
+            color: {
+              dark: "#193549",
+              light: "#FFFFFF",
+            },
+            errorCorrectionLevel: "M",
+          });
+          setQrCodeUrl(url);
+        } catch (qrErr) {
+          console.error("Erreur génération QR code:", qrErr);
+        }
+
+        setSubmitted(true);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } catch (err: any) {
+        console.error("Erreur lors de la soumission de la candidature :", err);
+        const errorDetail =
+          err?.data?.detail ||
+          err?.data?.message ||
+          (err?.data && typeof err.data === "object"
+            ? Object.entries(err.data)
+                .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(", ") : v}`)
+                .join(" | ")
+            : null) ||
+          "Une erreur est survenue lors de l'enregistrement de votre candidature. Veuillez vérifier les informations saisies et réessayer.";
+        setErrorMessage(errorDetail);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -423,6 +514,8 @@ export default function Formulaire() {
       e.target.value = "";
       return;
     }
+
+    setRawFiles((prev) => ({ ...prev, [field]: file }));
 
     setFieldErrors((prev) => {
       const next = { ...prev };
@@ -874,7 +967,7 @@ export default function Formulaire() {
                       onChange={(e) =>
                         updateField("nom", e.target.value.toUpperCase())
                       }
-                      placeholder="Ex: MAHAMAN"
+                      placeholder="Nom de famille"
                       className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none transition-colors ${
                         fieldErrors.nom
                           ? "border-red-500 bg-red-50/20 focus:border-red-500 focus:ring-1 focus:ring-red-500"
@@ -908,7 +1001,7 @@ export default function Formulaire() {
                       required
                       value={data.prenom}
                       onChange={(e) => updateField("prenom", e.target.value)}
-                      placeholder="Ex: Ibrahim"
+                      placeholder="Prénom(s)"
                       className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none transition-colors ${
                         fieldErrors.prenom
                           ? "border-red-500 bg-red-50/20 focus:border-red-500 focus:ring-1 focus:ring-red-500"
@@ -1167,7 +1260,7 @@ export default function Formulaire() {
                       onChange={(e) =>
                         updateField("telephoneCandidat", e.target.value)
                       }
-                      placeholder="Ex: +227 90 00 00 00"
+                      placeholder="+227 XX XX XX XX"
                       className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none transition-colors ${
                         fieldErrors.telephoneCandidat
                           ? "border-red-500 bg-red-50/20 focus:border-red-500 focus:ring-1 focus:ring-red-500"
@@ -1201,7 +1294,7 @@ export default function Formulaire() {
                       required
                       value={data.email}
                       onChange={(e) => updateField("email", e.target.value)}
-                      placeholder="candidat@email.com"
+                      placeholder="exemple@domaine.com"
                       className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none transition-colors ${
                         fieldErrors.email
                           ? "border-red-500 bg-red-50/20 focus:border-red-500 focus:ring-1 focus:ring-red-500"
@@ -1245,7 +1338,7 @@ export default function Formulaire() {
                       onChange={(e) =>
                         updateField("telephoneTuteur", e.target.value)
                       }
-                      placeholder="Ex: +227 96 00 00 00"
+                      placeholder="+227 XX XX XX XX"
                       className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none transition-colors ${
                         fieldErrors.telephoneTuteur
                           ? "border-red-500 bg-red-50/20 focus:border-red-500 focus:ring-1 focus:ring-red-500"
@@ -2501,10 +2594,25 @@ export default function Formulaire() {
             ) : (
               <button
                 type="button"
+                disabled={isSubmitting}
                 onClick={handleSubmit}
-                className="px-6 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-ope-orange hover:bg-ope-orange-dark active:scale-95 transition-all shadow-lg shadow-ope-orange/40 animate-pulse cursor-pointer"
+                className={`px-6 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white transition-all shadow-lg flex items-center justify-center gap-2 ${
+                  isSubmitting
+                    ? "bg-ope-orange/70 cursor-not-allowed"
+                    : "bg-ope-orange hover:bg-ope-orange-dark active:scale-95 shadow-ope-orange/40 animate-pulse cursor-pointer"
+                }`}
               >
-                {t("form.submit")}
+                {isSubmitting ? (
+                  <>
+                    <svg className="w-4 h-4 animate-spin shrink-0" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                    </svg>
+                    <span>Envoi en cours...</span>
+                  </>
+                ) : (
+                  t("form.submit")
+                )}
               </button>
             )}
           </div>

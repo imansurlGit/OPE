@@ -28,7 +28,7 @@ class Candidature(models.Model):
     ]
 
     # Référence unique générée
-    reference = models.CharField(max_length=50, unique=True, verbose_name="N° Dossier")
+    reference = models.CharField(max_length=50, unique=True, verbose_name="N° Dossier", blank=True)
 
     # Étape 1 : Domaine
     domaine = models.CharField(max_length=10, choices=DOMAINE_CHOICES, verbose_name="Domaine / House")
@@ -65,8 +65,8 @@ class Candidature(models.Model):
     acces_numerique = models.CharField(max_length=100, default="Oui personnellement", verbose_name="Accès numérique")
 
     # Étape 5 : Pièces jointes
-    photo_identite = models.ImageField(upload_to="candidatures/photos/", verbose_name="Photo d'identité")
-    piece_identite = models.FileField(upload_to="candidatures/pieces/", verbose_name="Pièce d'identité")
+    photo_identite = models.ImageField(upload_to="candidatures/photos/", verbose_name="Photo d'identité", blank=True, null=True)
+    piece_identite = models.FileField(upload_to="candidatures/pieces/", verbose_name="Pièce d'identité", blank=True, null=True)
     bulletins_scolaires = models.FileField(upload_to="candidatures/bulletins/", blank=True, null=True, verbose_name="Bulletins (STEAM)")
     autorisation_parentale = models.FileField(upload_to="candidatures/autorisations/", blank=True, null=True, verbose_name="Autorisation parentale (Mineur)")
     preuve_projet = models.FileField(upload_to="candidatures/preuves/", blank=True, null=True, verbose_name="Preuve projet (Optionnel)")
@@ -77,7 +77,7 @@ class Candidature(models.Model):
     confirmation_parent = models.BooleanField(default=False, verbose_name="Accord parental confirmé")
 
     # Gestion interne / Admin
-    statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default="soumis", verbose_name="Statut du dossier")
+    statut = models.CharField(max_length=20, choices=STATUT_CHOICES, default="admis", verbose_name="Statut du dossier")
     note_interne = models.TextField(blank=True, verbose_name="Notes / Remarques admin")
     score_evaluation = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)], verbose_name="Score /100")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Date de soumission")
@@ -88,36 +88,21 @@ class Candidature(models.Model):
         verbose_name_plural = "Candidatures"
         ordering = ["-created_at"]
 
+    def save(self, *args, **kwargs):
+        if not self.reference:
+            import random
+            while True:
+                num = random.randint(10000, 99999)
+                ref = f"CNCEIZ-2026-{num}"
+                if not Candidature.objects.filter(reference=ref).exists():
+                    self.reference = ref
+                    break
+        if not self.statut:
+            self.statut = "admis"
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.reference} - {self.prenom} {self.nom} ({self.domaine})"
-
-class Talent(models.Model):
-    CATEGORIE_CHOICES = [
-        ("STEAM", "STEAM"),
-        ("LP", "Local Projects (LP)"),
-        ("MCC", "Modèle Citoyen (MCC)"),
-    ]
-
-    nom = models.CharField(max_length=150, verbose_name="Nom complet")
-    region = models.CharField(max_length=50, verbose_name="Région d'origine")
-    categorie = models.CharField(max_length=10, choices=CATEGORIE_CHOICES, verbose_name="Catégorie / House")
-    titre_projet = models.CharField(max_length=200, blank=True, verbose_name="Titre du projet")
-    description_courte = models.TextField(verbose_name="Résumé / Accroche")
-    description_complete = models.TextField(verbose_name="Biographie & Présentation détaillée")
-    photo = models.ImageField(upload_to="talents/", verbose_name="Photo de profil")
-    tags = models.CharField(max_length=255, blank=True, help_text="Séparés par des virgules (ex: Robotique, IoT, Solaire)")
-    est_mis_en_avant = models.BooleanField(default=False, verbose_name="Mis en avant sur l'accueil")
-    actif = models.BooleanField(default=True, verbose_name="Afficher sur le site")
-    ordre = models.PositiveIntegerField(default=0, verbose_name="Ordre d'affichage")
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = "Talent"
-        verbose_name_plural = "Les 1000 Talents"
-        ordering = ["ordre", "-created_at"]
-
-    def __str__(self):
-        return f"{self.nom} ({self.categorie} - {self.region})"
 
 class Actualite(models.Model):
     PHASE_CHOICES = [
@@ -147,15 +132,9 @@ class Actualite(models.Model):
         return self.titre
 
 class MembreEquipe(models.Model):
-    SECTION_CHOICES = [
-        ("bureau", "Conseil d'Administration / Bureau exécutif"),
-        ("coordination", "Coordination & Pôles"),
-        ("regional", "Points Focaux Régionaux"),
-    ]
-
     nom = models.CharField(max_length=150, verbose_name="Nom complet")
     role = models.CharField(max_length=150, verbose_name="Rôle / Titre (ex: COORDINATEUR GÉNÉRAL)")
-    section = models.CharField(max_length=20, choices=SECTION_CHOICES, default="coordination", verbose_name="Section")
+    section = models.CharField(max_length=100, default="Coordination", verbose_name="Section")
     description = models.TextField(blank=True, verbose_name="Courte biographie")
     photo = models.ImageField(upload_to="equipe/", verbose_name="Photo")
     email = models.EmailField(blank=True, verbose_name="Email de contact")
@@ -172,25 +151,21 @@ class MembreEquipe(models.Model):
         return f"{self.nom} - {self.role}"
 
 class Partenaire(models.Model):
-    TIER_CHOICES = [
-        ("or", "Partenaire Or"),
-        ("argent", "Partenaire Argent"),
-        ("bronze", "Partenaire Bronze"),
-        ("institutionnel", "Partenaire Institutionnel"),
+    TYPE_CHOICES = [
+        ("pays", "Pays"),
+        ("institution", "Institution"),
+        ("ong", "ONG"),
+        ("ambassade", "Ambassade"),
     ]
 
-    nom = models.CharField(max_length=150, verbose_name="Nom de l'organisation")
-    role = models.CharField(max_length=150, help_text="Ex: Fournisseur d'Infrastructures, Bourses...", verbose_name="Rôle / Apport")
-    tier = models.CharField(max_length=20, choices=TIER_CHOICES, default="argent", verbose_name="Niveau / Palier")
+    nom = models.CharField(max_length=150, verbose_name="Nom du sponsor")
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, default="argent", verbose_name="Niveau / Palier")
     logo = models.ImageField(upload_to="partenaires/", blank=True, null=True, verbose_name="Logo image")
-    site_web = models.URLField(blank=True, verbose_name="Site web officiel")
-    ordre = models.PositiveIntegerField(default=0, verbose_name="Ordre d'affichage")
-    actif = models.BooleanField(default=True, verbose_name="Actif")
 
     class Meta:
         verbose_name = "Partenaire / Sponsor"
         verbose_name_plural = "Partenaires & Sponsors"
-        ordering = ["tier", "ordre", "nom"]
+        ordering = ["type", "nom", "logo"]
 
     def __str__(self):
         return f"{self.nom} ({self.get_tier_display()})"

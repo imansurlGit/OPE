@@ -23,6 +23,7 @@ class CustomLoginView(TokenObtainPairView):
             response = Response({
                 "success": True,
                 "access": access_token,
+                "refresh": refresh_token,
                 "user": user_data,
                 "message": "Connecté avec succes",
                 "status_code": status.HTTP_200_OK,
