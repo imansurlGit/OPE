@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { HashRouter, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navarbar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
@@ -52,10 +52,10 @@ function Layout() {
 
 export default function App() {
   return (
-    <BrowserRouter basename="/OPE">
+    <HashRouter>
       <ErrorBoundary>
         <Layout />
       </ErrorBoundary>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
