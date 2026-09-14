@@ -334,9 +334,6 @@ export default function Accueil() {
                                     >
                                         {value}
                                     </span>
-                                    <span className={`text-[8px] sm:text-[9px] mt-1.5 tracking-wider font-bold uppercase ${label === t("countdown.month") ? "text-ope-orange" : "text-ope-text-muted"}`}>
-                                        {label}
-                                    </span>
                                 </div>
                             ))}
                         </div>
