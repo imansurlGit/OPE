@@ -52,7 +52,7 @@ function Layout() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/OPE">
       <ErrorBoundary>
         <Layout />
       </ErrorBoundary>
