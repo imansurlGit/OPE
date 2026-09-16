@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import { partenaireService, type Partenaire, type PartenaireType } from "../services";
+import Pagination from "./Pagination";
 
 const TYPE_CONFIG: Record<PartenaireType, { label: string; badgeClass: string; textColor: string }> = {
   pays: {
@@ -32,6 +33,10 @@ export default function AdminPartenaires() {
   const [selectedType, setSelectedType] = useState<string>("all");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<"success" | "error">("success");
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(8);
 
   // Modals
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -77,6 +82,17 @@ export default function AdminPartenaires() {
       return matchesType && matchesSearch;
     });
   }, [partenaires, selectedType, searchQuery]);
+
+  // Réinitialiser la page lors du changement de filtre
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedType, searchQuery]);
+
+  // Partenaires paginés
+  const paginatedPartenaires = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filtered.slice(start, start + itemsPerPage);
+  }, [filtered, currentPage, itemsPerPage]);
 
   // ── Stats ─────────────────────────────────────────────────────────────────
   const stats = useMemo(() => ({
@@ -278,8 +294,9 @@ export default function AdminPartenaires() {
         </div>
       ) : (
         /* ── Grille de cartes ── */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filtered.map((p) => {
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {paginatedPartenaires.map((p) => {
             const typeInfo = TYPE_CONFIG[p.type];
             return (
               <div
@@ -332,8 +349,20 @@ export default function AdminPartenaires() {
                   </button>
                 </div>
               </div>
-            );
-          })}
+              );
+            })}
+          </div>
+
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalItems={filtered.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            itemLabel="partenaires"
+            pageSizeOptions={[8, 16, 24]}
+            onPageSizeChange={setItemsPerPage}
+          />
         </div>
       )}
 

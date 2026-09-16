@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import { membreService, type MembreEquipe } from "../services";
+import Pagination from "./Pagination";
 
 // ── Palette dynamique des badges de section ─────────────────────────────────
 const getSectionBadge = (section: string) => {
@@ -29,6 +30,10 @@ export default function AdminMembres() {
   const [selectedActif, setSelectedActif] = useState<string>("all");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<"success" | "error">("success");
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(8);
 
   // Modals
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -104,6 +109,17 @@ export default function AdminMembres() {
       return matchesSection && matchesActif && matchesSearch;
     });
   }, [membres, selectedSection, selectedActif, searchQuery]);
+
+  // Réinitialiser la page lors du changement de filtre
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedSection, selectedActif, searchQuery]);
+
+  // Membres paginés
+  const paginatedMembres = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredMembres.slice(start, start + itemsPerPage);
+  }, [filteredMembres, currentPage, itemsPerPage]);
 
   // ── Stats rapides ─────────────────────────────────────────────────────────
   const stats = useMemo(() => {
@@ -396,7 +412,7 @@ export default function AdminMembres() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#EFECE6] text-xs">
-                {filteredMembres.map((membre) => {
+                {paginatedMembres.map((membre) => {
                   const secBadge = getSectionBadge(membre.section);
                   return (
                     <tr key={membre.id} className="hover:bg-[#FAF7F2]/50 transition-colors">
@@ -522,6 +538,19 @@ export default function AdminMembres() {
             </table>
           </div>
         </div>
+      )}
+
+      {/* Pagination */}
+      {filteredMembres.length > 0 && !isLoading && (
+        <Pagination
+          currentPage={currentPage}
+          totalItems={filteredMembres.length}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+          itemLabel="membres"
+          pageSizeOptions={[8, 16, 24]}
+          onPageSizeChange={setItemsPerPage}
+        />
       )}
 
       {/* ══════════════════════════════════════════════════════════════════════

@@ -48,6 +48,7 @@ export default function APropos() {
             desc: "Création de l'initiative avec une première cohorte de 50 talents locaux axée sur le numérique.",
             offsetClass: "lg:translate-y-7",
             dotPosition: "top",
+            mobileDotPosition: "left",
             isSpecial: false,
         },
         {
@@ -56,6 +57,7 @@ export default function APropos() {
             desc: "Ouverture du premier hub d'innovation physique à Agadez. Partenariats stratégiques établis.",
             offsetClass: "lg:-translate-y-7",
             dotPosition: "bottom",
+            mobileDotPosition: "right",
             isSpecial: false,
         },
         {
@@ -64,6 +66,7 @@ export default function APropos() {
             desc: "Lancement du programme ambitieux visant à former 1000 jeunes innovateurs sur 3 ans.",
             offsetClass: "lg:translate-y-7",
             dotPosition: "top",
+            mobileDotPosition: "left",
             isSpecial: false,
         },
         {
@@ -72,6 +75,7 @@ export default function APropos() {
             desc: "Reconnaissance nationale et déploiement de solutions tech locales impactant la région.",
             offsetClass: "lg:-translate-y-7",
             dotPosition: "bottom",
+            mobileDotPosition: "right",
             isSpecial: true,
         },
     ];
@@ -195,10 +199,19 @@ export default function APropos() {
                             {TIMELINE.map((item) => (
                                 <div
                                     key={item.annee}
-                                    className={`flex flex-col items-center transition-transform duration-300 ${item.offsetClass}`}
+                                    className={`flex flex-row items-center lg:flex-col transition-transform duration-300 ${item.offsetClass}`}
                                 >
-                                    {/* Point au-dessus (Cartes 1 et 3) */}
-                                    <div className="h-7 flex items-center justify-center mb-2">
+                                    {/* Point à gauche (Mobile - Cartes 1 et 3) */}
+                                    <div className="lg:hidden w-7 shrink-0 flex items-center justify-center mr-2 sm:mr-3">
+                                        {item.mobileDotPosition === "left" ? (
+                                            <span className="w-3.5 h-3.5 rounded-full bg-[#1c5d6f] shadow-sm ring-4 ring-ope-bg" />
+                                        ) : (
+                                            <span className="w-3.5 h-3.5 opacity-0" />
+                                        )}
+                                    </div>
+
+                                    {/* Point au-dessus (Desktop - Cartes 1 et 3) */}
+                                    <div className="hidden lg:flex h-7 items-center justify-center mb-2">
                                         {item.dotPosition === "top" ? (
                                             <span className="w-3.5 h-3.5 rounded-full bg-[#1c5d6f] shadow-sm ring-4 ring-ope-bg" />
                                         ) : (
@@ -208,7 +221,7 @@ export default function APropos() {
 
                                     {/* Carte */}
                                     <div
-                                        className={`w-full bg-ope-white rounded-2xl p-6 min-h-[220px] flex flex-col justify-start ${
+                                        className={`flex-1 w-full bg-ope-white rounded-2xl p-6 min-h-[220px] flex flex-col justify-start ${
                                             item.isSpecial
                                                 ? "border-2 border-[#5ba7be] shadow-sm"
                                                 : "border border-ope-border shadow-sm"
@@ -233,9 +246,18 @@ export default function APropos() {
                                         </p>
                                     </div>
 
-                                    {/* Point en-dessous (Cartes 2 et 4) */}
-                                    <div className="h-7 flex items-center justify-center mt-2">
+                                    {/* Point en-dessous (Desktop - Cartes 2 et 4) */}
+                                    <div className="hidden lg:flex h-7 items-center justify-center mt-2">
                                         {item.dotPosition === "bottom" ? (
+                                            <span className="w-3.5 h-3.5 rounded-full bg-[#1c5d6f] shadow-sm ring-4 ring-ope-bg" />
+                                        ) : (
+                                            <span className="w-3.5 h-3.5 opacity-0" />
+                                        )}
+                                    </div>
+
+                                    {/* Point à droite (Mobile - Cartes 2 et 4) */}
+                                    <div className="lg:hidden w-7 shrink-0 flex items-center justify-center ml-2 sm:ml-3">
+                                        {item.mobileDotPosition === "right" ? (
                                             <span className="w-3.5 h-3.5 rounded-full bg-[#1c5d6f] shadow-sm ring-4 ring-ope-bg" />
                                         ) : (
                                             <span className="w-3.5 h-3.5 opacity-0" />

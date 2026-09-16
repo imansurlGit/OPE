@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import { actualiteService, type Actualite, type ActualitePhase } from "../services";
+import Pagination from "./Pagination";
 
 const PHASES_CONFIG: Record<
   ActualitePhase,
@@ -35,6 +36,10 @@ export default function AdminActualites() {
   const [viewMode, setViewMode] = useState<"table" | "cards">("cards");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<"success" | "error">("success");
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(8);
 
   // Modals
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -101,6 +106,17 @@ export default function AdminActualites() {
       return matchesPhase && matchesStatut && matchesSearch;
     });
   }, [articles, selectedPhase, selectedStatut, searchQuery]);
+
+  // Réinitialiser la page lors du changement de filtre
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedPhase, selectedStatut, searchQuery]);
+
+  // Articles paginés
+  const paginatedArticles = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredArticles.slice(start, start + itemsPerPage);
+  }, [filteredArticles, currentPage, itemsPerPage]);
 
   // Statistiques rapides
   const stats = useMemo(() => {
@@ -457,7 +473,7 @@ export default function AdminActualites() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#EFECE6] text-xs">
-                {filteredArticles.map((article) => {
+                {paginatedArticles.map((article) => {
                   const phaseInfo = PHASES_CONFIG[article.phase] || PHASES_CONFIG.avant;
                   return (
                     <tr key={article.id} className="hover:bg-slate-50/70 transition-colors">
@@ -577,7 +593,7 @@ export default function AdminActualites() {
       ) : (
         /* ── Vue Grille de Cartes ── */
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filteredArticles.map((article) => {
+          {paginatedArticles.map((article) => {
             const phaseInfo = PHASES_CONFIG[article.phase] || PHASES_CONFIG.avant;
             return (
               <div
@@ -673,6 +689,19 @@ export default function AdminActualites() {
             );
           })}
         </div>
+      )}
+
+      {/* Pagination */}
+      {filteredArticles.length > 0 && !isLoading && (
+        <Pagination
+          currentPage={currentPage}
+          totalItems={filteredArticles.length}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+          itemLabel="articles"
+          pageSizeOptions={[8, 16, 24]}
+          onPageSizeChange={setItemsPerPage}
+        />
       )}
 
       {/* ══════════════════════════════════════════════════════

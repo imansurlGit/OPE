@@ -5,6 +5,7 @@ import {
   type MediaGalerie,
   type MediaCategorie,
 } from "../services";
+import Pagination from "./Pagination";
 
 const CATEGORIES_CONFIG: Record<
   MediaCategorie,
@@ -44,6 +45,10 @@ export default function AdminGalerie() {
   const [selectedHighlight, setSelectedHighlight] = useState<string>("all");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<"success" | "error">("success");
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(12);
 
   // Drag and Drop state
   const [isDragging, setIsDragging] = useState(false);
@@ -107,6 +112,17 @@ export default function AdminGalerie() {
       return matchesCategory && matchesHighlight && matchesSearch;
     });
   }, [medias, selectedCategory, selectedHighlight, searchQuery]);
+
+  // Réinitialiser la page lors du changement de filtre
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, selectedHighlight, searchQuery]);
+
+  // Médias paginés
+  const paginatedMedias = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredMedias.slice(start, start + itemsPerPage);
+  }, [filteredMedias, currentPage, itemsPerPage]);
 
   // ── Statistiques rapides ──────────────────────────────────────────────────
   const stats = useMemo(() => {
@@ -540,8 +556,9 @@ export default function AdminGalerie() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
-          {filteredMedias.map((media) => {
+        <div className="space-y-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
+            {paginatedMedias.map((media) => {
             const config =
               CATEGORIES_CONFIG[media.categorie] || CATEGORIES_CONFIG.ambiance;
 
@@ -700,8 +717,20 @@ export default function AdminGalerie() {
                   </div>
                 </div>
               </div>
-            );
-          })}
+              );
+            })}
+          </div>
+
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalItems={filteredMedias.length}
+            itemsPerPage={itemsPerPage}
+            onPageChange={setCurrentPage}
+            itemLabel="médias"
+            pageSizeOptions={[12, 24, 48]}
+            onPageSizeChange={setItemsPerPage}
+          />
         </div>
       )}
 

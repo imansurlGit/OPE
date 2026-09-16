@@ -7,13 +7,14 @@ import AdminActualites from "../components/AdminActualites";
 import AdminMembres from "../components/AdminMembres";
 import AdminGalerie from "../components/AdminGalerie";
 import AdminPartenaires from "../components/AdminPartenaires";
+import AdminContact from "../components/AdminContact";
 import { authService } from "../services";
 
 export default function Admin() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const VALID_TABS: AdminTab[] = ["dashboard", "talents", "actualites", "membres", "galerie", "partenaires"];
+  const VALID_TABS: AdminTab[] = ["dashboard", "talents", "actualites", "membres", "partenaires", "contact", "galerie"];
   const tabFromUrl = searchParams.get("tab") as AdminTab | null;
   const activeTab: AdminTab = tabFromUrl && VALID_TABS.includes(tabFromUrl) ? tabFromUrl : "dashboard";
 
@@ -103,6 +104,11 @@ export default function Admin() {
               ONGLET : PARTENAIRES
               ══════════════════════════════════════════════════ */}
           {activeTab === "partenaires" && <AdminPartenaires />}
+
+          {/* ══════════════════════════════════════════════════
+              ONGLET : CONTACT / MESSAGES
+              ══════════════════════════════════════════════════ */}
+          {activeTab === "contact" && <AdminContact />}
         </main>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { talentService, type Candidature } from "../services";
+import Pagination from "./Pagination";
 
 const REGIONS = [
   "Toutes",
@@ -27,6 +28,10 @@ export default function AdminTalents() {
   const [toastType, setToastType] = useState<"success" | "error">("success");
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   // Formulaire d'édition dans le modal
   const [editStatut, setEditStatut] = useState<Candidature["statut"]>("admis");
@@ -105,6 +110,17 @@ export default function AdminTalents() {
       return true;
     });
   }, [candidatures, selectedDomaine, selectedStatut, selectedRegion, searchQuery]);
+
+  // Réinitialiser la page lors du changement de filtre
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedDomaine, selectedStatut, selectedRegion, searchQuery]);
+
+  // Candidatures paginées
+  const paginatedCandidatures = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredCandidatures.slice(start, start + itemsPerPage);
+  }, [filteredCandidatures, currentPage, itemsPerPage]);
 
   // Statistiques réelles calculées via le service
   const stats = useMemo(() => {
@@ -621,7 +637,7 @@ export default function AdminTalents() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#EFECE6]/80 font-medium text-gray-700">
-                {filteredCandidatures.map((cand) => (
+                {paginatedCandidatures.map((cand) => (
                   <tr
                     key={cand.id || cand.reference}
                     className="hover:bg-[#FAF7F2]/60 transition-colors group cursor-pointer"
@@ -702,7 +718,7 @@ export default function AdminTalents() {
       ) : (
         /* ── Vue 2 : CARTES EN GRILLE ── */
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-          {filteredCandidatures.map((cand) => (
+          {paginatedCandidatures.map((cand) => (
             <div
               key={cand.id || cand.reference}
               onClick={() => handleOpenDetail(cand)}
@@ -747,6 +763,19 @@ export default function AdminTalents() {
             </div>
           ))}
         </div>
+      )}
+
+      {/* Pagination */}
+      {filteredCandidatures.length > 0 && !isLoading && (
+        <Pagination
+          currentPage={currentPage}
+          totalItems={filteredCandidatures.length}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+          itemLabel="talents"
+          pageSizeOptions={[10, 25, 50]}
+          onPageSizeChange={setItemsPerPage}
+        />
       )}
 
       {/* ═════════════════════════════════════════════════════════════════════
