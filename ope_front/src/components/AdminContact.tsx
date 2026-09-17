@@ -216,9 +216,6 @@ export default function AdminContact() {
           <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
             Messages & Contact
           </h1>
-          <p className="text-xs sm:text-sm text-gray-500 mt-1 font-medium">
-            Gérez les messages, demandes d'information et partenariats reçus.
-          </p>
         </div>
         <button
           type="button"

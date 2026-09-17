@@ -224,7 +224,6 @@ export default function DashboardStats() {
         <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
           Tableau de bord statistique
         </h1>
-        <p className="text-xs text-gray-400 mt-1">Données en temps réel · CNCEIZ 2026</p>
       </div>
 
       {/* ── KPIs ── */}
