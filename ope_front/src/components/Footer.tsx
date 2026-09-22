@@ -153,11 +153,6 @@ export default function Footer() {
                             alt="Camp National Citoyen"
                             className="h-9 sm:h-12 md:h-16 lg:h-20 w-auto object-contain rounded-md shadow-xs transition-all duration-200"
                         />
-                        <img
-                            src={logoIman}
-                            alt="Propulsé par e-IMAN"
-                            className="h-9 sm:h-12 md:h-16 lg:h-20 w-auto object-contain rounded-md shadow-xs transition-all duration-200"
-                        />
                     </div>
                 </div>
             </div>
