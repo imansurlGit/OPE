@@ -36,21 +36,17 @@ export default function Navbar() {
         {/* ── Zone 1 : Logo (gauche) ── */}
         <NavLink
           to="/"
-          className="flex items-center justify-center gap-1.5 group shrink-0"
+          className="flex items-center justify-center gap-0 group shrink-0"
         >
           <img
             src={logoOpe}
             alt="OPE Logo"
             className="w-14 h-14 sm:w-16 sm:h-16 object-contain rounded-md"
           />
-        </NavLink>
-        <NavLink
-          to="/"
-          className="flex items-center justify-center gap-1.5 group shrink-0"
-        >
+          <span className="text-6xl font-thin text-ope-border select-none leading-none">/</span>
           <img
             src={logoEvent}
-            alt="OPE Logo"
+            alt="event Logo"
             className="w-14 h-auto sm:w-16 sm:h-16 object-contain rounded-md"
           />
         </NavLink>
