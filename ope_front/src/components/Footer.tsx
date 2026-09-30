@@ -139,20 +139,6 @@ export default function Footer() {
                     <p className="text-center sm:text-left">
                         {t("footer.copyright")}
                     </p>
-
-                    {/* Logos partenaires & institutions en bas à droite */}
-                    <div className="flex items-center justify-center sm:justify-end gap-3 sm:gap-4 md:gap-5 flex-wrap shrink-0">
-                        <img
-                            src={logoOpe}
-                            alt="OPE Logo"
-                            className="h-14 sm:h-20 md:h-28 lg:h-36 w-auto max-w-[140px] sm:max-w-none object-contain rounded-md shadow-xs transition-all duration-200"
-                        />
-                        <img
-                            src={logoEvent}
-                            alt="Camp National Citoyen"
-                            className="h-9 sm:h-12 md:h-16 lg:h-20 w-auto object-contain rounded-md shadow-xs transition-all duration-200"
-                        />
-                    </div>
                 </div>
             </div>
         </footer>
