@@ -1,7 +1,5 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import logoOpe from "../assets/logo_ope.png";
-import logoEvent from "../assets/logo_event.png";
 
 export default function Footer() {
     const { t } = useTranslation();
