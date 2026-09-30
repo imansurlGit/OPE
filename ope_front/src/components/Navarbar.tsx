@@ -43,7 +43,7 @@ export default function Navbar() {
             alt="OPE Logo"
             className="w-14 h-14 sm:w-16 sm:h-16 object-contain rounded-md"
           />
-          <span className="text-6xl font-thin text-ope-border select-none leading-none">/</span>
+          <span className="inline-block w-[1.5px] h-14 sm:h-16 bg-ope-border rotate-[22deg] mx-1 rounded-full select-none" />
           <img
             src={logoEvent}
             alt="event Logo"
@@ -168,8 +168,8 @@ export default function Navbar() {
               className={({ isActive }) =>
                 `px-3 py-2.5 text-xs font-semibold uppercase tracking-wider rounded-md ${
                   isActive
-                    ? "text-ope-orange bg-ope-orange/5"
-                    : "text-ope-text-muted hover:text-ope-primary hover:bg-ope-primary/5"
+                    ? "text-ope-orange"
+                    : "text-ope-text-muted hover:text-ope-primary"
                 }`
               }
               onClick={() => setMenuOpen(false)}
