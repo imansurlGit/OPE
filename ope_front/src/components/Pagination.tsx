@@ -62,7 +62,7 @@ export default function Pagination({
   const pages = getPageNumbers();
 
   return (
-    <div className="bg-white rounded-2xl sm:rounded-3xl border border-[#EFECE6] p-3.5 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 shadow-2xs">
+    <div className="bg-white rounded-2xl sm:rounded-3xl border border-[#d0e4f0] p-3.5 sm:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 shadow-2xs">
       {/* ── Gauche : Compteur & Sélecteur de taille ── */}
       <div className="flex items-center gap-3 text-xs text-gray-500 font-medium w-full sm:w-auto justify-between sm:justify-start">
         <span>
@@ -81,7 +81,7 @@ export default function Pagination({
                 onPageSizeChange(Number(e.target.value));
                 onPageChange(1);
               }}
-              className="bg-[#FAF7F2] border border-[#EFECE6] rounded-lg px-2 py-1 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#B85028] cursor-pointer"
+              className="bg-[#f4f8fb] border border-[#d0e4f0] rounded-lg px-2 py-1 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#2F6084] cursor-pointer"
             >
               {pageSizeOptions.map((opt) => (
                 <option key={opt} value={opt}>
@@ -100,7 +100,7 @@ export default function Pagination({
           type="button"
           onClick={() => onPageChange(Math.max(1, currentPage - 1))}
           disabled={currentPage === 1}
-          className="inline-flex items-center justify-center p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold text-gray-700 bg-[#FAF7F2] hover:bg-slate-100 disabled:opacity-40 disabled:hover:bg-[#FAF7F2] disabled:cursor-not-allowed transition-colors cursor-pointer"
+          className="inline-flex items-center justify-center p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold text-gray-700 bg-[#f4f8fb] hover:bg-slate-100 disabled:opacity-40 disabled:hover:bg-[#f4f8fb] disabled:cursor-not-allowed transition-colors cursor-pointer"
           title="Page précédente"
         >
           <svg className="w-4 h-4 sm:mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -133,8 +133,8 @@ export default function Pagination({
                 onClick={() => onPageChange(pageNum)}
                 className={`w-8 h-8 rounded-xl text-xs transition-all cursor-pointer flex items-center justify-center ${
                   isActive
-                    ? "bg-[#B85028] text-white font-black shadow-xs scale-105"
-                    : "text-gray-700 hover:bg-[#FAF7F2] font-bold"
+                    ? "bg-[#2F6084] text-white font-black shadow-xs scale-105"
+                    : "text-gray-700 hover:bg-[#edf4f9] font-bold"
                 }`}
               >
                 {pageNum}
@@ -144,7 +144,7 @@ export default function Pagination({
         </div>
 
         {/* Indicateur mobile compact */}
-        <div className="sm:hidden px-3 py-1 text-xs font-bold text-gray-700 bg-[#FAF7F2] rounded-xl">
+        <div className="sm:hidden px-3 py-1 text-xs font-bold text-gray-700 bg-[#f4f8fb] rounded-xl">
           {currentPage} / {totalPages}
         </div>
 
@@ -153,7 +153,7 @@ export default function Pagination({
           type="button"
           onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
           disabled={currentPage === totalPages}
-          className="inline-flex items-center justify-center p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold text-gray-700 bg-[#FAF7F2] hover:bg-slate-100 disabled:opacity-40 disabled:hover:bg-[#FAF7F2] disabled:cursor-not-allowed transition-colors cursor-pointer"
+          className="inline-flex items-center justify-center p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold text-gray-700 bg-[#f4f8fb] hover:bg-slate-100 disabled:opacity-40 disabled:hover:bg-[#f4f8fb] disabled:cursor-not-allowed transition-colors cursor-pointer"
           title="Page suivante"
         >
           <span className="hidden sm:inline">Suivant</span>

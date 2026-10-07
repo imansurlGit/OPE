@@ -5,7 +5,7 @@ import heroImg from "../assets/agadez_drone.jpeg";
 import campNationalCitoyen from "../assets/camp_natio.png";
 
 const ORANGE = "#F15B29";
-const CARD_BG = "#E9EFF4";
+const CARD_BG = "#FFFFFF";
 const CARD_TITLE = "#132433";
 const CARD_SUBTITLE = "#5C6B76";
 

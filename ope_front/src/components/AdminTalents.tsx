@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+﻿import { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { talentService, type Candidature } from "../services";
 import Pagination from "./Pagination";
@@ -323,7 +323,7 @@ export default function AdminTalents() {
   const getDomaineBadge = (domaine: string) => {
     switch (domaine) {
       case "STEAM":
-        return "bg-orange-50 text-[#B85028] border-orange-200";
+        return "bg-[#edf4f9] text-[#2F6084] border-orange-200";
       case "LP":
         return "bg-blue-50 text-[#2F6084] border-blue-200";
       case "MCC":
@@ -366,7 +366,7 @@ export default function AdminTalents() {
             <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
               Les 1000 Talents
             </h1>
-            <span className="px-3 py-1 rounded-full text-xs font-black bg-[#B85028] text-white shadow-xs">
+            <span className="px-3 py-1 rounded-full text-xs font-black bg-[#f15b29] text-white shadow-xs">
               {stats.admis} / 1 000 Admis
             </span>
           </div>
@@ -377,11 +377,11 @@ export default function AdminTalents() {
             type="button"
             onClick={fetchCandidatures}
             disabled={isLoading}
-            className="p-2.5 rounded-xl border border-[#EFECE6] bg-white text-gray-700 hover:bg-slate-50 active:scale-95 transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 text-xs font-bold"
+            className="p-2.5 rounded-xl border border-[#d0e4f0] bg-white text-gray-700 hover:bg-slate-50 active:scale-95 transition-all shadow-2xs cursor-pointer flex items-center gap-1.5 text-xs font-bold"
             title="Rafraîchir"
           >
             <svg
-              className={`w-4 h-4 ${isLoading ? "animate-spin text-[#B85028]" : ""}`}
+              className={`w-4 h-4 ${isLoading ? "animate-spin text-[#f15b29]" : ""}`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -400,7 +400,7 @@ export default function AdminTalents() {
             type="button"
             onClick={handleExportCSV}
             disabled={filteredCandidatures.length === 0}
-            className="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-[#B85028] hover:bg-[#9e3f1d] active:scale-95 cursor-pointer shadow-xs transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-[#f15b29] hover:bg-[#d44d1f] active:scale-95 cursor-pointer shadow-xs transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -418,7 +418,7 @@ export default function AdminTalents() {
       {/* ── Cartes Synthétiques ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Total Admis */}
-        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#EFECE6] shadow-2xs">
+        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#d0e4f0] shadow-2xs">
           <div className="flex items-center justify-between text-xs text-gray-500 font-medium mb-1">
             <span>Talents Sélectionnés</span>
             <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
@@ -437,10 +437,10 @@ export default function AdminTalents() {
         </div>
 
         {/* Candidatures Totales */}
-        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#EFECE6] shadow-2xs">
+        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#d0e4f0] shadow-2xs">
           <div className="flex items-center justify-between text-xs text-gray-500 font-medium mb-1">
             <span>Dossiers Enregistrés</span>
-            <span className="text-[11px] font-bold text-[#B85028] bg-orange-50 px-2 py-0.5 rounded-full">
+            <span className="text-[11px] font-bold text-[#2F6084] bg-[#edf4f9] px-2 py-0.5 rounded-full">
               Base de données
             </span>
           </div>
@@ -453,7 +453,7 @@ export default function AdminTalents() {
         </div>
 
         {/* Parité Filles / Garçons */}
-        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#EFECE6] shadow-2xs">
+        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#d0e4f0] shadow-2xs">
           <div className="flex items-center justify-between text-xs text-gray-500 font-medium mb-1">
             <span>Parité F / G</span>
             <span className="text-[11px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full">
@@ -469,7 +469,7 @@ export default function AdminTalents() {
         </div>
 
         {/* Maisons d'Excellence */}
-        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#EFECE6] shadow-2xs">
+        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#d0e4f0] shadow-2xs">
           <div className="flex items-center justify-between text-xs text-gray-500 font-medium mb-1">
             <span>Par Maison</span>
             <span className="text-[11px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full">
@@ -486,7 +486,7 @@ export default function AdminTalents() {
       </div>
 
       {/* ── Barre d'Outils : Recherche & Filtres ── */}
-      <div className="bg-white p-5 rounded-3xl border border-[#EFECE6] shadow-2xs space-y-4">
+      <div className="bg-white p-5 rounded-3xl border border-[#d0e4f0] shadow-2xs space-y-4">
         <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
           {/* Champ Recherche */}
           <div className="relative flex-1">
@@ -503,7 +503,7 @@ export default function AdminTalents() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Rechercher par nom, prénom, n° dossier, ville, projet..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#EFECE6] bg-[#FAF7F2]/50 text-sm focus:outline-none focus:border-[#B85028] focus:bg-white transition-all"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#d0e4f0] bg-[#f4f8fb]/50 text-sm focus:outline-none focus:border-[#f15b29] focus:bg-white transition-all"
             />
             {searchQuery && (
               <button
@@ -522,7 +522,7 @@ export default function AdminTalents() {
             <select
               value={selectedStatut}
               onChange={(e) => setSelectedStatut(e.target.value)}
-              className="px-3 py-2.5 rounded-xl border border-[#EFECE6] bg-white text-xs font-bold text-gray-700 focus:outline-none focus:border-[#B85028] cursor-pointer"
+              className="px-3 py-2.5 rounded-xl border border-[#d0e4f0] bg-white text-xs font-bold text-gray-700 focus:outline-none focus:border-[#f15b29] cursor-pointer"
             >
               <option value="all">Tous les statuts</option>
               <option value="admis">Admis uniquement</option>
@@ -536,7 +536,7 @@ export default function AdminTalents() {
             <select
               value={selectedRegion}
               onChange={(e) => setSelectedRegion(e.target.value)}
-              className="px-3 py-2.5 rounded-xl border border-[#EFECE6] bg-white text-xs font-bold text-gray-700 focus:outline-none focus:border-[#B85028] cursor-pointer"
+              className="px-3 py-2.5 rounded-xl border border-[#d0e4f0] bg-white text-xs font-bold text-gray-700 focus:outline-none focus:border-[#f15b29] cursor-pointer"
             >
               {REGIONS.map((r) => (
                 <option key={r} value={r}>
@@ -572,7 +572,7 @@ export default function AdminTalents() {
         </div>
 
         {/* Pilules de Maisons */}
-        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-[#EFECE6]/80">
+        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-[#d0e4f0]/80">
           <span className="text-xs font-bold text-gray-500 mr-1">Maisons :</span>
           {[
             { key: "all", label: "Toutes les maisons", count: stats.total },
@@ -586,8 +586,8 @@ export default function AdminTalents() {
               onClick={() => setSelectedDomaine(pill.key)}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
                 selectedDomaine === pill.key
-                  ? "bg-[#FAF7F2] text-[#B85028] border-[#B85028] shadow-2xs font-black"
-                  : "bg-white text-gray-600 border-[#EFECE6] hover:bg-slate-50"
+                  ? "bg-[#f4f8fb] text-[#f15b29] border-[#f15b29] shadow-2xs font-black"
+                  : "bg-white text-gray-600 border-[#d0e4f0] hover:bg-slate-50"
               }`}
             >
               {pill.label} ({pill.count})
@@ -598,8 +598,8 @@ export default function AdminTalents() {
 
       {/* ── Chargement en cours ── */}
       {isLoading ? (
-        <div className="bg-white rounded-3xl border border-[#EFECE6] p-12 text-center shadow-2xs flex flex-col items-center justify-center">
-          <svg className="w-8 h-8 text-[#B85028] animate-spin mb-3" viewBox="0 0 24 24" fill="none">
+        <div className="bg-white rounded-3xl border border-[#d0e4f0] p-12 text-center shadow-2xs flex flex-col items-center justify-center">
+          <svg className="w-8 h-8 text-[#f15b29] animate-spin mb-3" viewBox="0 0 24 24" fill="none">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
           </svg>
@@ -607,8 +607,8 @@ export default function AdminTalents() {
           <p className="text-xs text-gray-400 mt-0.5">Interrogation de la table candidature en cours</p>
         </div>
       ) : filteredCandidatures.length === 0 ? (
-        <div className="bg-white rounded-3xl border border-[#EFECE6] p-12 text-center shadow-2xs">
-          <div className="w-12 h-12 rounded-full bg-orange-50 text-[#B85028] flex items-center justify-center mx-auto mb-3">
+        <div className="bg-white rounded-3xl border border-[#d0e4f0] p-12 text-center shadow-2xs">
+          <div className="w-12 h-12 rounded-full bg-[#edf4f9] text-[#2F6084] flex items-center justify-center mx-auto mb-3">
             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -622,11 +622,11 @@ export default function AdminTalents() {
         </div>
       ) : viewMode === "table" ? (
         /* ── Vue 1 : TABLEAU MODERNE DES VRAIS TALENTS ── */
-        <div className="bg-white rounded-3xl border border-[#EFECE6] shadow-2xs overflow-hidden">
+        <div className="bg-white rounded-3xl border border-[#d0e4f0] shadow-2xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="bg-[#FAF7F2] border-b border-[#EFECE6] text-[11px] font-black uppercase text-gray-500 tracking-wider">
+                <tr className="bg-[#f4f8fb] border-b border-[#d0e4f0] text-[11px] font-black uppercase text-gray-500 tracking-wider">
                   <th className="py-3.5 px-4">Talent / Candidat</th>
                   <th className="py-3.5 px-4">Réf. Dossier</th>
                   <th className="py-3.5 px-4">Maison & Projet</th>
@@ -636,21 +636,21 @@ export default function AdminTalents() {
                   <th className="py-3.5 px-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#EFECE6]/80 font-medium text-gray-700">
+              <tbody className="divide-y divide-[#d0e4f0]/80 font-medium text-gray-700">
                 {paginatedCandidatures.map((cand) => (
                   <tr
                     key={cand.id || cand.reference}
-                    className="hover:bg-[#FAF7F2]/60 transition-colors group cursor-pointer"
+                    className="hover:bg-[#f4f8fb]/60 transition-colors group cursor-pointer"
                     onClick={() => handleOpenDetail(cand)}
                   >
                     {/* Nom & Avatar */}
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#B85028] to-[#2F6084] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-2xs">
+                        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#f15b29] to-[#2F6084] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-2xs">
                           {cand.prenom?.charAt(0) || ""}{cand.nom?.charAt(0) || ""}
                         </div>
                         <div>
-                          <p className="font-extrabold text-gray-900 text-sm group-hover:text-[#B85028] transition-colors">
+                          <p className="font-extrabold text-gray-900 text-sm group-hover:text-[#f15b29] transition-colors">
                             {cand.prenom} {cand.nom}
                           </p>
                           <p className="text-[11px] text-gray-400">{cand.email}</p>
@@ -704,7 +704,7 @@ export default function AdminTalents() {
                           e.stopPropagation();
                           handleOpenDetail(cand);
                         }}
-                        className="px-3 py-1.5 rounded-xl border border-[#EFECE6] bg-white hover:bg-[#FAF7F2] text-[#B85028] font-bold text-xs shadow-2xs hover:shadow-xs transition-all cursor-pointer"
+                        className="px-3 py-1.5 rounded-xl border border-[#d0e4f0] bg-white hover:bg-[#f4f8fb] text-[#f15b29] font-bold text-xs shadow-2xs hover:shadow-xs transition-all cursor-pointer"
                       >
                         Consulter
                       </button>
@@ -722,16 +722,16 @@ export default function AdminTalents() {
             <div
               key={cand.id || cand.reference}
               onClick={() => handleOpenDetail(cand)}
-              className="bg-white p-5 rounded-3xl border border-[#EFECE6] shadow-2xs hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between group"
+              className="bg-white p-5 rounded-3xl border border-[#d0e4f0] shadow-2xs hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col justify-between group"
             >
               <div>
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-2xl bg-[#FAF7F2] border border-[#EFECE6] text-[#B85028] flex items-center justify-center font-black text-sm shrink-0">
+                    <div className="w-10 h-10 rounded-2xl bg-[#f4f8fb] border border-[#d0e4f0] text-[#f15b29] flex items-center justify-center font-black text-sm shrink-0">
                       {cand.prenom?.charAt(0) || ""}{cand.nom?.charAt(0) || ""}
                     </div>
                     <div>
-                      <h3 className="font-extrabold text-gray-900 text-sm group-hover:text-[#B85028] transition-colors">
+                      <h3 className="font-extrabold text-gray-900 text-sm group-hover:text-[#f15b29] transition-colors">
                         {cand.prenom} {cand.nom}
                       </h3>
                       <span className="font-mono text-[11px] font-semibold text-[#2F6084]">
@@ -754,7 +754,7 @@ export default function AdminTalents() {
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-[#EFECE6]/80 flex items-center justify-between mt-2">
+              <div className="pt-3 border-t border-[#d0e4f0]/80 flex items-center justify-between mt-2">
                 <div className="text-[11px] font-semibold text-gray-400">
                   <span>{cand.region}</span> · <span>{cand.ville_village}</span>
                 </div>
@@ -787,13 +787,13 @@ export default function AdminTalents() {
           onClick={() => setSelectedCandidate(null)}
         >
           <div
-            className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl border border-[#EFECE6] overflow-hidden my-auto max-h-[90vh] flex flex-col"
+            className="bg-white w-full max-w-3xl rounded-3xl shadow-2xl border border-[#d0e4f0] overflow-hidden my-auto max-h-[90vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Entête Modal */}
-            <div className="p-5 sm:p-6 bg-[#FAF7F2] border-b border-[#EFECE6] flex items-center justify-between shrink-0">
+            <div className="p-5 sm:p-6 bg-[#f4f8fb] border-b border-[#d0e4f0] flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-[#B85028] text-white flex items-center justify-center font-black text-base shadow-sm">
+                <div className="w-12 h-12 rounded-2xl bg-[#f15b29] text-white flex items-center justify-center font-black text-base shadow-sm">
                   {selectedCandidate.prenom?.charAt(0) || ""}{selectedCandidate.nom?.charAt(0) || ""}
                 </div>
                 <div>
@@ -814,7 +814,7 @@ export default function AdminTalents() {
               <button
                 type="button"
                 onClick={() => setSelectedCandidate(null)}
-                className="w-8 h-8 rounded-full bg-white border border-[#EFECE6] flex items-center justify-center text-gray-500 hover:text-gray-900 cursor-pointer transition-colors"
+                className="w-8 h-8 rounded-full bg-white border border-[#d0e4f0] flex items-center justify-center text-gray-500 hover:text-gray-900 cursor-pointer transition-colors"
               >
                 ✕
               </button>
@@ -837,7 +837,7 @@ export default function AdminTalents() {
                     <select
                       value={editStatut}
                       onChange={(e) => setEditStatut(e.target.value as Candidature["statut"])}
-                      className="w-full px-3 py-2 rounded-xl border border-gray-300 bg-white font-bold text-xs focus:border-[#B85028] focus:outline-none cursor-pointer"
+                      className="w-full px-3 py-2 rounded-xl border border-gray-300 bg-white font-bold text-xs focus:border-[#f15b29] focus:outline-none cursor-pointer"
                     >
                       <option value="admis">Admis au Camp National (Les 1 000)</option>
                       <option value="preselectionne">Pré-sélectionné (Pré-camp)</option>
@@ -857,7 +857,7 @@ export default function AdminTalents() {
                       max={100}
                       value={editScore}
                       onChange={(e) => setEditScore(Number(e.target.value))}
-                      className="w-full px-3 py-2 rounded-xl border border-gray-300 bg-white font-bold text-xs focus:border-[#B85028] focus:outline-none"
+                      className="w-full px-3 py-2 rounded-xl border border-gray-300 bg-white font-bold text-xs focus:border-[#f15b29] focus:outline-none"
                     />
                   </div>
                 </div>
@@ -871,14 +871,14 @@ export default function AdminTalents() {
                     value={editNote}
                     onChange={(e) => setEditNote(e.target.value)}
                     placeholder="Observations du comité de sélection..."
-                    className="w-full p-2.5 rounded-xl border border-gray-300 bg-white text-xs focus:border-[#B85028] focus:outline-none"
+                    className="w-full p-2.5 rounded-xl border border-gray-300 bg-white text-xs focus:border-[#f15b29] focus:outline-none"
                   />
                 </div>
               </div>
 
               {/* 2. Identité & Coordonnées */}
               <div>
-                <h3 className="text-xs font-black uppercase tracking-wider text-[#B85028] mb-3 pb-1 border-b border-[#EFECE6]">
+                <h3 className="text-xs font-black uppercase tracking-wider text-[#f15b29] mb-3 pb-1 border-b border-[#d0e4f0]">
                   1. Identité & Origine
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -925,7 +925,7 @@ export default function AdminTalents() {
                 </div>
 
                 {selectedCandidate.biographie && (
-                  <div className="mt-3 p-3 rounded-xl bg-[#FAF7F2]/60 border border-[#EFECE6]">
+                  <div className="mt-3 p-3 rounded-xl bg-[#f4f8fb]/60 border border-[#d0e4f0]">
                     <span className="text-gray-400 block text-[10px] font-bold">Biographie :</span>
                     <p className="text-xs text-gray-700 mt-0.5">{selectedCandidate.biographie}</p>
                   </div>
@@ -934,7 +934,7 @@ export default function AdminTalents() {
 
               {/* 3. Projet & House */}
               <div>
-                <h3 className="text-xs font-black uppercase tracking-wider text-[#2F6084] mb-3 pb-1 border-b border-[#EFECE6]">
+                <h3 className="text-xs font-black uppercase tracking-wider text-[#2F6084] mb-3 pb-1 border-b border-[#d0e4f0]">
                   2. House visée & Projet de Candidature
                 </h3>
                 <div className="space-y-2.5">
@@ -949,7 +949,7 @@ export default function AdminTalents() {
                   </div>
 
                   {selectedCandidate.description_projet && (
-                    <div className="p-3.5 rounded-xl bg-white border border-[#EFECE6]">
+                    <div className="p-3.5 rounded-xl bg-white border border-[#d0e4f0]">
                       <span className="text-gray-400 block text-[10px] font-bold">Description du projet :</span>
                       <p className="text-xs text-gray-800 mt-1 leading-relaxed whitespace-pre-line">
                         {selectedCandidate.description_projet}
@@ -958,7 +958,7 @@ export default function AdminTalents() {
                   )}
 
                   {selectedCandidate.motivation && (
-                    <div className="p-3.5 rounded-xl bg-white border border-[#EFECE6]">
+                    <div className="p-3.5 rounded-xl bg-white border border-[#d0e4f0]">
                       <span className="text-gray-400 block text-[10px] font-bold">Motivation pour Agadez 2026 :</span>
                       <p className="text-xs text-gray-800 mt-1 leading-relaxed whitespace-pre-line">
                         {selectedCandidate.motivation}
@@ -970,7 +970,7 @@ export default function AdminTalents() {
             </div>
 
             {/* Pied Modal : Actions */}
-            <div className="p-4 sm:p-5 bg-white border-t border-[#EFECE6] flex items-center justify-between shrink-0">
+            <div className="p-4 sm:p-5 bg-white border-t border-[#d0e4f0] flex items-center justify-between shrink-0">
               <button
                 type="button"
                 disabled={isDeleting}
@@ -993,7 +993,7 @@ export default function AdminTalents() {
                   type="button"
                   disabled={isUpdating}
                   onClick={handleSaveDecision}
-                  className="px-5 py-2 rounded-xl bg-[#B85028] hover:bg-[#9e3f1d] active:scale-95 text-white font-bold text-xs shadow-xs cursor-pointer transition-all flex items-center gap-1.5"
+                  className="px-5 py-2 rounded-xl bg-[#f15b29] hover:bg-[#d44d1f] active:scale-95 text-white font-bold text-xs shadow-xs cursor-pointer transition-all flex items-center gap-1.5"
                 >
                   {isUpdating ? (
                     <span>Enregistrement...</span>

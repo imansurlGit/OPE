@@ -34,8 +34,8 @@ function TalentAvatar({
   if (!photo || imgError) {
     if (size === "modal") {
       return (
-        <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#2D2A26] via-[#201D1A] to-[#151312] text-[#E5DEC9]">
-          <div className="w-20 h-20 rounded-full bg-white/10 border border-white/15 flex items-center justify-center text-white/80 shadow-md mb-2 backdrop-blur-xs">
+        <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-ope-primary via-[#245070] to-[#1b3a4f] text-white">
+          <div className="w-20 h-20 rounded-full bg-white/15 border border-white/20 flex items-center justify-center text-white shadow-md mb-2 backdrop-blur-xs">
             <svg
               className="w-10 h-10"
               fill="none"
@@ -50,7 +50,7 @@ function TalentAvatar({
               />
             </svg>
           </div>
-          <span className="text-xs font-semibold text-white/60 tracking-wider">
+          <span className="text-xs font-semibold text-white/80 tracking-wider">
             Photo d'identité non renseignée
           </span>
         </div>
@@ -58,8 +58,8 @@ function TalentAvatar({
     }
 
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#FAF5EE] via-[#F4EDE2] to-[#E9DFCF] text-gray-400 group-hover:from-[#F6EFE4] group-hover:to-[#E4D7C2] transition-colors duration-300">
-        <div className="w-16 h-16 rounded-full bg-white/90 border border-[#E5DEC9] flex items-center justify-center text-[#B85028]/70 shadow-2xs group-hover:scale-105 transition-transform duration-300">
+      <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#edf4f9] via-[#e5f0f7] to-[#d6e8f4] text-ope-primary/60 group-hover:from-[#e4eff6] group-hover:to-[#cee2ef] transition-colors duration-300">
+        <div className="w-16 h-16 rounded-full bg-white/95 border border-ope-border flex items-center justify-center text-ope-primary shadow-2xs group-hover:scale-105 transition-transform duration-300">
           <svg
             className="w-8 h-8"
             fill="none"
@@ -74,7 +74,7 @@ function TalentAvatar({
             />
           </svg>
         </div>
-        <span className="text-[10px] font-bold text-gray-400 mt-2 uppercase tracking-wider">
+        <span className="text-[10px] font-bold text-ope-text-muted mt-2 uppercase tracking-wider">
           Sans photo
         </span>
       </div>
@@ -266,7 +266,12 @@ export default function Talents() {
       {/* ── Section En-Tête ──────────────────────────────────────── */}
       <section className="py-8 sm:py-12 px-4 sm:px-6 text-center">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-ope-text leading-tight mb-4 tracking-tight">
+          <h1
+            className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-4 tracking-tight animate-bounce bg-clip-text text-transparent"
+            style={{
+              backgroundImage: "linear-gradient(to right, #e40303, #ff8c00, #ffed00, #008026, #004dff, #732982)",
+            }}
+          >
             {t("talents.title")}
           </h1>
           <p className="text-xs sm:text-sm md:text-base text-ope-text-muted leading-relaxed max-w-2xl mx-auto">
@@ -288,7 +293,7 @@ export default function Talents() {
                   setSelectedRegion(e.target.value);
                   setDisplayCount(8);
                 }}
-                className="w-full bg-[#FAF5EE] border border-[#E8DEC8] text-ope-text text-xs sm:text-sm font-semibold rounded-xl px-4 py-3 appearance-none focus:outline-none focus:border-ope-primary cursor-pointer pr-10 shadow-2xs transition-colors"
+                className="w-full bg-white border border-ope-border text-ope-text text-xs sm:text-sm font-semibold rounded-xl px-4 py-3 appearance-none focus:outline-none focus:border-ope-primary cursor-pointer pr-10 shadow-2xs transition-colors"
               >
                 {REGIONS.map((r) => (
                   <option key={r} value={r}>
@@ -319,7 +324,7 @@ export default function Talents() {
                   setSelectedCategory(e.target.value);
                   setDisplayCount(8);
                 }}
-                className="w-full bg-[#FAF5EE] border border-[#E8DEC8] text-ope-text text-xs sm:text-sm font-semibold rounded-xl px-4 py-3 appearance-none focus:outline-none focus:border-ope-primary cursor-pointer pr-10 shadow-2xs transition-colors"
+                className="w-full bg-white border border-ope-border text-ope-text text-xs sm:text-sm font-semibold rounded-xl px-4 py-3 appearance-none focus:outline-none focus:border-ope-primary cursor-pointer pr-10 shadow-2xs transition-colors"
               >
                 {CATEGORIES.map((c) => (
                   <option key={c} value={c}>
@@ -355,7 +360,7 @@ export default function Talents() {
                 setDisplayCount(8);
               }}
               placeholder={t("talents.search_placeholder")}
-              className="w-full bg-[#FAF5EE] border border-[#E8DEC8] text-ope-text text-xs sm:text-sm font-medium rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-ope-primary shadow-2xs placeholder:text-ope-text-muted transition-colors"
+              className="w-full bg-white border border-ope-border text-ope-text text-xs sm:text-sm font-medium rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-ope-primary shadow-2xs placeholder:text-ope-text-muted transition-colors"
             />
             <svg
               className="w-4 h-4 text-ope-text-muted absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
@@ -390,7 +395,7 @@ export default function Talents() {
             <button
               type="button"
               onClick={() => setRetryTrigger((r) => r + 1)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#B85028] text-white text-xs font-bold hover:bg-[#a0431f] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#f15b29] text-white text-xs font-bold hover:bg-[#d44d1f] transition-colors cursor-pointer"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -410,7 +415,7 @@ export default function Talents() {
               {[...Array(8)].map((_, idx) => (
                 <div
                   key={idx}
-                  className="bg-white rounded-2xl overflow-hidden border border-[#E8DEC8] h-[420px] flex flex-col animate-pulse"
+                  className="bg-white rounded-2xl overflow-hidden border border-ope-border h-[420px] flex flex-col animate-pulse"
                 >
                   <div className="h-1/2 w-full bg-slate-200" />
                   <div className="h-1/2 p-5 space-y-3">
@@ -426,7 +431,7 @@ export default function Talents() {
           {/* Aucun résultat */}
           {!isLoading && !error && visibleTalents.length === 0 && (
             <div className="text-center py-16 bg-ope-white rounded-3xl border border-ope-border">
-              <div className="w-12 h-12 rounded-full bg-orange-50 text-ope-primary flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 rounded-full bg-[#edf4f9] text-ope-primary flex items-center justify-center mx-auto mb-3">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
@@ -496,7 +501,7 @@ export default function Talents() {
 
                       {/* Footer de la carte */}
                       <div className="pt-2 border-t border-gray-100/80">
-                        <div className="text-[11px] font-bold text-[#B85028] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                        <div className="text-[11px] font-bold text-[#f15b29] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                           <span>{t("talents.view_profile")}</span>
                           <span>→</span>
                         </div>
@@ -515,7 +520,7 @@ export default function Talents() {
                 <button
                   type="button"
                   onClick={handleLoadMore}
-                  className="group inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl text-xs sm:text-sm font-extrabold text-white bg-[#B85028] hover:bg-[#a0431f] active:scale-95 transition-all shadow-md hover:shadow-lg cursor-pointer"
+                  className="group inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-2xl text-xs sm:text-sm font-extrabold text-white bg-[#f15b29] hover:bg-[#d44d1f] active:scale-95 transition-all shadow-md hover:shadow-lg cursor-pointer"
                 >
                   <span>{t("talents.view_more", "Voir plus")}</span>
                   <svg
@@ -543,7 +548,7 @@ export default function Talents() {
                       .getElementById("talents-grid")
                       ?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="group inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-ope-text-muted hover:text-ope-primary bg-[#FAF5EE] border border-[#E8DEC8] hover:border-ope-primary/40 transition-all cursor-pointer"
+                  className="group inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-xs sm:text-sm font-bold text-ope-text-muted hover:text-ope-primary bg-white border border-ope-border hover:border-ope-primary/40 transition-all cursor-pointer"
                 >
                   <span>{t("talents.view_less", "Voir moins")}</span>
                   <svg
@@ -648,7 +653,7 @@ export default function Talents() {
 
                 {/* House visée */}
                 {selectedTalent.house && (
-                  <div className="bg-[#FAF5EE] rounded-xl p-3.5 border border-[#E8DEC8]">
+                  <div className="bg-ope-bg rounded-xl p-3.5 border border-ope-border">
                     <span className="text-[10px] uppercase font-extrabold tracking-wider text-gray-500 block mb-0.5">
                       Filière d'Excellence / Spécialisation
                     </span>
@@ -684,7 +689,7 @@ export default function Talents() {
               </div>
 
               {/* Pied de modal */}
-              <div className="p-4 border-t border-ope-border bg-[#FAF7F2] flex items-center justify-end shrink-0">
+              <div className="p-4 border-t border-ope-border bg-white flex items-center justify-end shrink-0">
                 <button
                   type="button"
                   onClick={() => setSelectedTalent(null)}

@@ -1,10 +1,10 @@
-import { useState, useEffect, useMemo } from "react";
+﻿import { useState, useEffect, useMemo } from "react";
 import dashboardService from "../services/dashboardService";
 import type { DashboardStats, TimelinePoint } from "../services/dashboardService";
 
 // ── Couleurs fixes des régions ──
 const REGION_COLORS = [
-  "from-[#B85028] to-[#D97706]",
+  "from-[#f15b29] to-[#D97706]",
   "from-[#2F6084] to-[#4A80A8]",
   "from-amber-600 to-amber-500",
   "from-emerald-600 to-teal-500",
@@ -20,10 +20,10 @@ const HOUSE_CONFIG = [
     name: "House STEAM",
     badge: "STEAM",
     desc: "Sciences, Technologies, Ingénierie, Arts & Maths",
-    color: "#B85028",
-    colorClass: "bg-[#B85028]",
-    textColor: "text-[#B85028]",
-    borderColor: "border-[#B85028]",
+    color: "#f15b29",
+    colorClass: "bg-[#f15b29]",
+    textColor: "text-[#f15b29]",
+    borderColor: "border-[#f15b29]",
     bgSoft: "bg-orange-50",
   },
   {
@@ -229,7 +229,7 @@ export default function DashboardStats() {
       {/* ── KPIs ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Total candidatures */}
-        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#EFECE6] shadow-2xs hover:shadow-xs transition-all">
+        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#d0e4f0] shadow-2xs hover:shadow-xs transition-all">
           <div className="flex items-center justify-between text-xs text-gray-500 font-medium mb-1.5">
             <span>Candidatures</span>
             <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
@@ -245,7 +245,7 @@ export default function DashboardStats() {
         </div>
 
         {/* Talents retenus */}
-        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#EFECE6] shadow-2xs hover:shadow-xs transition-all">
+        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#d0e4f0] shadow-2xs hover:shadow-xs transition-all">
           <div className="flex items-center justify-between text-xs text-gray-500 font-medium mb-1.5">
             <span>Talents retenus</span>
             <span className="text-[11px] font-bold text-[#2F6084] bg-blue-50 px-2 py-0.5 rounded-full">
@@ -262,7 +262,7 @@ export default function DashboardStats() {
         </div>
 
         {/* Parité */}
-        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#EFECE6] shadow-2xs hover:shadow-xs transition-all">
+        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#d0e4f0] shadow-2xs hover:shadow-xs transition-all">
           <div className="flex items-center justify-between text-xs text-gray-500 font-medium mb-1.5">
             <span>Parité F / G</span>
             <span className="text-[11px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full">
@@ -279,7 +279,7 @@ export default function DashboardStats() {
         </div>
 
         {/* Couverture régionale */}
-        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#EFECE6] shadow-2xs hover:shadow-xs transition-all">
+        <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#d0e4f0] shadow-2xs hover:shadow-xs transition-all">
           <div className="flex items-center justify-between text-xs text-gray-500 font-medium mb-1.5">
             <span>Territoire</span>
             <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
@@ -298,7 +298,7 @@ export default function DashboardStats() {
       {/* ── Graphiques ligne 2 ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 items-stretch">
         {/* Courbe d'évolution par semaine / par mois / par jour */}
-        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#EFECE6] shadow-2xs flex flex-col justify-between h-full">
+        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#d0e4f0] shadow-2xs flex flex-col justify-between h-full">
           <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <h2 className="text-base font-extrabold text-gray-900 tracking-tight">
@@ -312,7 +312,7 @@ export default function DashboardStats() {
             </div>
 
             {/* Sélecteur de période : Semaine / Mois / Jour */}
-            <div className="flex items-center self-start sm:self-auto bg-[#FAF7F2] p-1 rounded-xl border border-[#EFECE6] text-xs font-semibold text-gray-500">
+            <div className="flex items-center self-start sm:self-auto bg-[#f4f8fb] p-1 rounded-xl border border-[#d0e4f0] text-xs font-semibold text-gray-500">
               <button
                 type="button"
                 onClick={() => {
@@ -321,7 +321,7 @@ export default function DashboardStats() {
                 }}
                 className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                   timelinePeriod === "week"
-                    ? "bg-white text-[#B85028] shadow-2xs font-extrabold"
+                    ? "bg-white text-[#f15b29] shadow-2xs font-extrabold"
                     : "hover:text-gray-900"
                 }`}
               >
@@ -335,7 +335,7 @@ export default function DashboardStats() {
                 }}
                 className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                   timelinePeriod === "month"
-                    ? "bg-white text-[#B85028] shadow-2xs font-extrabold"
+                    ? "bg-white text-[#f15b29] shadow-2xs font-extrabold"
                     : "hover:text-gray-900"
                 }`}
               >
@@ -349,7 +349,7 @@ export default function DashboardStats() {
                 }}
                 className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                   timelinePeriod === "day"
-                    ? "bg-white text-[#B85028] shadow-2xs font-extrabold"
+                    ? "bg-white text-[#f15b29] shadow-2xs font-extrabold"
                     : "hover:text-gray-900"
                 }`}
               >
@@ -362,11 +362,11 @@ export default function DashboardStats() {
             <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full h-44 sm:h-48 overflow-visible">
               <defs>
                 <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#B85028" stopOpacity="0.35" />
-                  <stop offset="100%" stopColor="#B85028" stopOpacity="0.0" />
+                  <stop offset="0%" stopColor="#f15b29" stopOpacity="0.35" />
+                  <stop offset="100%" stopColor="#f15b29" stopOpacity="0.0" />
                 </linearGradient>
                 <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#B85028" floodOpacity="0.3" />
+                  <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#f15b29" floodOpacity="0.3" />
                 </filter>
               </defs>
 
@@ -374,7 +374,7 @@ export default function DashboardStats() {
                 const y = svgHeight - paddingY - ratio * (svgHeight - paddingY * 2);
                 return (
                   <line key={ratio} x1={paddingX} y1={y} x2={svgWidth - paddingX} y2={y}
-                    stroke="#EFECE6" strokeDasharray="4 4" strokeWidth="1" />
+                    stroke="#d0e4f0" strokeDasharray="4 4" strokeWidth="1" />
                 );
               })}
 
@@ -382,7 +382,7 @@ export default function DashboardStats() {
                 <path d={areaD} fill="url(#areaGradient)" className="transition-all duration-700 ease-out" />
               )}
               {pathD && (
-                <path d={pathD} fill="none" stroke="#B85028" strokeWidth="3.5"
+                <path d={pathD} fill="none" stroke="#f15b29" strokeWidth="3.5"
                   strokeLinecap="round" strokeLinejoin="round" filter="url(#glow)"
                   className="transition-all duration-700 ease-out" />
               )}
@@ -392,7 +392,7 @@ export default function DashboardStats() {
                 return (
                   <g key={idx}>
                     <circle cx={pt.x} cy={pt.y} r={isHovered ? 7 : 4.5}
-                      className="fill-white stroke-[#B85028] stroke-3 transition-all duration-200 cursor-pointer"
+                      className="fill-white stroke-[#f15b29] stroke-3 transition-all duration-200 cursor-pointer"
                       onMouseEnter={() => setHoveredPoint(pt)}
                       onMouseLeave={() => setHoveredPoint(null)} />
                     <text x={pt.x} y={svgHeight - 10} textAnchor="middle"
@@ -438,7 +438,7 @@ export default function DashboardStats() {
         </div>
 
         {/* Donut : Répartition par Maison */}
-        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#EFECE6] shadow-2xs flex flex-col justify-between h-full">
+        <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#d0e4f0] shadow-2xs flex flex-col justify-between h-full">
           <div className="mb-3">
             <h2 className="text-base font-extrabold text-gray-900 tracking-tight">
               Répartition par Maison
@@ -487,7 +487,7 @@ export default function DashboardStats() {
                   onMouseLeave={() => setHoveredHouse(null)}
                   className={`p-2 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
                     hoveredHouse === house.name
-                      ? "bg-[#FAF7F2] border-[#B85028] shadow-xs"
+                      ? "bg-[#f4f8fb] border-[#f15b29] shadow-xs"
                       : "border-transparent hover:bg-slate-50"
                   }`}
                 >
@@ -512,7 +512,7 @@ export default function DashboardStats() {
       {/* ── Graphiques ligne 3 : Régions + Pipeline ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Histogramme Régions */}
-        <div className="lg:col-span-7 bg-white p-6 sm:p-7 rounded-3xl border border-[#EFECE6] shadow-2xs">
+        <div className="lg:col-span-7 bg-white p-6 sm:p-7 rounded-3xl border border-[#d0e4f0] shadow-2xs">
           <div className="flex items-center justify-between mb-5">
             <div>
               <h2 className="text-base sm:text-lg font-extrabold text-gray-900 tracking-tight">
@@ -522,7 +522,7 @@ export default function DashboardStats() {
                 Candidatures par région du Niger
               </p>
             </div>
-            <span className="text-xs font-bold text-[#B85028] bg-orange-50 px-2.5 py-1 rounded-lg">
+            <span className="text-xs font-bold text-[#f15b29] bg-orange-50 px-2.5 py-1 rounded-lg">
               {s.regions_couvertes} Régions
             </span>
           </div>
@@ -531,7 +531,7 @@ export default function DashboardStats() {
             {s.regions.map((reg, idx) => (
               <div key={reg.region} className="group">
                 <div className="flex items-center justify-between text-xs font-bold mb-1">
-                  <span className="text-gray-800 group-hover:text-[#B85028] transition-colors">
+                  <span className="text-gray-800 group-hover:text-[#f15b29] transition-colors">
                     {reg.region}
                   </span>
                   <span className="text-gray-500 font-mono">
@@ -556,7 +556,7 @@ export default function DashboardStats() {
         </div>
 
         {/* Pipeline de sélection */}
-        <div className="lg:col-span-5 bg-white p-6 sm:p-7 rounded-3xl border border-[#EFECE6] shadow-2xs">
+        <div className="lg:col-span-5 bg-white p-6 sm:p-7 rounded-3xl border border-[#d0e4f0] shadow-2xs">
           <div className="mb-5">
             <h2 className="text-base sm:text-lg font-extrabold text-gray-900 tracking-tight">
               Entonnoir de sélection
@@ -571,8 +571,8 @@ export default function DashboardStats() {
                 count: total,
                 pct: 100,
                 color: "bg-gray-600",
-                bg: "bg-[#FAF7F2]",
-                border: "border-[#EFECE6]",
+                bg: "bg-[#f4f8fb]",
+                border: "border-[#d0e4f0]",
                 textColor: "text-gray-700",
                 barBg: "bg-slate-200",
               },

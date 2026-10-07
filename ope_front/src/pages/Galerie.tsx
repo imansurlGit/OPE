@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+﻿import { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { galerieService, type MediaGalerie } from "../services";
 
@@ -76,7 +76,7 @@ export default function Galerie() {
     };
 
     return (
-        <div className="pt-16 bg-[#FAF5EE] min-h-screen">
+        <div className="pt-16 bg-ope-bg min-h-screen">
             {/* ── En-tête ──────────────────────────────────────────────── */}
             <section className="py-10 px-4 sm:px-6 text-center">
                 <div className="max-w-3xl mx-auto">
@@ -88,7 +88,7 @@ export default function Galerie() {
                     </p>
 
                     {/* Filtres */}
-                    <div className="inline-flex items-center justify-center flex-wrap gap-2 p-1.5 rounded-full bg-white border border-[#E8DEC8] shadow-2xs">
+                    <div className="inline-flex items-center justify-center flex-wrap gap-2 p-1.5 rounded-full bg-white border border-ope-border shadow-2xs">
                         {categories.map((cat) => {
                             const isActive = activeCat === cat.key;
                             return (
@@ -111,7 +111,7 @@ export default function Galerie() {
 
             {/* ── Contenu Principal ──────────────────────────────────── */}
             <section className="px-4 sm:px-6 pb-24">
-                <div className="max-w-6xl mx-auto relative p-3 sm:p-5 rounded-[2.5rem] bg-white border border-[#EADFD2] shadow-sm">
+                <div className="max-w-6xl mx-auto relative p-3 sm:p-5 rounded-[2.5rem] bg-white border border-ope-border shadow-sm">
                     {/* Motif de fond */}
                     <div className="absolute inset-0 pointer-events-none opacity-25">
                         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
@@ -150,7 +150,7 @@ export default function Galerie() {
                             </p>
                             <button
                                 onClick={() => window.location.reload()}
-                                className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#BD5338] hover:bg-[#a0431f] transition-colors cursor-pointer"
+                                className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#BD5338] hover:bg-[#d44d1f] transition-colors cursor-pointer"
                             >
                                 Réessayer
                             </button>
@@ -178,7 +178,7 @@ export default function Galerie() {
                             {activeCat !== "all" && (
                                 <button
                                     onClick={() => setActiveCat("all")}
-                                    className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#BD5338] hover:bg-[#a0431f] transition-colors cursor-pointer"
+                                    className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#BD5338] hover:bg-[#d44d1f] transition-colors cursor-pointer"
                                 >
                                     Voir toutes les photos
                                 </button>

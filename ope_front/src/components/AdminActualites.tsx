@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+﻿import { useState, useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import { actualiteService, type Actualite, type ActualitePhase } from "../services";
 import Pagination from "./Pagination";
@@ -15,15 +15,15 @@ const PHASES_CONFIG: Record<
   },
   pendant: {
     label: "Pendant le camp",
-    badgeClass: "bg-[#FDF3EE] text-[#B85028] border-[#F0C5AE]",
+    badgeClass: "bg-[#FDF3EE] text-[#f15b29] border-[#F0C5AE]",
     bgSoft: "bg-[#FDF3EE]/50",
-    textColor: "text-[#B85028]",
+    textColor: "text-[#f15b29]",
   },
   apres: {
     label: "Après le camp",
-    badgeClass: "bg-[#F0ECE8] text-[#6B4533] border-[#D9C4B8]",
+    badgeClass: "bg-[#F0ECE8] text-[#1b3a4f] border-[#D9C4B8]",
     bgSoft: "bg-[#F0ECE8]/50",
-    textColor: "text-[#6B4533]",
+    textColor: "text-[#1b3a4f]",
   },
 };
 
@@ -293,7 +293,7 @@ export default function AdminActualites() {
         <button
           type="button"
           onClick={openCreateModal}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm text-white bg-[#B85028] hover:bg-[#a0431f] cursor-pointer shadow-xs transition-all active:scale-95"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm text-white bg-[#f15b29] hover:bg-[#d44d1f] cursor-pointer shadow-xs transition-all active:scale-95"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
@@ -304,7 +304,7 @@ export default function AdminActualites() {
 
       {/* ── Statistiques Rapides ── */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-        <div className="bg-white p-4 rounded-2xl border border-[#EFECE6] shadow-2xs">
+        <div className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs">
           <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">
             Total Articles
           </span>
@@ -313,25 +313,25 @@ export default function AdminActualites() {
           </span>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-[#EFECE6] shadow-2xs">
-          <span className="text-[11px] font-bold text-[#B85028] uppercase tracking-wider block">
+        <div className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs">
+          <span className="text-[11px] font-bold text-[#f15b29] uppercase tracking-wider block">
             Publiés
           </span>
-          <span className="text-2xl font-black text-[#B85028] mt-1 block">
+          <span className="text-2xl font-black text-[#f15b29] mt-1 block">
             {stats.publies}
           </span>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-[#EFECE6] shadow-2xs">
-          <span className="text-[11px] font-bold text-[#6B4533] uppercase tracking-wider block">
+        <div className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs">
+          <span className="text-[11px] font-bold text-[#1b3a4f] uppercase tracking-wider block">
             Brouillons
           </span>
-          <span className="text-2xl font-black text-[#6B4533] mt-1 block">
+          <span className="text-2xl font-black text-[#1b3a4f] mt-1 block">
             {stats.brouillons}
           </span>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-[#EFECE6] shadow-2xs">
+        <div className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs">
           <span className="text-[11px] font-bold text-[#193549] uppercase tracking-wider block">
             Avant Camp
           </span>
@@ -340,18 +340,18 @@ export default function AdminActualites() {
           </span>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-[#EFECE6] shadow-2xs col-span-2 sm:col-span-1">
-          <span className="text-[11px] font-bold text-[#B85028] uppercase tracking-wider block">
+        <div className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs col-span-2 sm:col-span-1">
+          <span className="text-[11px] font-bold text-[#f15b29] uppercase tracking-wider block">
             Pendant / Après
           </span>
-          <span className="text-2xl font-black text-[#B85028] mt-1 block">
+          <span className="text-2xl font-black text-[#f15b29] mt-1 block">
             {stats.pendant + stats.apres}
           </span>
         </div>
       </div>
 
       {/* ── Barre d'outils : Filtres, Recherche & Affichage ── */}
-      <div className="bg-white p-4 rounded-2xl border border-[#EFECE6] shadow-2xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+      <div className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2.5 flex-1">
           {/* Recherche */}
           <div className="relative flex-1 min-w-[220px]">
@@ -360,7 +360,7 @@ export default function AdminActualites() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Rechercher par titre, résumé..."
-              className="w-full bg-[#FAF7F2] border border-[#EFECE6] rounded-xl pl-9 pr-3 py-2 text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#B85028]"
+              className="w-full bg-[#f4f8fb] border border-[#d0e4f0] rounded-xl pl-9 pr-3 py-2 text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#f15b29]"
             />
             <svg
               className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"
@@ -376,7 +376,7 @@ export default function AdminActualites() {
           <select
             value={selectedPhase}
             onChange={(e) => setSelectedPhase(e.target.value)}
-            className="bg-[#FAF7F2] border border-[#EFECE6] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#B85028] cursor-pointer"
+            className="bg-[#f4f8fb] border border-[#d0e4f0] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#f15b29] cursor-pointer"
           >
             <option value="all">Toutes les phases</option>
             <option value="avant">Avant le camp</option>
@@ -388,7 +388,7 @@ export default function AdminActualites() {
           <select
             value={selectedStatut}
             onChange={(e) => setSelectedStatut(e.target.value)}
-            className="bg-[#FAF7F2] border border-[#EFECE6] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#B85028] cursor-pointer"
+            className="bg-[#f4f8fb] border border-[#d0e4f0] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#f15b29] cursor-pointer"
           >
             <option value="all">Tous les statuts</option>
             <option value="publie">Publié en ligne</option>
@@ -397,13 +397,13 @@ export default function AdminActualites() {
         </div>
 
         {/* Switch Mode Vue */}
-        <div className="flex items-center gap-1 bg-[#FAF7F2] p-1 rounded-xl border border-[#EFECE6] self-end md:self-auto">
+        <div className="flex items-center gap-1 bg-[#f4f8fb] p-1 rounded-xl border border-[#d0e4f0] self-end md:self-auto">
           <button
             type="button"
             onClick={() => setViewMode("table")}
             className={`p-1.5 rounded-lg cursor-pointer transition-all ${
               viewMode === "table"
-                ? "bg-white text-[#B85028] shadow-2xs"
+                ? "bg-white text-[#f15b29] shadow-2xs"
                 : "text-gray-400 hover:text-gray-600"
             }`}
             title="Vue tableau"
@@ -417,7 +417,7 @@ export default function AdminActualites() {
             onClick={() => setViewMode("cards")}
             className={`p-1.5 rounded-lg cursor-pointer transition-all ${
               viewMode === "cards"
-                ? "bg-white text-[#B85028] shadow-2xs"
+                ? "bg-white text-[#f15b29] shadow-2xs"
                 : "text-gray-400 hover:text-gray-600"
             }`}
             title="Vue grille de cartes"
@@ -431,15 +431,15 @@ export default function AdminActualites() {
 
       {/* ── Contenu : Chargement, Empty state ou Liste ── */}
       {isLoading ? (
-        <div className="bg-white rounded-3xl border border-[#EFECE6] p-8 space-y-4 animate-pulse">
+        <div className="bg-white rounded-3xl border border-[#d0e4f0] p-8 space-y-4 animate-pulse">
           <div className="h-6 bg-slate-100 rounded w-1/4" />
           <div className="h-10 bg-slate-100 rounded w-full" />
           <div className="h-10 bg-slate-100 rounded w-full" />
           <div className="h-10 bg-slate-100 rounded w-full" />
         </div>
       ) : filteredArticles.length === 0 ? (
-        <div className="bg-white rounded-3xl border border-[#EFECE6] p-12 text-center">
-          <div className="w-14 h-14 rounded-full bg-orange-50 text-[#B85028] flex items-center justify-center mx-auto mb-3">
+        <div className="bg-white rounded-3xl border border-[#d0e4f0] p-12 text-center">
+          <div className="w-14 h-14 rounded-full bg-[#edf4f9] text-[#2F6084] flex items-center justify-center mx-auto mb-3">
             <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
             </svg>
@@ -453,18 +453,18 @@ export default function AdminActualites() {
           <button
             type="button"
             onClick={openCreateModal}
-            className="px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-[#B85028] hover:bg-[#a0431f] cursor-pointer shadow-xs transition-colors"
+            className="px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-[#f15b29] hover:bg-[#d44d1f] cursor-pointer shadow-xs transition-colors"
           >
             + Rédiger un article
           </button>
         </div>
       ) : viewMode === "table" ? (
         /* ── Vue Tableau ── */
-        <div className="bg-white rounded-3xl border border-[#EFECE6] shadow-2xs overflow-hidden">
+        <div className="bg-white rounded-3xl border border-[#d0e4f0] shadow-2xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-[#EFECE6] bg-[#FAF7F2]/60 text-[11px] font-black uppercase tracking-wider text-gray-400">
+                <tr className="border-b border-[#d0e4f0] bg-[#f4f8fb]/60 text-[11px] font-black uppercase tracking-wider text-gray-400">
                   <th className="py-3.5 px-4 sm:px-6">Article</th>
                   <th className="py-3.5 px-4">Phase</th>
                   <th className="py-3.5 px-4">Date</th>
@@ -472,7 +472,7 @@ export default function AdminActualites() {
                   <th className="py-3.5 px-4 text-right sm:pr-6">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#EFECE6] text-xs">
+              <tbody className="divide-y divide-[#d0e4f0] text-xs">
                 {paginatedArticles.map((article) => {
                   const phaseInfo = PHASES_CONFIG[article.phase] || PHASES_CONFIG.avant;
                   return (
@@ -502,7 +502,7 @@ export default function AdminActualites() {
                                 {article.temps_lecture} min de lecture
                               </span>
                             </div>
-                            <h4 className="font-extrabold text-gray-900 text-sm truncate hover:text-[#B85028] transition-colors cursor-pointer"
+                            <h4 className="font-extrabold text-gray-900 text-sm truncate hover:text-[#f15b29] transition-colors cursor-pointer"
                               onClick={() => setPreviewArticle(article)}
                             >
                               {article.titre}
@@ -533,11 +533,11 @@ export default function AdminActualites() {
                           onClick={() => togglePublie(article)}
                           className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold transition-all cursor-pointer ${
                             article.publie
-                              ? "bg-[#FDF3EE] text-[#B85028] border border-[#F0C5AE] hover:bg-[#F9E4D6]"
-                              : "bg-[#FAF7F2] text-[#6B4533] border border-[#EFECE6] hover:bg-[#EFECE6]"
+                              ? "bg-[#FDF3EE] text-[#f15b29] border border-[#F0C5AE] hover:bg-[#F9E4D6]"
+                              : "bg-[#f4f8fb] text-[#1b3a4f] border border-[#d0e4f0] hover:bg-[#d0e4f0]"
                           }`}
                         >
-                          <span className={`w-1.5 h-1.5 rounded-full ${article.publie ? "bg-[#B85028]" : "bg-[#9C8578]"}`} />
+                          <span className={`w-1.5 h-1.5 rounded-full ${article.publie ? "bg-[#f15b29]" : "bg-[#9C8578]"}`} />
                           <span>{article.publie ? "Publié" : "Brouillon"}</span>
                         </button>
                       </td>
@@ -598,7 +598,7 @@ export default function AdminActualites() {
             return (
               <div
                 key={article.id}
-                className="bg-white rounded-3xl border border-[#EFECE6] overflow-hidden shadow-2xs hover:shadow-md transition-all duration-300 flex flex-col group h-[400px]"
+                className="bg-white rounded-3xl border border-[#d0e4f0] overflow-hidden shadow-2xs hover:shadow-md transition-all duration-300 flex flex-col group h-[400px]"
               >
                 {/* Image de couverture — 50% fixe */}
                 <div className="relative h-1/2 w-full bg-[#F0ECE8] overflow-hidden shrink-0">
@@ -609,11 +609,13 @@ export default function AdminActualites() {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#FAF7F2] to-[#ECE7DC] text-[#9C8578]">
-                      <svg className="w-10 h-10 opacity-40 mb-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      <span className="text-[10px] font-bold uppercase tracking-wider">Sans image</span>
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#edf4f9] via-[#e5f0f7] to-[#d6e8f4] text-ope-primary/60">
+                      <div className="w-14 h-14 rounded-full bg-white/95 border border-ope-border flex items-center justify-center mb-1.5 shadow-2xs group-hover:scale-105 transition-transform duration-300">
+                        <svg className="w-7 h-7 text-ope-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-ope-text-muted">Sans image</span>
                     </div>
                   )}
 
@@ -635,7 +637,7 @@ export default function AdminActualites() {
                       togglePublie(article);
                     }}
                     className={`absolute top-3 right-3 px-2 py-0.5 rounded-full text-[9px] font-black shadow-xs cursor-pointer ${
-                      article.publie ? "bg-[#B85028] text-white" : "bg-[#193549]/80 text-gray-200"
+                      article.publie ? "bg-[#f15b29] text-white" : "bg-[#193549]/80 text-gray-200"
                     }`}
                   >
                     {article.publie ? "En ligne" : "Brouillon"}
@@ -650,7 +652,7 @@ export default function AdminActualites() {
                       <span>•</span>
                       <span>{article.temps_lecture} min</span>
                     </div>
-                    <h3 className="font-extrabold text-sm text-gray-900 mb-1.5 group-hover:text-[#B85028] transition-colors line-clamp-2">
+                    <h3 className="font-extrabold text-sm text-gray-900 mb-1.5 group-hover:text-[#f15b29] transition-colors line-clamp-2">
                       {article.titre}
                     </h3>
                     <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
@@ -659,7 +661,7 @@ export default function AdminActualites() {
                   </div>
 
                   {/* Footer Carte */}
-                  <div className="px-4 py-3 border-t border-[#EFECE6] bg-[#FAF7F2]/40 flex items-center justify-between shrink-0">
+                  <div className="px-4 py-3 border-t border-[#d0e4f0] bg-[#f4f8fb]/40 flex items-center justify-between shrink-0">
                     <button
                       type="button"
                       onClick={() => setPreviewArticle(article)}
@@ -717,9 +719,9 @@ export default function AdminActualites() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header Modal */}
-            <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-[#FAF7F2]">
+            <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-[#f4f8fb]">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-[#FDF3EE] text-[#B85028] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#FDF3EE] text-[#f15b29] flex items-center justify-center">
                   {editingArticle ? (
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -742,7 +744,7 @@ export default function AdminActualites() {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-[#EFECE6] text-[#193549] hover:bg-[#DDD8D0] flex items-center justify-center cursor-pointer transition-colors"
+                className="w-8 h-8 rounded-full bg-[#d0e4f0] text-[#193549] hover:bg-[#DDD8D0] flex items-center justify-center cursor-pointer transition-colors"
                 aria-label="Fermer"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -764,7 +766,7 @@ export default function AdminActualites() {
                   value={formTitre}
                   onChange={(e) => setFormTitre(e.target.value)}
                   placeholder="Ex : Lancement des inscriptions au Camp 2026..."
-                  className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold text-gray-900 focus:outline-none focus:border-[#B85028]"
+                  className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold text-gray-900 focus:outline-none focus:border-[#f15b29]"
                 />
               </div>
 
@@ -778,7 +780,7 @@ export default function AdminActualites() {
                   <select
                     value={formPhase}
                     onChange={(e) => setFormPhase(e.target.value as ActualitePhase)}
-                    className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#B85028]"
+                    className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#f15b29]"
                   >
                     <option value="avant">Avant le camp</option>
                     <option value="pendant">Pendant le camp</option>
@@ -796,7 +798,7 @@ export default function AdminActualites() {
                     value={formBadge}
                     onChange={(e) => setFormBadge(e.target.value)}
                     placeholder="OFFICIEL, ATELIER, DIRECT..."
-                    className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#B85028]"
+                    className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#f15b29]"
                   />
                 </div>
 
@@ -809,7 +811,7 @@ export default function AdminActualites() {
                     type="date"
                     value={formDate}
                     onChange={(e) => setFormDate(e.target.value)}
-                    className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#B85028]"
+                    className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#f15b29]"
                   />
                 </div>
               </div>
@@ -826,7 +828,7 @@ export default function AdminActualites() {
                     max={60}
                     value={formTempsLecture}
                     onChange={(e) => setFormTempsLecture(Number(e.target.value))}
-                    className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#B85028]"
+                    className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#f15b29]"
                   />
                 </div>
 
@@ -845,7 +847,7 @@ export default function AdminActualites() {
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#FAF7F2] border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+                      className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#f4f8fb] border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
                     >
                       Choisir une image...
                     </button>
@@ -883,7 +885,7 @@ export default function AdminActualites() {
                   value={formResume}
                   onChange={(e) => setFormResume(e.target.value)}
                   placeholder="Bref résumé en 1 à 2 phrases..."
-                  className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl p-3 text-xs sm:text-sm font-medium text-gray-900 focus:outline-none focus:border-[#B85028]"
+                  className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl p-3 text-xs sm:text-sm font-medium text-gray-900 focus:outline-none focus:border-[#f15b29]"
                 />
               </div>
 
@@ -898,7 +900,7 @@ export default function AdminActualites() {
                   value={formContenu}
                   onChange={(e) => setFormContenu(e.target.value)}
                   placeholder="Rédigez ici l'article complet..."
-                  className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl p-3 text-xs sm:text-sm font-medium text-gray-900 focus:outline-none focus:border-[#B85028]"
+                  className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl p-3 text-xs sm:text-sm font-medium text-gray-900 focus:outline-none focus:border-[#f15b29]"
                 />
               </div>
 
@@ -909,7 +911,7 @@ export default function AdminActualites() {
                     type="checkbox"
                     checked={formPublie}
                     onChange={(e) => setFormPublie(e.target.checked)}
-                    className="w-4 h-4 rounded border-gray-300 text-[#B85028] focus:ring-[#B85028] cursor-pointer"
+                    className="w-4 h-4 rounded border-gray-300 text-[#f15b29] focus:ring-[#f15b29] cursor-pointer"
                   />
                   <span className="text-xs font-bold text-gray-800">
                     Publier immédiatement sur le site public
@@ -930,7 +932,7 @@ export default function AdminActualites() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-[#B85028] hover:bg-[#a0431f] transition-all cursor-pointer shadow-xs disabled:opacity-50"
+                  className="px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-[#f15b29] hover:bg-[#d44d1f] transition-all cursor-pointer shadow-xs disabled:opacity-50"
                 >
                   {isSubmitting ? "Enregistrement..." : editingArticle ? "Enregistrer les modifications" : "Publier l'article"}
                 </button>
@@ -967,7 +969,7 @@ export default function AdminActualites() {
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
               <div className="absolute bottom-4 left-4 right-4 text-white">
-                <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-[#B85028] text-white mb-2 inline-block">
+                <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-[#f15b29] text-white mb-2 inline-block">
                   {previewArticle.badge_label}
                 </span>
                 <h2 className="text-lg sm:text-xl font-black leading-tight">
@@ -992,12 +994,12 @@ export default function AdminActualites() {
                 <span>•</span>
                 <span>{previewArticle.temps_lecture} min de lecture</span>
                 <span>•</span>
-                 <span className={previewArticle.publie ? "text-[#B85028] font-bold" : "text-[#6B4533] font-bold"}>
+                 <span className={previewArticle.publie ? "text-[#f15b29] font-bold" : "text-[#1b3a4f] font-bold"}>
                    {previewArticle.publie ? "En ligne" : "Brouillon"}
                  </span>
               </div>
 
-              <div className="bg-[#FAF7F2] p-4 rounded-2xl border border-[#EFECE6]">
+              <div className="bg-[#f4f8fb] p-4 rounded-2xl border border-[#d0e4f0]">
                 <p className="text-xs sm:text-sm font-semibold text-gray-800 italic">
                   {previewArticle.resume}
                 </p>
@@ -1008,7 +1010,7 @@ export default function AdminActualites() {
               </div>
             </div>
 
-            <div className="p-4 border-t border-gray-100 bg-[#FAF7F2] flex items-center justify-between">
+            <div className="p-4 border-t border-gray-100 bg-[#f4f8fb] flex items-center justify-between">
               <button
                 type="button"
                 onClick={() => {

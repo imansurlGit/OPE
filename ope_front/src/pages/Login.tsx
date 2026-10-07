@@ -178,7 +178,7 @@ export default function Login() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 aria-invalid={error?.title === "Champs obligatoires" && !username.trim()}
-                className="w-full pl-10 pr-4 py-3 bg-[#FAF5EE] border border-[#E8DEC8] rounded-xl text-xs sm:text-sm text-ope-text placeholder-[#A89A88] focus:outline-none focus:border-ope-primary focus:bg-white transition-all"
+                className="w-full pl-10 pr-4 py-3 bg-ope-bg border border-ope-border rounded-xl text-xs sm:text-sm text-ope-text placeholder-ope-text-muted/60 focus:outline-none focus:border-ope-primary focus:bg-white transition-all"
               />
             </div>
           </div>
@@ -225,7 +225,7 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 aria-invalid={error?.title === "Champs obligatoires" && !password.trim()}
-                className="w-full pl-10 pr-11 py-3 bg-[#FAF5EE] border border-[#E8DEC8] rounded-xl text-xs sm:text-sm text-ope-text placeholder-[#A89A88] focus:outline-none focus:border-ope-primary focus:bg-white transition-all"
+                className="w-full pl-10 pr-11 py-3 bg-ope-bg border border-ope-border rounded-xl text-xs sm:text-sm text-ope-text placeholder-ope-text-muted/60 focus:outline-none focus:border-ope-primary focus:bg-white transition-all"
               />
               <button
                 type="button"
@@ -282,7 +282,7 @@ export default function Login() {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 rounded border-[#E8DEC8] text-ope-orange focus:ring-ope-orange/30 accent-ope-orange cursor-pointer"
+                className="w-4 h-4 rounded border-ope-border text-ope-orange focus:ring-ope-orange/30 accent-ope-orange cursor-pointer"
               />
               <span className="text-xs font-semibold text-ope-text-muted">
                 Se souvenir de moi

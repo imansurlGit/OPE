@@ -23,6 +23,7 @@
   --color-text:         #1b3a4f;   /* Texte principal : bleu nuit      */
   --color-text-muted:   #557a96;   /* Texte secondaire : bleu-gris     */
   --color-border:       #d0e4f0;   /* Bordures : bleu très clair       */
+  --color-text-orange  :#f15b29;
   --color-shadow:       rgba(47, 96, 132, 0.20);
 
   /* ── Countdown ───────────────────────────────────────── */

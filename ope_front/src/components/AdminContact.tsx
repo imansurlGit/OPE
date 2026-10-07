@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+﻿import { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { contactService, type MessageContact } from "../services";
 import Pagination from "./Pagination";
@@ -221,7 +221,7 @@ export default function AdminContact() {
           type="button"
           onClick={fetchMessages}
           disabled={isLoading}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm text-gray-700 bg-white hover:bg-gray-50 border border-[#EFECE6] cursor-pointer shadow-2xs transition-all active:scale-95 disabled:opacity-50"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm text-gray-700 bg-white hover:bg-gray-50 border border-[#d0e4f0] cursor-pointer shadow-2xs transition-all active:scale-95 disabled:opacity-50"
         >
           <svg
             className={`w-4 h-4 text-gray-500 ${isLoading ? "animate-spin" : ""}`}
@@ -242,32 +242,32 @@ export default function AdminContact() {
 
       {/* ── Cartes Statistiques ── */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-        <div className="bg-white p-4 rounded-2xl border border-[#EFECE6] shadow-2xs">
+        <div className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs">
           <span className="text-[11px] font-bold uppercase tracking-wider block text-gray-500">
             Total Reçus
           </span>
           <span className="text-2xl font-black mt-1 block text-gray-900">{stats.total}</span>
         </div>
-        <div className="bg-white p-4 rounded-2xl border border-[#EFECE6] shadow-2xs">
-          <span className="text-[11px] font-bold uppercase tracking-wider block text-[#B85028]">
+        <div className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs">
+          <span className="text-[11px] font-bold uppercase tracking-wider block text-[#f15b29]">
             En attente
           </span>
           <div className="flex items-baseline gap-2 mt-1">
-            <span className="text-2xl font-black text-[#B85028]">{stats.enAttente}</span>
+            <span className="text-2xl font-black text-[#f15b29]">{stats.enAttente}</span>
             {stats.enAttente > 0 && (
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-orange-100 text-[#B85028]">
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-orange-100 text-[#f15b29]">
                 À traiter
               </span>
             )}
           </div>
         </div>
-        <div className="bg-white p-4 rounded-2xl border border-[#EFECE6] shadow-2xs">
+        <div className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs">
           <span className="text-[11px] font-bold uppercase tracking-wider block text-[#1D6353]">
             Traités
           </span>
           <span className="text-2xl font-black mt-1 block text-[#1D6353]">{stats.traites}</span>
         </div>
-        <div className="bg-white p-4 rounded-2xl border border-[#EFECE6] shadow-2xs">
+        <div className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs">
           <span className="text-[11px] font-bold uppercase tracking-wider block text-[#1c5d6f]">
             Taux de suivi
           </span>
@@ -276,14 +276,14 @@ export default function AdminContact() {
       </div>
 
       {/* ── Barre de recherche & Filtres ── */}
-      <div className="bg-white p-4 rounded-2xl border border-[#EFECE6] shadow-2xs flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+      <div className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
         <div className="relative flex-1">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Rechercher par nom, email, sujet ou mot-clé..."
-            className="w-full bg-[#FAF7F2] border border-[#EFECE6] rounded-xl pl-9 pr-3 py-2 text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#B85028]"
+            className="w-full bg-[#f4f8fb] border border-[#d0e4f0] rounded-xl pl-9 pr-3 py-2 text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#f15b29]"
           />
           <svg
             className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"
@@ -308,7 +308,7 @@ export default function AdminContact() {
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value as "all" | "en_attente" | "traite")}
-          className="bg-[#FAF7F2] border border-[#EFECE6] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#B85028] cursor-pointer"
+          className="bg-[#f4f8fb] border border-[#d0e4f0] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#f15b29] cursor-pointer"
         >
           <option value="all">Tous les messages ({messages.length})</option>
           <option value="en_attente">En attente ({stats.enAttente})</option>
@@ -318,15 +318,15 @@ export default function AdminContact() {
 
       {/* ── Contenu / Liste des messages ── */}
       {isLoading ? (
-        <div className="bg-white rounded-3xl border border-[#EFECE6] p-8 animate-pulse space-y-4">
+        <div className="bg-white rounded-3xl border border-[#d0e4f0] p-8 animate-pulse space-y-4">
           <div className="h-6 bg-slate-100 rounded w-1/4" />
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="h-20 bg-slate-100 rounded-2xl w-full" />
           ))}
         </div>
       ) : filteredMessages.length === 0 ? (
-        <div className="bg-white rounded-3xl border border-[#EFECE6] p-12 text-center">
-          <div className="w-14 h-14 rounded-full bg-orange-50 text-[#B85028] flex items-center justify-center mx-auto mb-3">
+        <div className="bg-white rounded-3xl border border-[#d0e4f0] p-12 text-center">
+          <div className="w-14 h-14 rounded-full bg-[#edf4f9] text-[#2F6084] flex items-center justify-center mx-auto mb-3">
             <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
               <path
                 strokeLinecap="round"
@@ -348,7 +348,7 @@ export default function AdminContact() {
                 setSearchQuery("");
                 setStatusFilter("all");
               }}
-              className="px-4 py-2 rounded-xl font-bold text-xs text-[#B85028] bg-orange-50 hover:bg-orange-100 cursor-pointer transition-colors"
+              className="px-4 py-2 rounded-xl font-bold text-xs text-[#2F6084] bg-[#edf4f9] hover:bg-orange-100 cursor-pointer transition-colors"
             >
               Réinitialiser les filtres
             </button>
@@ -366,7 +366,7 @@ export default function AdminContact() {
                 onClick={() => openDetailModal(msg)}
                 className={`group bg-white rounded-2xl sm:rounded-3xl border transition-all duration-200 cursor-pointer p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:shadow-md overflow-hidden ${
                   isTraite
-                    ? "border-[#EFECE6] opacity-90 hover:opacity-100"
+                    ? "border-[#d0e4f0] opacity-90 hover:opacity-100"
                     : "border-orange-200/80 shadow-2xs bg-gradient-to-r from-white via-white to-orange-50/20"
                 }`}
               >
@@ -377,7 +377,7 @@ export default function AdminContact() {
                     className={`w-10 h-10 rounded-2xl flex items-center justify-center font-extrabold text-xs shrink-0 transition-colors ${
                       isTraite
                         ? "bg-slate-100 text-slate-600"
-                        : "bg-[#B85028]/10 text-[#B85028]"
+                        : "bg-[#f15b29]/10 text-[#f15b29]"
                     }`}
                   >
                     {getInitials(msg.nom)}
@@ -393,7 +393,7 @@ export default function AdminContact() {
                         className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full border shrink-0 ${
                           isTraite
                             ? "bg-[#EAF5F2] text-[#1D6353] border-[#BDE0D6]"
-                            : "bg-[#FDF3EE] text-[#B85028] border-[#F0C5AE]"
+                            : "bg-[#FDF3EE] text-[#f15b29] border-[#F0C5AE]"
                         }`}
                       >
                         {isTraite ? "Traité" : "En attente"}
@@ -442,7 +442,7 @@ export default function AdminContact() {
                       className={`p-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
                         isTraite
                           ? "text-emerald-700 bg-emerald-50 hover:bg-emerald-100"
-                          : "text-[#B85028] bg-orange-50 hover:bg-orange-100"
+                          : "text-[#2F6084] bg-[#edf4f9] hover:bg-orange-100"
                       }`}
                     >
                       {isTraite ? (
@@ -511,14 +511,14 @@ export default function AdminContact() {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header Modal */}
-              <div className="p-5 sm:p-6 border-b border-[#EFECE6] flex items-center justify-between bg-[#FAF7F2]">
+              <div className="p-5 sm:p-6 border-b border-[#d0e4f0] flex items-center justify-between bg-[#f4f8fb]">
                 <div className="min-w-0 pr-4">
                   <div className="flex items-center gap-2 mb-1">
                     <span
                       className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full border ${
                         editTraite
                           ? "bg-[#EAF5F2] text-[#1D6353] border-[#BDE0D6]"
-                          : "bg-[#FDF3EE] text-[#B85028] border-[#F0C5AE]"
+                          : "bg-[#FDF3EE] text-[#f15b29] border-[#F0C5AE]"
                       }`}
                     >
                       {editTraite ? "Message Traité" : "En attente de traitement"}
@@ -545,16 +545,16 @@ export default function AdminContact() {
               {/* Corps Modal Scrollable */}
               <div className="p-5 sm:p-6 overflow-y-auto space-y-6 flex-1 text-xs sm:text-sm">
                 {/* Expéditeur Info Box */}
-                <div className="bg-[#FAF7F2] p-4 rounded-2xl border border-[#EFECE6] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="bg-[#f4f8fb] p-4 rounded-2xl border border-[#d0e4f0] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 rounded-2xl bg-[#B85028]/10 text-[#B85028] flex items-center justify-center font-extrabold text-sm shrink-0">
+                    <div className="w-11 h-11 rounded-2xl bg-[#f15b29]/10 text-[#f15b29] flex items-center justify-center font-extrabold text-sm shrink-0">
                       {getInitials(selectedMessage.nom)}
                     </div>
                     <div>
                       <div className="font-extrabold text-gray-900">{selectedMessage.nom}</div>
                       <a
                         href={`mailto:${selectedMessage.email}`}
-                        className="text-xs text-[#B85028] hover:underline font-medium flex items-center gap-1 mt-0.5"
+                        className="text-xs text-[#f15b29] hover:underline font-medium flex items-center gap-1 mt-0.5"
                       >
                         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -569,7 +569,7 @@ export default function AdminContact() {
                     href={`mailto:${selectedMessage.email}?subject=Re: ${encodeURIComponent(selectedMessage.sujet)}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#B85028] hover:bg-[#a0431f] cursor-pointer shadow-xs transition-colors shrink-0"
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#f15b29] hover:bg-[#d44d1f] cursor-pointer shadow-xs transition-colors shrink-0"
                   >
                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
@@ -583,13 +583,13 @@ export default function AdminContact() {
                   <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">
                     Message transmis
                   </label>
-                  <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#EFECE6] text-gray-800 leading-relaxed whitespace-pre-wrap font-normal">
+                  <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#d0e4f0] text-gray-800 leading-relaxed whitespace-pre-wrap font-normal">
                     {selectedMessage.message}
                   </div>
                 </div>
 
                 {/* Section Suivi / Note Interne */}
-                <div className="bg-gradient-to-br from-[#FAF7F2] to-white p-4 sm:p-5 rounded-2xl border border-[#EFECE6] space-y-4">
+                <div className="bg-gradient-to-br from-[#f4f8fb] to-white p-4 sm:p-5 rounded-2xl border border-[#d0e4f0] space-y-4">
                   <div className="flex items-center justify-between">
                     <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider">
                       Suivi interne & Traitement
@@ -629,14 +629,14 @@ export default function AdminContact() {
                       value={editReponse}
                       onChange={(e) => setEditReponse(e.target.value)}
                       placeholder="Ex: Répondu le 16/09 par téléphone, réorienté vers le pôle STEAM..."
-                      className="w-full bg-white border border-[#EFECE6] rounded-xl p-3 text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#B85028]"
+                      className="w-full bg-white border border-[#d0e4f0] rounded-xl p-3 text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#f15b29]"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Footer Modal */}
-              <div className="p-4 sm:p-6 border-t border-[#EFECE6] bg-[#FAF7F2] flex items-center justify-between gap-3">
+              <div className="p-4 sm:p-6 border-t border-[#d0e4f0] bg-[#f4f8fb] flex items-center justify-between gap-3">
                 <button
                   type="button"
                   onClick={() => {
@@ -659,7 +659,7 @@ export default function AdminContact() {
                     type="button"
                     onClick={handleSaveDetails}
                     disabled={isUpdating}
-                    className="px-5 py-2.5 rounded-xl font-extrabold text-xs text-white bg-[#B85028] hover:bg-[#a0431f] cursor-pointer shadow-xs transition-all disabled:opacity-50"
+                    className="px-5 py-2.5 rounded-xl font-extrabold text-xs text-white bg-[#f15b29] hover:bg-[#d44d1f] cursor-pointer shadow-xs transition-all disabled:opacity-50"
                   >
                     {isUpdating ? "Enregistrement..." : "Enregistrer le suivi"}
                   </button>

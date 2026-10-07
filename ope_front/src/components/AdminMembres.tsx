@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+﻿import { useState, useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import { membreService, type MembreEquipe } from "../services";
 import Pagination from "./Pagination";
@@ -6,9 +6,9 @@ import Pagination from "./Pagination";
 // ── Palette dynamique des badges de section ─────────────────────────────────
 const getSectionBadge = (section: string) => {
   const BADGE_PALETTES = [
-    { badgeClass: "bg-[#FDF3EE] text-[#B85028] border-[#F0C5AE]" },
+    { badgeClass: "bg-[#FDF3EE] text-[#f15b29] border-[#F0C5AE]" },
     { badgeClass: "bg-[#EBF2F7] text-[#193549] border-[#C5D8E8]" },
-    { badgeClass: "bg-[#F0ECE8] text-[#6B4533] border-[#D9C4B8]" },
+    { badgeClass: "bg-[#F0ECE8] text-[#1b3a4f] border-[#D9C4B8]" },
     { badgeClass: "bg-[#EAF5F2] text-[#1D6353] border-[#BDE0D6]" },
     { badgeClass: "bg-[#FEF6E9] text-[#9A6700] border-[#FCE1B4]" },
   ];
@@ -234,13 +234,13 @@ export default function AdminMembres() {
         <img
           src={membre.photo}
           alt={membre.nom}
-          className={`${sizeClass} rounded-full object-cover border-2 border-[#EFECE6] shrink-0`}
+          className={`${sizeClass} rounded-full object-cover border-2 border-[#d0e4f0] shrink-0`}
         />
       );
     }
     return (
       <div
-        className={`${sizeClass} rounded-full bg-gradient-to-br from-[#B85028] to-[#6B4533] text-white font-black flex items-center justify-center shrink-0`}
+        className={`${sizeClass} rounded-full bg-gradient-to-br from-[#f15b29] to-[#1b3a4f] text-white font-black flex items-center justify-center shrink-0`}
       >
         {initials}
       </div>
@@ -283,7 +283,7 @@ export default function AdminMembres() {
         <button
           type="button"
           onClick={openCreateModal}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm text-white bg-[#B85028] hover:bg-[#a0431f] cursor-pointer shadow-xs transition-all active:scale-95"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm text-white bg-[#f15b29] hover:bg-[#d44d1f] cursor-pointer shadow-xs transition-all active:scale-95"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
@@ -296,11 +296,11 @@ export default function AdminMembres() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         {[
           { label: "Total", value: stats.total, color: "text-gray-900" },
-          { label: "Actifs", value: stats.actifs, color: "text-[#B85028]" },
+          { label: "Actifs", value: stats.actifs, color: "text-[#f15b29]" },
           { label: "Masqués", value: stats.inactifs, color: "text-gray-500" },
           { label: "Sections", value: stats.sectionsCount, color: "text-[#193549]" },
         ].map((s) => (
-          <div key={s.label} className="bg-white p-4 rounded-2xl border border-[#EFECE6] shadow-2xs">
+          <div key={s.label} className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs">
             <span className={`text-[11px] font-bold uppercase tracking-wider block ${s.color}`}>
               {s.label}
             </span>
@@ -310,7 +310,7 @@ export default function AdminMembres() {
       </div>
 
       {/* ── Toolbar ───────────────────────────────────────────────────────── */}
-      <div className="bg-white p-4 rounded-2xl border border-[#EFECE6] shadow-2xs flex flex-col md:flex-row items-stretch md:items-center gap-3">
+      <div className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs flex flex-col md:flex-row items-stretch md:items-center gap-3">
         {/* Recherche */}
         <div className="relative flex-1 min-w-[220px]">
           <input
@@ -318,7 +318,7 @@ export default function AdminMembres() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Rechercher par nom, rôle..."
-            className="w-full bg-[#FAF7F2] border border-[#EFECE6] rounded-xl pl-9 pr-3 py-2 text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#B85028]"
+            className="w-full bg-[#f4f8fb] border border-[#d0e4f0] rounded-xl pl-9 pr-3 py-2 text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#f15b29]"
           />
           <svg className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -329,7 +329,7 @@ export default function AdminMembres() {
         <select
           value={selectedSection}
           onChange={(e) => setSelectedSection(e.target.value)}
-          className="bg-[#FAF7F2] border border-[#EFECE6] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#B85028] cursor-pointer"
+          className="bg-[#f4f8fb] border border-[#d0e4f0] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#f15b29] cursor-pointer"
         >
           <option value="all">Toutes les sections ({availableSections.length})</option>
           {availableSections.map((sec) => (
@@ -343,7 +343,7 @@ export default function AdminMembres() {
         <select
           value={selectedActif}
           onChange={(e) => setSelectedActif(e.target.value)}
-          className="bg-[#FAF7F2] border border-[#EFECE6] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#B85028] cursor-pointer"
+          className="bg-[#f4f8fb] border border-[#d0e4f0] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#f15b29] cursor-pointer"
         >
           <option value="all">Tous les statuts</option>
           <option value="actif">Visibles sur le site</option>
@@ -355,10 +355,10 @@ export default function AdminMembres() {
           type="button"
           onClick={fetchMembres}
           disabled={isLoading}
-          className="p-2.5 rounded-xl border border-[#EFECE6] bg-[#FAF7F2] text-gray-600 hover:bg-[#EFECE6] cursor-pointer transition-colors"
+          className="p-2.5 rounded-xl border border-[#d0e4f0] bg-[#f4f8fb] text-gray-600 hover:bg-[#d0e4f0] cursor-pointer transition-colors"
           title="Rafraîchir"
         >
-          <svg className={`w-4 h-4 ${isLoading ? "animate-spin text-[#B85028]" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className={`w-4 h-4 ${isLoading ? "animate-spin text-[#f15b29]" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
         </button>
@@ -366,20 +366,20 @@ export default function AdminMembres() {
 
       {/* ── Contenu principal ─────────────────────────────────────────────── */}
       {isLoading ? (
-        <div className="bg-white rounded-3xl border border-[#EFECE6] p-8 space-y-4 animate-pulse">
+        <div className="bg-white rounded-3xl border border-[#d0e4f0] p-8 space-y-4 animate-pulse">
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-[#EFECE6]" />
+              <div className="w-12 h-12 rounded-full bg-[#d0e4f0]" />
               <div className="flex-1 space-y-2">
-                <div className="h-4 bg-[#EFECE6] rounded w-1/4" />
-                <div className="h-3 bg-[#EFECE6] rounded w-1/3" />
+                <div className="h-4 bg-[#d0e4f0] rounded w-1/4" />
+                <div className="h-3 bg-[#d0e4f0] rounded w-1/3" />
               </div>
             </div>
           ))}
         </div>
       ) : filteredMembres.length === 0 ? (
-        <div className="bg-white rounded-3xl border border-[#EFECE6] p-12 text-center">
-          <div className="w-14 h-14 rounded-full bg-[#FDF3EE] text-[#B85028] flex items-center justify-center mx-auto mb-3">
+        <div className="bg-white rounded-3xl border border-[#d0e4f0] p-12 text-center">
+          <div className="w-14 h-14 rounded-full bg-[#FDF3EE] text-[#f15b29] flex items-center justify-center mx-auto mb-3">
             <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
@@ -391,18 +391,18 @@ export default function AdminMembres() {
           <button
             type="button"
             onClick={openCreateModal}
-            className="px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-[#B85028] hover:bg-[#a0431f] cursor-pointer shadow-xs transition-colors"
+            className="px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-[#f15b29] hover:bg-[#d44d1f] cursor-pointer shadow-xs transition-colors"
           >
             + Ajouter un membre
           </button>
         </div>
       ) : (
         /* ── Tableau ──────────────────────────────────────────────────────── */
-        <div className="bg-white rounded-3xl border border-[#EFECE6] shadow-2xs overflow-hidden">
+        <div className="bg-white rounded-3xl border border-[#d0e4f0] shadow-2xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-[#EFECE6] bg-[#FAF7F2]/60 text-[11px] font-black uppercase tracking-wider text-gray-400">
+                <tr className="border-b border-[#d0e4f0] bg-[#f4f8fb]/60 text-[11px] font-black uppercase tracking-wider text-gray-400">
                   <th className="py-3.5 px-4 sm:px-6">Membre</th>
                   <th className="py-3.5 px-4">Section</th>
                   <th className="py-3.5 px-4 hidden md:table-cell">Contact</th>
@@ -411,18 +411,18 @@ export default function AdminMembres() {
                   <th className="py-3.5 px-4 text-right sm:pr-6">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#EFECE6] text-xs">
+              <tbody className="divide-y divide-[#d0e4f0] text-xs">
                 {paginatedMembres.map((membre) => {
                   const secBadge = getSectionBadge(membre.section);
                   return (
-                    <tr key={membre.id} className="hover:bg-[#FAF7F2]/50 transition-colors">
+                    <tr key={membre.id} className="hover:bg-[#f4f8fb]/50 transition-colors">
                       {/* Membre */}
                       <td className="py-4 px-4 sm:px-6">
                         <div className="flex items-center gap-3">
                           <Avatar membre={membre} size="sm" />
                           <div className="min-w-0">
                             <div
-                              className="font-extrabold text-sm text-gray-900 truncate hover:text-[#B85028] cursor-pointer transition-colors"
+                              className="font-extrabold text-sm text-gray-900 truncate hover:text-[#f15b29] cursor-pointer transition-colors"
                               onClick={() => setPreviewMembre(membre)}
                             >
                               {membre.nom}
@@ -483,11 +483,11 @@ export default function AdminMembres() {
                           onClick={() => toggleActif(membre)}
                           className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold transition-all cursor-pointer ${
                             membre.actif
-                              ? "bg-[#FDF3EE] text-[#B85028] border border-[#F0C5AE] hover:bg-[#F9E4D6]"
-                              : "bg-[#FAF7F2] text-[#6B4533] border border-[#EFECE6] hover:bg-[#EFECE6]"
+                              ? "bg-[#FDF3EE] text-[#f15b29] border border-[#F0C5AE] hover:bg-[#F9E4D6]"
+                              : "bg-[#f4f8fb] text-[#1b3a4f] border border-[#d0e4f0] hover:bg-[#d0e4f0]"
                           }`}
                         >
-                          <span className={`w-1.5 h-1.5 rounded-full ${membre.actif ? "bg-[#B85028]" : "bg-[#9C8578]"}`} />
+                          <span className={`w-1.5 h-1.5 rounded-full ${membre.actif ? "bg-[#f15b29]" : "bg-[#9C8578]"}`} />
                           {membre.actif ? "Visible" : "Masqué"}
                         </button>
                       </td>
@@ -566,9 +566,9 @@ export default function AdminMembres() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-[#FAF7F2]">
+            <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-[#f4f8fb]">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-[#FDF3EE] text-[#B85028] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#FDF3EE] text-[#f15b29] flex items-center justify-center">
                   {editingMembre ? (
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -589,7 +589,7 @@ export default function AdminMembres() {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-[#EFECE6] text-[#193549] hover:bg-[#DDD8D0] flex items-center justify-center cursor-pointer transition-colors"
+                className="w-8 h-8 rounded-full bg-[#d0e4f0] text-[#193549] hover:bg-[#DDD8D0] flex items-center justify-center cursor-pointer transition-colors"
                 aria-label="Fermer"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -607,10 +607,10 @@ export default function AdminMembres() {
                     <img
                       src={photoPreviewUrl}
                       alt="Aperçu"
-                      className="w-16 h-16 rounded-full object-cover border-2 border-[#B85028] shadow-inner"
+                      className="w-16 h-16 rounded-full object-cover border-2 border-[#f15b29] shadow-inner"
                     />
                   ) : (
-                    <div className="w-16 h-16 rounded-full bg-[#FAF7F2] border-2 border-dashed border-[#EFECE6] flex items-center justify-center text-gray-400">
+                    <div className="w-16 h-16 rounded-full bg-[#f4f8fb] border-2 border-dashed border-[#d0e4f0] flex items-center justify-center text-gray-400">
                       <svg className="w-7 h-7 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
@@ -619,7 +619,7 @@ export default function AdminMembres() {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#B85028] text-white flex items-center justify-center shadow-xs hover:bg-[#a0431f] cursor-pointer transition-colors"
+                    className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#f15b29] text-white flex items-center justify-center shadow-xs hover:bg-[#d44d1f] cursor-pointer transition-colors"
                     title="Changer la photo"
                   >
                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -637,7 +637,7 @@ export default function AdminMembres() {
                     value={formNom}
                     onChange={(e) => setFormNom(e.target.value)}
                     placeholder="Ex: Moussa Ibrahim Mahamane"
-                    className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold text-gray-900 focus:outline-none focus:border-[#B85028]"
+                    className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold text-gray-900 focus:outline-none focus:border-[#f15b29]"
                   />
                 </div>
               </div>
@@ -651,7 +651,7 @@ export default function AdminMembres() {
                   value={formRole}
                   onChange={(e) => setFormRole(e.target.value)}
                   placeholder="Ex: COORDINATEUR GÉNÉRAL, POINT FOCAL AGADEZ..."
-                  className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold text-gray-900 focus:outline-none focus:border-[#B85028]"
+                  className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold text-gray-900 focus:outline-none focus:border-[#f15b29]"
                 />
               </div>
 
@@ -666,7 +666,7 @@ export default function AdminMembres() {
                     value={formSection}
                     onChange={(e) => setFormSection(e.target.value)}
                     placeholder="Saisir la section (ex: Bureau exécutif...)"
-                    className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-900 focus:outline-none focus:border-[#B85028]"
+                    className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-900 focus:outline-none focus:border-[#f15b29]"
                   />
                   <datalist id="admin-sections-list">
                     {availableSections.map((sec) => (
@@ -681,7 +681,7 @@ export default function AdminMembres() {
                     min={0}
                     value={formOrdre}
                     onChange={(e) => setFormOrdre(Number(e.target.value))}
-                    className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#B85028]"
+                    className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#f15b29]"
                   />
                 </div>
               </div>
@@ -695,7 +695,7 @@ export default function AdminMembres() {
                     value={formEmail}
                     onChange={(e) => setFormEmail(e.target.value)}
                     placeholder="contact@example.com"
-                    className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-900 focus:outline-none focus:border-[#B85028]"
+                    className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-900 focus:outline-none focus:border-[#f15b29]"
                   />
                 </div>
                 <div>
@@ -705,7 +705,7 @@ export default function AdminMembres() {
                     value={formLinkedin}
                     onChange={(e) => setFormLinkedin(e.target.value)}
                     placeholder="https://linkedin.com/in/..."
-                    className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-900 focus:outline-none focus:border-[#B85028]"
+                    className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-3 py-2 text-xs font-semibold text-gray-900 focus:outline-none focus:border-[#f15b29]"
                   />
                 </div>
               </div>
@@ -718,7 +718,7 @@ export default function AdminMembres() {
                   value={formDescription}
                   onChange={(e) => setFormDescription(e.target.value)}
                   placeholder="Présentation synthétique du rôle et du parcours du membre..."
-                  className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl p-3 text-xs sm:text-sm font-medium text-gray-900 focus:outline-none focus:border-[#B85028]"
+                  className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl p-3 text-xs sm:text-sm font-medium text-gray-900 focus:outline-none focus:border-[#f15b29]"
                 />
               </div>
 
@@ -729,7 +729,7 @@ export default function AdminMembres() {
                     type="checkbox"
                     checked={formActif}
                     onChange={(e) => setFormActif(e.target.checked)}
-                    className="w-4 h-4 rounded border-gray-300 text-[#B85028] focus:ring-[#B85028] cursor-pointer"
+                    className="w-4 h-4 rounded border-gray-300 text-[#f15b29] focus:ring-[#f15b29] cursor-pointer"
                   />
                   <span className="text-xs font-bold text-gray-800">Afficher sur le site public</span>
                 </label>
@@ -748,7 +748,7 @@ export default function AdminMembres() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-[#B85028] hover:bg-[#a0431f] transition-all cursor-pointer shadow-xs disabled:opacity-50"
+                  className="px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-[#f15b29] hover:bg-[#d44d1f] transition-all cursor-pointer shadow-xs disabled:opacity-50"
                 >
                   {isSubmitting ? "Enregistrement..." : editingMembre ? "Enregistrer" : "Ajouter le membre"}
                 </button>
@@ -772,7 +772,7 @@ export default function AdminMembres() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Bande couleur + photo */}
-            <div className="h-24 bg-gradient-to-r from-[#193549] to-[#B85028] relative">
+            <div className="h-24 bg-gradient-to-r from-[#193549] to-[#f15b29] relative">
               <button
                 type="button"
                 onClick={() => setPreviewMembre(null)}
@@ -791,7 +791,7 @@ export default function AdminMembres() {
             <div className="pt-12 px-6 pb-6 space-y-4">
               <div>
                 <h3 className="font-black text-xl text-gray-900">{previewMembre.nom}</h3>
-                <p className="text-xs font-bold text-[#B85028] uppercase tracking-wider mt-0.5">
+                <p className="text-xs font-bold text-[#f15b29] uppercase tracking-wider mt-0.5">
                   {previewMembre.role}
                 </p>
                 {previewMembre.section && (
@@ -802,15 +802,15 @@ export default function AdminMembres() {
               </div>
 
               {previewMembre.description && (
-                <p className="text-xs text-gray-600 leading-relaxed bg-[#FAF7F2] p-3 rounded-xl border border-[#EFECE6]">
+                <p className="text-xs text-gray-600 leading-relaxed bg-[#f4f8fb] p-3 rounded-xl border border-[#d0e4f0]">
                   {previewMembre.description}
                 </p>
               )}
 
               <div className="space-y-2">
                 {previewMembre.email && (
-                  <a href={`mailto:${previewMembre.email}`} className="flex items-center gap-2 text-xs text-gray-600 hover:text-[#B85028] transition-colors">
-                    <svg className="w-4 h-4 text-[#B85028] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <a href={`mailto:${previewMembre.email}`} className="flex items-center gap-2 text-xs text-gray-600 hover:text-[#f15b29] transition-colors">
+                    <svg className="w-4 h-4 text-[#f15b29] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                     {previewMembre.email}
@@ -826,7 +826,7 @@ export default function AdminMembres() {
                 )}
               </div>
 
-              <div className="flex items-center justify-between pt-4 border-t border-[#EFECE6]">
+              <div className="flex items-center justify-between pt-4 border-t border-[#d0e4f0]">
                 <button
                   type="button"
                   onClick={() => { setPreviewMembre(null); openEditModal(previewMembre); }}

@@ -14,13 +14,13 @@ const PHASES_CONFIG: Record<
   },
   pendant: {
     label: "Pendant le camp",
-    badgeClass: "bg-[#FDF3EE] text-[#B85028] border-[#F0C5AE]",
-    textColor: "text-[#B85028]",
+    badgeClass: "bg-[#FDF3EE] text-[#f15b29] border-[#F0C5AE]",
+    textColor: "text-[#f15b29]",
   },
   apres: {
     label: "Après le camp",
-    badgeClass: "bg-[#F0ECE8] text-[#6B4533] border-[#D9C4B8]",
-    textColor: "text-[#6B4533]",
+    badgeClass: "bg-[#F0ECE8] text-[#1b3a4f] border-[#D9C4B8]",
+    textColor: "text-[#1b3a4f]",
   },
 };
 
@@ -85,7 +85,7 @@ export default function Actualites() {
       {/* ── Navigation par Phase (onglets) ──────────────────────────────── */}
       <section className="px-4 sm:px-6 pb-20">
         <div className="max-w-5xl mx-auto">
-          <div className="border-b border-[#E8DEC8] mb-8">
+          <div className="border-b border-ope-border mb-8">
             <div className="flex items-center gap-6 sm:gap-10 overflow-x-auto no-scrollbar">
               {(["avant", "pendant", "apres"] as ActualitePhase[]).map((phase) => {
                 const cfg = PHASES_CONFIG[phase];
@@ -106,8 +106,8 @@ export default function Actualites() {
                       <span
                         className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${
                           isActive
-                            ? "bg-[#FDF3EE] text-[#B85028]"
-                            : "bg-[#EFECE6] text-gray-500"
+                            ? "bg-[#FDF3EE] text-[#f15b29]"
+                            : "bg-[#d0e4f0] text-gray-500"
                         }`}
                       >
                         {articles.filter((a) => a.phase === phase).length}
@@ -131,19 +131,19 @@ export default function Actualites() {
                   key={i}
                   className="bg-ope-white rounded-2xl border border-ope-border overflow-hidden animate-pulse h-[400px] flex flex-col"
                 >
-                  <div className="h-1/2 bg-[#EFECE6]" />
+                  <div className="h-1/2 bg-[#d0e4f0]" />
                   <div className="p-5 flex-1 space-y-3">
-                    <div className="h-3 bg-[#EFECE6] rounded w-1/3" />
-                    <div className="h-5 bg-[#EFECE6] rounded w-3/4" />
-                    <div className="h-3 bg-[#EFECE6] rounded w-full" />
-                    <div className="h-3 bg-[#EFECE6] rounded w-5/6" />
+                    <div className="h-3 bg-[#d0e4f0] rounded w-1/3" />
+                    <div className="h-5 bg-[#d0e4f0] rounded w-3/4" />
+                    <div className="h-3 bg-[#d0e4f0] rounded w-full" />
+                    <div className="h-3 bg-[#d0e4f0] rounded w-5/6" />
                   </div>
                 </div>
               ))}
             </div>
           ) : error ? (
             /* État d'erreur */
-            <div className="bg-white rounded-3xl border border-[#EFECE6] p-12 text-center">
+            <div className="bg-white rounded-3xl border border-[#d0e4f0] p-12 text-center">
               <div className="w-14 h-14 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-4">
                 <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -157,7 +157,7 @@ export default function Actualites() {
               </p>
               <button
                 onClick={() => window.location.reload()}
-                className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#B85028] hover:bg-[#a0431f] cursor-pointer shadow-xs transition-colors"
+                className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#f15b29] hover:bg-[#d44d1f] cursor-pointer shadow-xs transition-colors"
               >
                 Réessayer
               </button>
@@ -165,7 +165,7 @@ export default function Actualites() {
           ) : currentArticles.length === 0 ? (
             /* Empty state */
             <div className="text-center py-16 bg-ope-white rounded-3xl border border-ope-border p-8">
-              <div className="w-12 h-12 rounded-full bg-[#FDF3EE] text-[#B85028] flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 rounded-full bg-[#FDF3EE] text-[#f15b29] flex items-center justify-center mx-auto mb-3">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
                 </svg>
@@ -188,7 +188,7 @@ export default function Actualites() {
                     className="bg-ope-white rounded-2xl overflow-hidden border border-ope-border shadow-2xs hover:shadow-md transition-all duration-300 flex flex-col h-[400px] group"
                   >
                     {/* Image / Empty state — 50% fixe */}
-                    <div className="relative h-1/2 w-full bg-[#F0ECE8] overflow-hidden shrink-0">
+                    <div className="relative h-1/2 w-full bg-ope-bg overflow-hidden shrink-0">
                       {article.image_principale ? (
                         <img
                           src={article.image_principale}
@@ -196,11 +196,13 @@ export default function Actualites() {
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#FAF7F2] to-[#ECE7DC] text-[#9C8578]">
-                          <svg className="w-10 h-10 opacity-40 mb-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                          <span className="text-[10px] font-bold uppercase tracking-wider">Sans image</span>
+                        <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#edf4f9] via-[#e5f0f7] to-[#d6e8f4] text-ope-primary/60">
+                          <div className="w-14 h-14 rounded-full bg-white/95 border border-ope-border flex items-center justify-center mb-1.5 shadow-2xs group-hover:scale-105 transition-transform duration-300">
+                            <svg className="w-7 h-7 text-ope-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                          </div>
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-ope-text-muted">Sans image</span>
                         </div>
                       )}
 
@@ -270,7 +272,7 @@ export default function Actualites() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#193549] to-[#0D1F2D] text-white/30">
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-ope-primary to-[#1b3a4f] text-white/50">
                   <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
@@ -279,7 +281,7 @@ export default function Actualites() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
               <div className="absolute bottom-4 left-5 right-14">
                 {selectedArticle.badge_label && (
-                  <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-[#B85028] text-white mb-2 inline-block">
+                  <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full bg-[#f15b29] text-white mb-2 inline-block">
                     {selectedArticle.badge_label}
                   </span>
                 )}
@@ -310,7 +312,7 @@ export default function Actualites() {
                 )}
               </div>
 
-              <div className="bg-[#FAF7F2] p-4 rounded-2xl border border-[#EFECE6]">
+              <div className="bg-[#f4f8fb] p-4 rounded-2xl border border-[#d0e4f0]">
                 <p className="text-xs sm:text-sm font-semibold text-gray-800 italic leading-relaxed">
                   {selectedArticle.resume}
                 </p>
@@ -322,7 +324,7 @@ export default function Actualites() {
             </div>
 
             {/* Footer */}
-            <div className="p-5 border-t border-ope-border bg-[#FAF7F2] flex justify-end">
+            <div className="p-5 border-t border-ope-border bg-[#f4f8fb] flex justify-end">
               <button
                 onClick={() => setSelectedArticle(null)}
                 className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#193549] hover:bg-[#12273A] transition-colors cursor-pointer"

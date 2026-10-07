@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+﻿import { useState, useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import { partenaireService, type Partenaire, type PartenaireType } from "../services";
 import Pagination from "./Pagination";
@@ -11,8 +11,8 @@ const TYPE_CONFIG: Record<PartenaireType, { label: string; badgeClass: string; t
   },
   institution: {
     label: "Institution",
-    badgeClass: "bg-[#FDF3EE] text-[#B85028] border-[#F0C5AE]",
-    textColor: "text-[#B85028]",
+    badgeClass: "bg-[#FDF3EE] text-[#f15b29] border-[#F0C5AE]",
+    textColor: "text-[#f15b29]",
   },
   ong: {
     label: "ONG",
@@ -213,7 +213,7 @@ export default function AdminPartenaires() {
         <button
           type="button"
           onClick={openCreateModal}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm text-white bg-[#B85028] hover:bg-[#a0431f] cursor-pointer shadow-xs transition-all active:scale-95"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm text-white bg-[#f15b29] hover:bg-[#d44d1f] cursor-pointer shadow-xs transition-all active:scale-95"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
@@ -227,11 +227,11 @@ export default function AdminPartenaires() {
         {[
           { label: "Total", value: stats.total, color: "text-gray-900" },
           { label: "Pays", value: stats.pays, color: "text-[#193549]" },
-          { label: "Institutions", value: stats.institution, color: "text-[#B85028]" },
+          { label: "Institutions", value: stats.institution, color: "text-[#f15b29]" },
           { label: "ONG", value: stats.ong, color: "text-[#1D6353]" },
           { label: "Ambassades", value: stats.ambassade, color: "text-[#9A6700]" },
         ].map((s) => (
-          <div key={s.label} className="bg-white p-4 rounded-2xl border border-[#EFECE6] shadow-2xs">
+          <div key={s.label} className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs">
             <span className={`text-[11px] font-bold uppercase tracking-wider block ${s.color}`}>{s.label}</span>
             <span className={`text-2xl font-black mt-1 block ${s.color}`}>{s.value}</span>
           </div>
@@ -239,14 +239,14 @@ export default function AdminPartenaires() {
       </div>
 
       {/* ── Filtres ── */}
-      <div className="bg-white p-4 rounded-2xl border border-[#EFECE6] shadow-2xs flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+      <div className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
         <div className="relative flex-1">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Rechercher un partenaire..."
-            className="w-full bg-[#FAF7F2] border border-[#EFECE6] rounded-xl pl-9 pr-3 py-2 text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#B85028]"
+            className="w-full bg-[#f4f8fb] border border-[#d0e4f0] rounded-xl pl-9 pr-3 py-2 text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#f15b29]"
           />
           <svg className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -255,7 +255,7 @@ export default function AdminPartenaires() {
         <select
           value={selectedType}
           onChange={(e) => setSelectedType(e.target.value)}
-          className="bg-[#FAF7F2] border border-[#EFECE6] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#B85028] cursor-pointer"
+          className="bg-[#f4f8fb] border border-[#d0e4f0] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#f15b29] cursor-pointer"
         >
           <option value="all">Tous les types</option>
           <option value="pays">Pays</option>
@@ -267,13 +267,13 @@ export default function AdminPartenaires() {
 
       {/* ── Contenu ── */}
       {isLoading ? (
-        <div className="bg-white rounded-3xl border border-[#EFECE6] p-8 animate-pulse space-y-4">
+        <div className="bg-white rounded-3xl border border-[#d0e4f0] p-8 animate-pulse space-y-4">
           <div className="h-6 bg-slate-100 rounded w-1/4" />
           {[1, 2, 3].map((i) => <div key={i} className="h-16 bg-slate-100 rounded w-full" />)}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-3xl border border-[#EFECE6] p-12 text-center">
-          <div className="w-14 h-14 rounded-full bg-orange-50 text-[#B85028] flex items-center justify-center mx-auto mb-3">
+        <div className="bg-white rounded-3xl border border-[#d0e4f0] p-12 text-center">
+          <div className="w-14 h-14 rounded-full bg-[#edf4f9] text-[#2F6084] flex items-center justify-center mx-auto mb-3">
             <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
@@ -287,7 +287,7 @@ export default function AdminPartenaires() {
           <button
             type="button"
             onClick={openCreateModal}
-            className="px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-[#B85028] hover:bg-[#a0431f] cursor-pointer shadow-xs transition-colors"
+            className="px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-[#f15b29] hover:bg-[#d44d1f] cursor-pointer shadow-xs transition-colors"
           >
             + Ajouter un partenaire
           </button>
@@ -301,10 +301,10 @@ export default function AdminPartenaires() {
             return (
               <div
                 key={p.id}
-                className="bg-white rounded-3xl border border-[#EFECE6] shadow-2xs hover:shadow-md transition-all duration-300 overflow-hidden group flex flex-col"
+                className="bg-white rounded-3xl border border-[#d0e4f0] shadow-2xs hover:shadow-md transition-all duration-300 overflow-hidden group flex flex-col"
               >
                 {/* Logo */}
-                <div className="h-32 bg-[#FAF7F2] flex items-center justify-center overflow-hidden border-b border-[#EFECE6]">
+                <div className="h-32 bg-[#f4f8fb] flex items-center justify-center overflow-hidden border-b border-[#d0e4f0]">
                   {p.logo ? (
                     <img
                       src={p.logo}
@@ -332,7 +332,7 @@ export default function AdminPartenaires() {
                 </div>
 
                 {/* Actions */}
-                <div className="px-4 py-3 border-t border-[#EFECE6] bg-[#FAF7F2]/40 flex items-center justify-end gap-2">
+                <div className="px-4 py-3 border-t border-[#d0e4f0] bg-[#f4f8fb]/40 flex items-center justify-end gap-2">
                   <button
                     type="button"
                     onClick={() => openEditModal(p)}
@@ -377,9 +377,9 @@ export default function AdminPartenaires() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-[#FAF7F2]">
+            <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-[#f4f8fb]">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-[#FDF3EE] text-[#B85028] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#FDF3EE] text-[#f15b29] flex items-center justify-center">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
@@ -391,7 +391,7 @@ export default function AdminPartenaires() {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-[#EFECE6] text-[#193549] hover:bg-[#DDD8D0] flex items-center justify-center cursor-pointer transition-colors"
+                className="w-8 h-8 rounded-full bg-[#d0e4f0] text-[#193549] hover:bg-[#DDD8D0] flex items-center justify-center cursor-pointer transition-colors"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -412,7 +412,7 @@ export default function AdminPartenaires() {
                   value={formNom}
                   onChange={(e) => setFormNom(e.target.value)}
                   placeholder="Nom complet de l'organisation"
-                  className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold text-gray-900 focus:outline-none focus:border-[#B85028]"
+                  className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold text-gray-900 focus:outline-none focus:border-[#f15b29]"
                 />
               </div>
 
@@ -424,7 +424,7 @@ export default function AdminPartenaires() {
                 <select
                   value={formType}
                   onChange={(e) => setFormType(e.target.value as PartenaireType)}
-                  className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl px-3 py-2.5 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#B85028] cursor-pointer"
+                  className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-3 py-2.5 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#f15b29] cursor-pointer"
                 >
                   <option value="pays">Pays</option>
                   <option value="institution">Institution</option>
@@ -449,7 +449,7 @@ export default function AdminPartenaires() {
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#FAF7F2] border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+                    className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#f4f8fb] border border-gray-200 text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
                   >
                     Choisir un logo...
                   </button>
@@ -485,7 +485,7 @@ export default function AdminPartenaires() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-[#B85028] hover:bg-[#a0431f] transition-all cursor-pointer shadow-xs disabled:opacity-50"
+                  className="px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-[#f15b29] hover:bg-[#d44d1f] transition-all cursor-pointer shadow-xs disabled:opacity-50"
                 >
                   {isSubmitting ? "Enregistrement..." : editingPartenaire ? "Enregistrer" : "Ajouter"}
                 </button>

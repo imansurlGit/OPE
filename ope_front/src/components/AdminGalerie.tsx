@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+﻿import { useState, useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import {
   galerieService,
@@ -19,8 +19,8 @@ const CATEGORIES_CONFIG: Record<
   },
   local: {
     label: "Local Projects (LP)",
-    badgeClass: "bg-[#FDF3EE] text-[#B85028] border-[#F0C5AE]",
-    textColor: "text-[#B85028]",
+    badgeClass: "bg-[#FDF3EE] text-[#f15b29] border-[#F0C5AE]",
+    textColor: "text-[#f15b29]",
     bgSoft: "bg-[#FDF3EE]",
   },
   citoyen: {
@@ -332,7 +332,7 @@ export default function AdminGalerie() {
         <button
           type="button"
           onClick={() => openCreateModal()}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm text-white bg-[#B85028] hover:bg-[#a0431f] cursor-pointer shadow-xs transition-all active:scale-95 shrink-0"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-extrabold text-xs sm:text-sm text-white bg-[#f15b29] hover:bg-[#d44d1f] cursor-pointer shadow-xs transition-all active:scale-95 shrink-0"
         >
           <svg
             className="w-4 h-4"
@@ -352,14 +352,14 @@ export default function AdminGalerie() {
         {[
           { label: "Total", value: stats.total, color: "text-gray-900" },
           { label: "STEAM", value: stats.steam, color: "text-[#193549]" },
-          { label: "Local (LP)", value: stats.local, color: "text-[#B85028]" },
+          { label: "Local (LP)", value: stats.local, color: "text-[#f15b29]" },
           { label: "Citoyen", value: stats.citoyen, color: "text-[#1D6353]" },
           { label: "Ambiance", value: stats.ambiance, color: "text-[#9A6700]" },
           { label: "À la une", value: stats.misEnAvant, color: "text-amber-600" },
         ].map((s) => (
           <div
             key={s.label}
-            className="bg-white p-4 rounded-2xl border border-[#EFECE6] shadow-2xs"
+            className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs"
           >
             <span
               className={`text-[11px] font-bold uppercase tracking-wider block ${s.color}`}
@@ -380,11 +380,11 @@ export default function AdminGalerie() {
         onDrop={handleDrop}
         className={`bg-white/80 border-2 border-dashed rounded-3xl p-6 sm:p-10 text-center transition-all ${
           isDragging
-            ? "border-[#B85028] bg-orange-50/60 scale-[1.01]"
-            : "border-[#E5DEC9] hover:border-[#B85028]/60 hover:bg-white"
+            ? "border-[#2F6084] bg-[#edf4f9]/60 scale-[1.01]"
+            : "border-[#E5DEC9] hover:border-[#f15b29]/60 hover:bg-white"
         }`}
       >
-        <div className="w-12 h-12 rounded-full bg-orange-50 text-[#B85028] flex items-center justify-center mx-auto mb-3 shadow-2xs">
+        <div className="w-12 h-12 rounded-full bg-[#edf4f9] text-[#2F6084] flex items-center justify-center mx-auto mb-3 shadow-2xs">
           <svg
             className="w-6 h-6"
             fill="none"
@@ -422,7 +422,7 @@ export default function AdminGalerie() {
         <button
           type="button"
           onClick={() => dropZoneInputRef.current?.click()}
-          className="inline-flex items-center justify-center px-6 py-2.5 rounded-xl border border-[#B85028] text-[#B85028] hover:bg-[#B85028] hover:text-white active:scale-95 font-bold text-xs sm:text-sm bg-white transition-all cursor-pointer shadow-2xs"
+          className="inline-flex items-center justify-center px-6 py-2.5 rounded-xl border border-[#f15b29] text-[#f15b29] hover:bg-[#f15b29] hover:text-white active:scale-95 font-bold text-xs sm:text-sm bg-white transition-all cursor-pointer shadow-2xs"
         >
           Parcourir les fichiers
         </button>
@@ -433,7 +433,7 @@ export default function AdminGalerie() {
       </div>
 
       {/* ── Barre d'outils et Filtres ──────────────────────────────────────── */}
-      <div className="bg-white p-4 rounded-2xl border border-[#EFECE6] shadow-2xs flex flex-col md:flex-row items-stretch md:items-center gap-3">
+      <div className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs flex flex-col md:flex-row items-stretch md:items-center gap-3">
         {/* Recherche */}
         <div className="relative flex-1 min-w-[220px]">
           <input
@@ -441,7 +441,7 @@ export default function AdminGalerie() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Rechercher par titre ou légende..."
-            className="w-full bg-[#FAF7F2] border border-[#EFECE6] rounded-xl pl-9 pr-3 py-2 text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#B85028]"
+            className="w-full bg-[#f4f8fb] border border-[#d0e4f0] rounded-xl pl-9 pr-3 py-2 text-xs font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#f15b29]"
           />
           <svg
             className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"
@@ -462,7 +462,7 @@ export default function AdminGalerie() {
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="bg-[#FAF7F2] border border-[#EFECE6] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#B85028] cursor-pointer"
+          className="bg-[#f4f8fb] border border-[#d0e4f0] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#f15b29] cursor-pointer"
         >
           <option value="all">Toutes les catégories</option>
           <option value="steam">Modèles STEAM</option>
@@ -475,7 +475,7 @@ export default function AdminGalerie() {
         <select
           value={selectedHighlight}
           onChange={(e) => setSelectedHighlight(e.target.value)}
-          className="bg-[#FAF7F2] border border-[#EFECE6] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#B85028] cursor-pointer"
+          className="bg-[#f4f8fb] border border-[#d0e4f0] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#f15b29] cursor-pointer"
         >
           <option value="all">Tous les médias</option>
           <option value="highlighted">Mis en avant</option>
@@ -487,11 +487,11 @@ export default function AdminGalerie() {
           type="button"
           onClick={fetchMedias}
           disabled={isLoading}
-          className="p-2.5 rounded-xl border border-[#EFECE6] bg-[#FAF7F2] text-gray-600 hover:bg-[#EFECE6] cursor-pointer transition-colors shrink-0"
+          className="p-2.5 rounded-xl border border-[#d0e4f0] bg-[#f4f8fb] text-gray-600 hover:bg-[#d0e4f0] cursor-pointer transition-colors shrink-0"
           title="Rafraîchir"
         >
           <svg
-            className={`w-4 h-4 ${isLoading ? "animate-spin text-[#B85028]" : ""}`}
+            className={`w-4 h-4 ${isLoading ? "animate-spin text-[#f15b29]" : ""}`}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -512,19 +512,19 @@ export default function AdminGalerie() {
           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
             <div
               key={i}
-              className="bg-white rounded-2xl border border-[#EFECE6] overflow-hidden"
+              className="bg-white rounded-2xl border border-[#d0e4f0] overflow-hidden"
             >
-              <div className="aspect-4/3 bg-[#EFECE6]" />
+              <div className="aspect-4/3 bg-[#d0e4f0]" />
               <div className="p-3.5 space-y-2">
-                <div className="h-4 bg-[#EFECE6] rounded w-3/4" />
-                <div className="h-3 bg-[#EFECE6] rounded w-1/2" />
+                <div className="h-4 bg-[#d0e4f0] rounded w-3/4" />
+                <div className="h-3 bg-[#d0e4f0] rounded w-1/2" />
               </div>
             </div>
           ))}
         </div>
       ) : filteredMedias.length === 0 ? (
-        <div className="bg-white rounded-3xl border border-[#EFECE6] p-12 text-center">
-          <div className="w-14 h-14 rounded-full bg-[#FDF3EE] text-[#B85028] flex items-center justify-center mx-auto mb-3">
+        <div className="bg-white rounded-3xl border border-[#d0e4f0] p-12 text-center">
+          <div className="w-14 h-14 rounded-full bg-[#FDF3EE] text-[#f15b29] flex items-center justify-center mx-auto mb-3">
             <svg
               className="w-7 h-7"
               fill="none"
@@ -550,7 +550,7 @@ export default function AdminGalerie() {
           <button
             type="button"
             onClick={() => openCreateModal()}
-            className="px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-[#B85028] hover:bg-[#a0431f] cursor-pointer shadow-xs transition-colors"
+            className="px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-[#f15b29] hover:bg-[#d44d1f] cursor-pointer shadow-xs transition-colors"
           >
             + Ajouter un média
           </button>
@@ -565,7 +565,7 @@ export default function AdminGalerie() {
             return (
               <div
                 key={media.id}
-                className="bg-white rounded-2xl overflow-hidden border border-[#EFECE6] shadow-2xs group hover:shadow-md transition-all flex flex-col"
+                className="bg-white rounded-2xl overflow-hidden border border-[#d0e4f0] shadow-2xs group hover:shadow-md transition-all flex flex-col"
               >
                 {/* Image Container */}
                 <div
@@ -626,7 +626,7 @@ export default function AdminGalerie() {
                 <div className="p-3.5 flex-1 flex flex-col justify-between">
                   <div>
                     <h4
-                      className="font-bold text-xs sm:text-sm text-gray-900 truncate hover:text-[#B85028] cursor-pointer transition-colors"
+                      className="font-bold text-xs sm:text-sm text-gray-900 truncate hover:text-[#f15b29] cursor-pointer transition-colors"
                       onClick={() => setPreviewMedia(media)}
                       title={media.titre}
                     >
@@ -645,7 +645,7 @@ export default function AdminGalerie() {
                   </div>
 
                   {/* Actions Buttons */}
-                  <div className="pt-3 border-t border-[#EFECE6]/80 flex items-center justify-between mt-3">
+                  <div className="pt-3 border-t border-[#d0e4f0]/80 flex items-center justify-between mt-3">
                     <button
                       type="button"
                       onClick={() => setPreviewMedia(media)}
@@ -748,9 +748,9 @@ export default function AdminGalerie() {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-[#FAF7F2]">
+              <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-[#f4f8fb]">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-[#FDF3EE] text-[#B85028] flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-xl bg-[#FDF3EE] text-[#f15b29] flex items-center justify-center">
                     <svg
                       className="w-4 h-4"
                       fill="none"
@@ -777,7 +777,7 @@ export default function AdminGalerie() {
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="w-8 h-8 rounded-full bg-[#EFECE6] text-[#193549] hover:bg-[#DDD8D0] flex items-center justify-center cursor-pointer transition-colors"
+                  className="w-8 h-8 rounded-full bg-[#d0e4f0] text-[#193549] hover:bg-[#DDD8D0] flex items-center justify-center cursor-pointer transition-colors"
                   aria-label="Fermer"
                 >
                   <svg
@@ -808,7 +808,7 @@ export default function AdminGalerie() {
                   </label>
                   <div className="flex flex-col sm:flex-row items-center gap-4">
                     {imagePreviewUrl ? (
-                      <div className="relative w-full sm:w-40 aspect-4/3 rounded-2xl overflow-hidden border-2 border-[#B85028] shadow-inner shrink-0 bg-slate-100">
+                      <div className="relative w-full sm:w-40 aspect-4/3 rounded-2xl overflow-hidden border-2 border-[#f15b29] shadow-inner shrink-0 bg-slate-100">
                         <img
                           src={imagePreviewUrl}
                           alt="Aperçu"
@@ -829,7 +829,7 @@ export default function AdminGalerie() {
                     ) : (
                       <div
                         onClick={() => fileInputRef.current?.click()}
-                        className="w-full sm:w-40 aspect-4/3 rounded-2xl bg-[#FAF7F2] border-2 border-dashed border-[#EFECE6] hover:border-[#B85028] flex flex-col items-center justify-center text-gray-400 cursor-pointer transition-colors shrink-0"
+                        className="w-full sm:w-40 aspect-4/3 rounded-2xl bg-[#f4f8fb] border-2 border-dashed border-[#d0e4f0] hover:border-[#f15b29] flex flex-col items-center justify-center text-gray-400 cursor-pointer transition-colors shrink-0"
                       >
                         <svg
                           className="w-8 h-8 text-gray-300"
@@ -854,7 +854,7 @@ export default function AdminGalerie() {
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="px-4 py-2 rounded-xl text-xs font-bold bg-[#FAF7F2] border border-gray-200 text-gray-700 hover:bg-gray-100 cursor-pointer transition-colors"
+                        className="px-4 py-2 rounded-xl text-xs font-bold bg-[#f4f8fb] border border-gray-200 text-gray-700 hover:bg-gray-100 cursor-pointer transition-colors"
                       >
                         {imagePreviewUrl ? "Changer l'image" : "Parcourir vos fichiers..."}
                       </button>
@@ -882,7 +882,7 @@ export default function AdminGalerie() {
                     value={formTitre}
                     onChange={(e) => setFormTitre(e.target.value)}
                     placeholder="Ex: Atelier de robotique au campus d'Agadez..."
-                    className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold text-gray-900 focus:outline-none focus:border-[#B85028]"
+                    className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold text-gray-900 focus:outline-none focus:border-[#f15b29]"
                   />
                 </div>
 
@@ -897,7 +897,7 @@ export default function AdminGalerie() {
                       onChange={(e) =>
                         setFormCategorie(e.target.value as MediaCategorie)
                       }
-                      className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl px-3 py-2.5 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#B85028] cursor-pointer"
+                      className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-3 py-2.5 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#f15b29] cursor-pointer"
                     >
                       <option value="steam">Modèles STEAM</option>
                       <option value="local">Local Projects (LP)</option>
@@ -914,7 +914,7 @@ export default function AdminGalerie() {
                       min={0}
                       value={formOrdre}
                       onChange={(e) => setFormOrdre(Number(e.target.value))}
-                      className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl px-3 py-2.5 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#B85028]"
+                      className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-3 py-2.5 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#f15b29]"
                     />
                   </div>
                 </div>
@@ -929,7 +929,7 @@ export default function AdminGalerie() {
                     value={formVideoUrl}
                     onChange={(e) => setFormVideoUrl(e.target.value)}
                     placeholder="https://youtube.com/watch?v=... ou https://vimeo.com/..."
-                    className="w-full bg-[#FAF7F2] border border-gray-200 rounded-xl px-4 py-2 text-xs font-semibold text-gray-900 focus:outline-none focus:border-[#B85028]"
+                    className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-4 py-2 text-xs font-semibold text-gray-900 focus:outline-none focus:border-[#f15b29]"
                   />
                 </div>
 
@@ -940,7 +940,7 @@ export default function AdminGalerie() {
                       type="checkbox"
                       checked={formMisEnAvant}
                       onChange={(e) => setFormMisEnAvant(e.target.checked)}
-                      className="w-4 h-4 rounded border-gray-300 text-[#B85028] focus:ring-[#B85028] cursor-pointer"
+                      className="w-4 h-4 rounded border-gray-300 text-[#f15b29] focus:ring-[#f15b29] cursor-pointer"
                     />
                     <div>
                       <span className="text-xs font-bold text-gray-800 block">
@@ -966,7 +966,7 @@ export default function AdminGalerie() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-[#B85028] hover:bg-[#a0431f] transition-all cursor-pointer shadow-xs disabled:opacity-50"
+                    className="px-5 py-2.5 rounded-xl text-xs font-extrabold text-white bg-[#f15b29] hover:bg-[#d44d1f] transition-all cursor-pointer shadow-xs disabled:opacity-50"
                   >
                     {isSubmitting
                       ? "Enregistrement..."
@@ -1062,7 +1062,7 @@ export default function AdminGalerie() {
                       href={previewMedia.video_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-xs font-bold text-[#B85028] hover:underline"
+                      className="inline-flex items-center gap-2 text-xs font-bold text-[#f15b29] hover:underline"
                     >
                       <svg
                         className="w-4 h-4"

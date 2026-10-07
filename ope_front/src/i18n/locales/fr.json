@@ -63,7 +63,7 @@
     "day": "JOUR",
     "month": "MOIS",
     "year": "ANNÉE",
-    "day_val": "15",
+    "day_val": "25",
     "month_val": "DÉC",
     "year_val": "2026"
   },
@@ -87,7 +87,7 @@
   },
   "talents": {
     "title": "Les 1000 Talents",
-    "subtitle": "Découvrez les pionniers, innovateurs et créateurs qui façonnent le futur technologique et citoyen du Niger.",
+    "subtitle": "Découvrez les pionniers, innovateurs et créateurs qui façonnent le monde technologique.",
     "search_placeholder": "Rechercher un talent, une spécialité, une ville...",
     "all_domains": "Tous les domaines",
     "view_profile": "Voir le profil",
@@ -348,3 +348,4 @@
     "dje": "Zarma"
   }
 }
+

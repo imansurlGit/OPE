@@ -197,7 +197,7 @@ export default function Categories() {
 
       {/* ── Bannière CTA en bas ──────────────────────────────────── */}
       <section className="pb-24 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto bg-[#F5EADB] rounded-3xl p-8 sm:p-10 border border-[#ebd8c1] flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
+        <div className="max-w-5xl mx-auto bg-white rounded-3xl p-8 sm:p-10 border border-ope-border flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
           <div className="text-center sm:text-left max-w-xl">
             <h3 className="text-xl sm:text-2xl font-extrabold text-[#BD5338] mb-2 tracking-tight">
               {t("apropos.title")}
@@ -208,7 +208,7 @@ export default function Categories() {
           </div>
 
           <NavLink
-            to="/participer"
+            to="/formulaire"
             className="inline-flex items-center justify-center px-6 py-3 rounded-xl text-sm font-bold text-white bg-[#BD5338] hover:bg-[#a5442c] shadow-md transition-all duration-200 shrink-0 active:scale-95"
           >
             {t("categories_page.apply_house")}
@@ -298,7 +298,7 @@ export default function Categories() {
             </div>
 
             {/* Critères d'éligibilité */}
-            <div className="mb-6 p-3 rounded-xl bg-[#FAF5EE] border border-[#E5DCD0]">
+            <div className="mb-6 p-3 rounded-xl bg-ope-bg border border-ope-border">
               <p className="text-xs text-ope-text font-medium">
                 <span className="font-bold text-[#BD5338]">Éligibilité : </span>
                 {selectedCat.details.criteres}
@@ -314,7 +314,7 @@ export default function Categories() {
                 {t("talents.close")}
               </button>
               <NavLink
-                to="/participer"
+                to="/formulaire"
                 className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-[#BD5338] hover:bg-[#a5442c] transition-colors"
               >
                 {t("categories_page.apply_house")} →

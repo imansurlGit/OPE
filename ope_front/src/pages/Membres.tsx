@@ -1,13 +1,13 @@
-import { useState, useEffect, useMemo } from "react";
+﻿import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { membreService, type MembreEquipe } from "../services";
 
 // ── Palette dynamique des badges de section ─────────────────────────────────
 const getSectionBadgeClass = (section: string) => {
   const BADGE_PALETTES = [
-    "bg-[#FDF3EE] text-[#B85028] border-[#F0C5AE]",
+    "bg-[#FDF3EE] text-[#f15b29] border-[#F0C5AE]",
     "bg-[#EBF2F7] text-[#193549] border-[#C5D8E8]",
-    "bg-[#F0ECE8] text-[#6B4533] border-[#D9C4B8]",
+    "bg-[#F0ECE8] text-[#1b3a4f] border-[#D9C4B8]",
     "bg-[#EAF5F2] text-[#1D6353] border-[#BDE0D6]",
     "bg-[#FEF6E9] text-[#9A6700] border-[#FCE1B4]",
   ];
@@ -35,10 +35,10 @@ const MemberAvatar = ({ photo, name }: { photo?: string | null; name: string }) 
   }
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#FAF5EE] to-[#EFECE6] text-[#A89A88]">
-      <div className="w-16 h-16 rounded-full bg-[#E8DEC8]/50 flex items-center justify-center mb-1">
+    <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#edf4f9] via-[#e5f0f7] to-[#d6e8f4] text-ope-primary/60 group-hover:from-[#e4eff6] group-hover:to-[#cee2ef] transition-colors duration-300">
+      <div className="w-16 h-16 rounded-full bg-white/95 border border-ope-border flex items-center justify-center mb-1.5 shadow-2xs group-hover:scale-105 transition-transform duration-300">
         <svg
-          className="w-9 h-9 text-[#8C7B6B]"
+          className="w-9 h-9 text-ope-primary"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -132,8 +132,8 @@ export default function Membres() {
                 onClick={() => setSelectedSection("all")}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                   selectedSection === "all"
-                    ? "bg-[#B85028] text-white shadow-xs"
-                    : "bg-white text-ope-text border border-ope-border hover:bg-[#FAF5EE]"
+                    ? "bg-[#f15b29] text-white shadow-xs"
+                    : "bg-white text-ope-text border border-ope-border hover:bg-ope-bg"
                 }`}
               >
                 Tous ({membres.length})
@@ -149,8 +149,8 @@ export default function Membres() {
                     onClick={() => setSelectedSection(sec)}
                     className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                       selectedSection.toLowerCase() === sec.toLowerCase()
-                        ? "bg-[#B85028] text-white shadow-xs"
-                        : "bg-white text-ope-text border border-ope-border hover:bg-[#FAF5EE]"
+                        ? "bg-[#f15b29] text-white shadow-xs"
+                        : "bg-white text-ope-text border border-ope-border hover:bg-ope-bg"
                     }`}
                   >
                     {sec} ({count})
@@ -186,7 +186,7 @@ export default function Membres() {
               <button
                 type="button"
                 onClick={fetchMembres}
-                className="px-4 py-2 rounded-xl bg-[#B85028] text-white text-xs font-bold hover:bg-[#a0431f] transition-colors cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-[#f15b29] text-white text-xs font-bold hover:bg-[#d44d1f] transition-colors cursor-pointer"
               >
                 Réessayer
               </button>
@@ -218,7 +218,7 @@ export default function Membres() {
           {/* ── État Vide (Clean generic empty state) ──────────────── */}
           {!isLoading && !error && filteredMembres.length === 0 && (
             <div className="text-center py-16 bg-ope-white rounded-3xl border border-ope-border">
-              <div className="w-14 h-14 rounded-full bg-orange-50 text-ope-primary flex items-center justify-center mx-auto mb-3">
+              <div className="w-14 h-14 rounded-full bg-[#edf4f9] text-ope-primary flex items-center justify-center mx-auto mb-3">
                 <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
@@ -274,7 +274,7 @@ export default function Membres() {
                             href={member.linkedin}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-8 h-8 rounded-lg bg-[#FAF5EE] border border-[#E8DEC8] flex items-center justify-center text-ope-text hover:bg-ope-primary hover:text-white hover:border-ope-primary transition-colors"
+                            className="w-8 h-8 rounded-lg bg-white border border-ope-border flex items-center justify-center text-ope-text hover:bg-ope-primary hover:text-white hover:border-ope-primary transition-colors"
                             aria-label={`LinkedIn de ${member.nom}`}
                           >
                             <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -286,7 +286,7 @@ export default function Membres() {
                         {member.email ? (
                           <a
                             href={member.email.startsWith("mailto:") ? member.email : `mailto:${member.email}`}
-                            className="w-8 h-8 rounded-lg bg-[#FAF5EE] border border-[#E8DEC8] flex items-center justify-center text-ope-text hover:bg-ope-orange hover:text-white hover:border-ope-orange transition-colors"
+                            className="w-8 h-8 rounded-lg bg-white border border-ope-border flex items-center justify-center text-ope-text hover:bg-ope-orange hover:text-white hover:border-ope-orange transition-colors"
                             aria-label={`Email de ${member.nom}`}
                           >
                             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

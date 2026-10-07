@@ -178,8 +178,8 @@ export default function SideBar({
                 }}
                 className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
                   isActive
-                    ? "bg-[#B85028] text-white shadow-sm"
-                    : "text-gray-600 hover:bg-[#FAF7F2] hover:text-[#B85028]"
+                    ? "bg-[#2F6084] text-white shadow-sm"
+                    : "text-gray-600 hover:bg-[#edf4f9] hover:text-[#2F6084]"
                 }`}
               >
                 <span className={isActive ? "text-white" : "text-gray-500"}>
@@ -195,10 +195,10 @@ export default function SideBar({
       {/* ── Bas : Action & Déconnexion ── */}
       <div className="pt-6 space-y-3">
         {/* Liens de sortie */}
-        <div className="flex items-center justify-between pt-2 border-t border-[#EFECE6] text-xs">
+        <div className="flex items-center justify-between pt-2 border-t border-[#d0e4f0] text-xs">
           <Link
             to="/"
-            className="text-gray-500 hover:text-[#B85028] font-medium transition-colors"
+            className="text-gray-500 hover:text-[#2F6084] font-medium transition-colors"
           >
             ← Site public
           </Link>
@@ -220,7 +220,7 @@ export default function SideBar({
   return (
     <>
       {/* ── Sidebar pour Bureau (Desktop fixe) ── */}
-      <aside className="hidden lg:block w-64 xl:w-72 bg-white border-r border-[#EFECE6] h-screen sticky top-0 shrink-0 select-none">
+      <aside className="hidden lg:block w-64 xl:w-72 bg-white border-r border-[#d0e4f0] h-screen sticky top-0 shrink-0 select-none">
         {sidebarContent}
       </aside>
 

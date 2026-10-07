@@ -89,20 +89,20 @@ export default function Contact() {
                                             required
                                             value={formData.nom}
                                             onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
-                                            className="w-full bg-[#FAF5EE] border border-[#E8DEC8] text-ope-text text-xs sm:text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-ope-primary transition-colors"
+                                            className="w-full bg-white border border-ope-border text-ope-text text-xs sm:text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-ope-primary transition-colors"
                                         />
                                     </div>
 
                                     <div>
                                         <label className="block text-[11px] font-bold text-ope-text mb-1.5">
-                                            {t("email", "Adresse e-mail")}
+                                             {t("email", "Adresse e-mail")}
                                         </label>
                                         <input
                                             type="email"
                                             required
                                             value={formData.email}
                                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                            className="w-full bg-[#FAF5EE] border border-[#E8DEC8] text-ope-text text-xs sm:text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-ope-primary transition-colors"
+                                            className="w-full bg-white border border-ope-border text-ope-text text-xs sm:text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-ope-primary transition-colors"
                                         />
                                     </div>
                                 </div>
@@ -117,7 +117,7 @@ export default function Contact() {
                                         required
                                         value={formData.sujet}
                                         onChange={(e) => setFormData({ ...formData, sujet: e.target.value })}
-                                        className="w-full bg-[#FAF5EE] border border-[#E8DEC8] text-ope-text text-xs sm:text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-ope-primary transition-colors"
+                                        className="w-full bg-white border border-ope-border text-ope-text text-xs sm:text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-ope-primary transition-colors"
                                     />
                                 </div>
 
@@ -131,7 +131,7 @@ export default function Contact() {
                                         rows={5}
                                         value={formData.message}
                                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                        className="w-full bg-[#FAF5EE] border border-[#E8DEC8] text-ope-text text-xs sm:text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-ope-primary resize-none transition-colors"
+                                        className="w-full bg-white border border-ope-border text-ope-text text-xs sm:text-sm rounded-xl px-4 py-3 focus:outline-none focus:border-ope-primary resize-none transition-colors"
                                     />
                                 </div>
 
@@ -235,7 +235,7 @@ export default function Contact() {
                                     href="https://facebook.com"
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="w-10 h-10 rounded-full bg-[#FAF5EE] border border-[#E8DEC8] flex items-center justify-center text-ope-text hover:bg-[#BD5338] hover:text-white hover:border-[#BD5338] transition-all cursor-pointer"
+                                    className="w-10 h-10 rounded-full bg-white border border-ope-border flex items-center justify-center text-ope-text hover:bg-[#BD5338] hover:text-white hover:border-[#BD5338] transition-all cursor-pointer"
                                     aria-label="Facebook"
                                 >
                                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -248,7 +248,7 @@ export default function Contact() {
                                     href="https://twitter.com"
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="w-10 h-10 rounded-full bg-[#FAF5EE] border border-[#E8DEC8] flex items-center justify-center text-ope-text hover:bg-[#BD5338] hover:text-white hover:border-[#BD5338] transition-all cursor-pointer"
+                                    className="w-10 h-10 rounded-full bg-white border border-ope-border flex items-center justify-center text-ope-text hover:bg-[#BD5338] hover:text-white hover:border-[#BD5338] transition-all cursor-pointer"
                                     aria-label="Twitter X"
                                 >
                                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -261,7 +261,7 @@ export default function Contact() {
                                     href="https://linkedin.com"
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="w-10 h-10 rounded-full bg-[#FAF5EE] border border-[#E8DEC8] flex items-center justify-center text-ope-text hover:bg-[#BD5338] hover:text-white hover:border-[#BD5338] transition-all cursor-pointer"
+                                    className="w-10 h-10 rounded-full bg-white border border-ope-border flex items-center justify-center text-ope-text hover:bg-[#BD5338] hover:text-white hover:border-[#BD5338] transition-all cursor-pointer"
                                     aria-label="LinkedIn"
                                 >
                                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">

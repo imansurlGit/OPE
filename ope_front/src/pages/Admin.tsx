@@ -39,7 +39,7 @@ export default function Admin() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#FAF7F2] text-[#193549]">
+    <div className="flex min-h-screen bg-[#f4f8fb] text-[#193549]">
       {/* ── Sidebar Navigation ── */}
       <SideBar
         activeTab={activeTab}
@@ -52,7 +52,7 @@ export default function Admin() {
       {/* ── Contenu Principal ── */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Topbar mobile pour ouvrir le menu */}
-        <header className="lg:hidden flex items-center justify-between p-4 bg-white border-b border-[#EFECE6] sticky top-0 z-30">
+        <header className="lg:hidden flex items-center justify-between p-4 bg-white border-b border-[#d0e4f0] sticky top-0 z-30">
           <div className="flex items-center gap-2.5">
             <button
               onClick={() => setMobileMenuOpen(true)}
@@ -63,7 +63,7 @@ export default function Admin() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            <span className="font-extrabold text-[#B85028] text-base">OPE Agadez</span>
+            <span className="font-extrabold text-[#2F6084] text-base">OPE Agadez</span>
           </div>
 
           <div className="flex items-center gap-2">
