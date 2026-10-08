@@ -6,14 +6,14 @@
     "news": "Actualités",
     "contact": "Contact",
     "explore": "Explorer",
-    "members": "Membres OPE",
+    "members": "Équipe CNCEIZ",
     "categories": "Les 3 Catégories",
     "sponsors": "Partenaires & Sponsors",
     "gallery": "Galerie Multimédia",
     "join": "Participer"
   },
   "footer": {
-    "title": "Organisation pour la Promotion de l'Excellence",
+    "title": "CNCEIZ",
     "mission": "Promouvoir et développer les compétences des 1000 jeunes talents sur tout le territoire nigérien, soutenir l'innovation citoyenne et organiser des programmes d'excellence.",
     "nav_title": "Navigation",
     "info_title": "Informations",
@@ -47,7 +47,16 @@
         "items": ["Agriculture", "Élevage", "Artisanat"]
       },
       "mcc": {
-        "title": "Modèles MCC",
+        "title": "Modèles MC2",
+        "subtitle": "Modèle de Citoyen Communautaire",
+        "items": [
+          "Plantation d'arbres sur le site de Courbouru",
+          "Réparation de tables-bancs",
+          "Confection de poubelles"
+        ]
+      },
+      "MC2": {
+        "title": "Modèles MC2",
         "subtitle": "Modèle de Citoyen Communautaire",
         "items": [
           "Plantation d'arbres sur le site de Courbouru",
@@ -60,9 +69,14 @@
   "countdown": {
     "title": "Rendez-vous à Agadez le…",
     "description": "Préparez-vous pour l'événement d'innovation le plus attendu de l'année. Les places sont limitées.",
+    "badge": "Camp National Citoyen",
     "day": "JOUR",
     "month": "MOIS",
     "year": "ANNÉE",
+    "days": "JOURS",
+    "hours": "HEURES",
+    "minutes": "MIN",
+    "seconds": "SEC",
     "day_val": "25",
     "month_val": "DÉC",
     "year_val": "2026"
@@ -98,6 +112,9 @@
     "contact_talent": "Contacter",
     "no_results": "Aucun talent ne correspond à vos critères de recherche.",
     "view_more": "Voir plus",
+    "download_booklets": "Télécharger les livrets des talents",
+    "booklets_dropdown_title": "Livrets des Talents OPE",
+    "booklets_dropdown_desc": "Consultez ou téléchargez les annuaires des promotions précédentes et à venir.",
     "view_less": "Voir moins"
   },
   "categories_page": {
@@ -107,14 +124,14 @@
     "steam_desc": "Sciences, Technologies, Ingénierie, Art et Mathématiques. Le laboratoire des technologies de pointe.",
     "lp_title": "House Local Projects (LP)",
     "lp_desc": "Entrepreneuriat appliqué aux ressources locales : agro-business, élevage résilient et artisanat d'excellence.",
-    "mcc_title": "House Modèle de Citoyen Communautaire (MCC)",
+    "mcc_title": "House Modèle de Citoyen Communautaire (MC2)",
     "mcc_desc": "Engagement civique, salubrité publique, paix et solidarité au service direct des communautés.",
     "discover_domain": "Explorer ce domaine",
     "apply_house": "Postuler dans cette House"
   },
   "membres": {
-    "title": "L'Équipe OPE",
-    "subtitle": "Des femmes et des hommes dévoués à l'autonomisation et à la réussite de la jeunesse nigérienne.",
+    "title": "L'Équipe CNCEIZ",
+    "subtitle": "Des femmes et des hommes dévoués à l'organisation, l'autonomisation et la réussite du Camp National et de la jeunesse.",
     "board": "Conseil d'Administration",
     "mentors": "Mentors & Formateurs",
     "coordination": "Coordination Régionale",

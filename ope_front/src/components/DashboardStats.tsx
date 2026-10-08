@@ -2,7 +2,7 @@
 import dashboardService from "../services/dashboardService";
 import type { DashboardStats, TimelinePoint } from "../services/dashboardService";
 
-// ── Couleurs fixes des régions ──
+// -- Couleurs fixes des régions --
 const REGION_COLORS = [
   "from-[#f15b29] to-[#D97706]",
   "from-[#2F6084] to-[#4A80A8]",
@@ -38,9 +38,9 @@ const HOUSE_CONFIG = [
     bgSoft: "bg-sky-50",
   },
   {
-    key: "MCC" as const,
-    name: "House MCC",
-    badge: "MCC",
+    key: "MC2" as const,
+    name: "House MC2",
+    badge: "MC2",
     desc: "Média, Création & Communication",
     color: "#D97706",
     colorClass: "bg-[#D97706]",
@@ -50,7 +50,7 @@ const HOUSE_CONFIG = [
   },
 ];
 
-// ── Skeleton Loader ──
+// -- Skeleton Loader --
 function Skeleton({ className = "" }: { className?: string }) {
   return (
     <div
@@ -95,7 +95,7 @@ export default function DashboardStats() {
       });
   }, [retryCount]);
 
-  // ── Courbe SVG dynamique selon la période (Semaine / Mois / Jour) ──
+  // -- Courbe SVG dynamique selon la période (Semaine / Mois / Jour) --
   const svgWidth = 600;
   const svgHeight = 220;
   const paddingX = 40;
@@ -137,7 +137,7 @@ export default function DashboardStats() {
       ? `${pathD} L ${svgPoints[svgPoints.length - 1].x} ${svgHeight - paddingY} L ${svgPoints[0].x} ${svgHeight - paddingY} Z`
       : "";
 
-  // ── Donut ──
+  // -- Donut --
   const radius = 64;
   const circumference = 2 * Math.PI * radius;
   let accumulatedOffset = 0;
@@ -219,14 +219,14 @@ export default function DashboardStats() {
 
   return (
     <div className="space-y-8 animate-fade-up">
-      {/* ── En-tête ── */}
+      {/* -- En-tête -- */}
       <div>
         <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
           Tableau de bord statistique
         </h1>
       </div>
 
-      {/* ── KPIs ── */}
+      {/* -- KPIs -- */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Total candidatures */}
         <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#d0e4f0] shadow-2xs hover:shadow-xs transition-all">
@@ -295,7 +295,7 @@ export default function DashboardStats() {
         </div>
       </div>
 
-      {/* ── Graphiques ligne 2 ── */}
+      {/* -- Graphiques ligne 2 -- */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 items-stretch">
         {/* Courbe d'évolution par semaine / par mois / par jour */}
         <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#d0e4f0] shadow-2xs flex flex-col justify-between h-full">
@@ -305,13 +305,13 @@ export default function DashboardStats() {
                 Dynamique d'inscription
               </h2>
               <p className="text-xs text-gray-400 mt-0.5">
-                {timelinePeriod === "week" && "Cumul des dossiers — Par semaine (8 dernières semaines)"}
-                {timelinePeriod === "month" && "Cumul des dossiers — Par mois (6 derniers mois)"}
-                {timelinePeriod === "day" && "Cumul des dossiers — Par jour (30 derniers jours)"}
+                {timelinePeriod === "week" && "Cumul des dossiers - Par semaine (8 dernières semaines)"}
+                {timelinePeriod === "month" && "Cumul des dossiers - Par mois (6 derniers mois)"}
+                {timelinePeriod === "day" && "Cumul des dossiers - Par jour (30 derniers jours)"}
               </p>
             </div>
 
-            {/* Sélecteur de période : Semaine / Mois / Jour */}
+            {/* Slecteur de priode : Semaine / Mois / Jour */}
             <div className="flex items-center self-start sm:self-auto bg-[#f4f8fb] p-1 rounded-xl border border-[#d0e4f0] text-xs font-semibold text-gray-500">
               <button
                 type="button"
@@ -509,7 +509,7 @@ export default function DashboardStats() {
         </div>
       </div>
 
-      {/* ── Graphiques ligne 3 : Régions + Pipeline ── */}
+      {/* -- Graphiques ligne 3 : Régions + Pipeline -- */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Histogramme Régions */}
         <div className="lg:col-span-7 bg-white p-6 sm:p-7 rounded-3xl border border-[#d0e4f0] shadow-2xs">

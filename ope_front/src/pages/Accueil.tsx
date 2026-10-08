@@ -3,6 +3,9 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import heroImg from "../assets/agadez_drone.jpeg";
 import campNationalCitoyen from "../assets/camp_natio.png";
+import useCountdown from "../hooks/useCountdown";
+
+const EVENT_TARGET_DATE = new Date("2026-12-25T08:00:00+01:00");
 
 const ORANGE = "#F15B29";
 const CARD_BG = "#FFFFFF";
@@ -10,7 +13,7 @@ const CARD_TITLE = "#132433";
 const CARD_SUBTITLE = "#5C6B76";
 
 interface CategoryMeta {
-    id: "steam" | "lp" | "mcc";
+    id: "steam" | "lp" | "MC2";
     icon: React.ReactNode;
 }
 
@@ -28,7 +31,7 @@ const CATEGORY_METAS: CategoryMeta[] = [
         ),
     },
     {
-        id: "mcc",
+        id: "MC2",
         icon: (
             <path d="M17 20v-2a4 4 0 00-3-3.87M9 20v-2a4 4 0 013-3.87M13 7a4 4 0 11-8 0 4 4 0 018 0zM21 20v-2a4 4 0 00-3-3.85M16 3.13a4 4 0 010 7.75" />
         ),
@@ -57,6 +60,8 @@ export default function Accueil() {
             icon: meta.icon,
         };
     });
+
+    const countdown = useCountdown(EVENT_TARGET_DATE);
 
     const dateBlocks = [
         { value: t("countdown.day_val"), label: t("countdown.day") },
@@ -318,24 +323,52 @@ export default function Accueil() {
                             </p>
                         </div>
 
-                        {/* Blocs de Date (Jour / Mois / Année) */}
-                        <div id="countdown-blocks" className="flex gap-2 sm:gap-3 shrink-0">
-                            {dateBlocks.map(({ value, label }) => (
-                                <div
-                                    key={label}
-                                    className="flex flex-col items-center justify-center rounded-2xl px-4 sm:px-5 py-3 sm:py-4 w-20 sm:w-24"
-                                    style={{
-                                        backgroundColor: "var(--color-count-bg)",
-                                        border: "1px solid var(--color-count-border)",
-                                    }}
-                                >
-                                    <span
-                                        className={`text-xl sm:text-3xl font-extrabold tracking-tight leading-none ${label === t("countdown.month") ? "text-ope-orange" : "text-ope-primary"}`}
+                        {/* Blocs de Date originaux (Jour / Mois / Année) + Décompte temps réel */}
+                        <div className="flex flex-col items-center md:items-end gap-3.5 shrink-0">
+                            {/* Blocs de Date (Jour / Mois / Année) */}
+                            <div id="countdown-blocks" className="flex gap-2 sm:gap-3">
+                                {dateBlocks.map(({ value, label }) => (
+                                    <div
+                                        key={label}
+                                        className="flex flex-col items-center justify-center rounded-2xl px-4 sm:px-5 py-3 sm:py-4 w-20 sm:w-24 shadow-2xs transition-transform hover:-translate-y-0.5"
+                                        style={{
+                                            backgroundColor: "var(--color-count-bg)",
+                                            border: "1px solid var(--color-count-border)",
+                                        }}
                                     >
-                                        {value}
-                                    </span>
-                                </div>
-                            ))}
+                                        <span
+                                            className={`text-xl sm:text-3xl font-extrabold tracking-tight leading-none ${
+                                                label === t("countdown.month") ? "text-ope-orange" : "text-ope-primary"
+                                            }`}
+                                        >
+                                            {value}
+                                        </span>
+                                        <span
+                                            className={`text-[8px] sm:text-[9px] mt-1.5 tracking-wider font-bold uppercase ${
+                                                label === t("countdown.month") ? "text-ope-orange" : "text-ope-text-muted"
+                                            }`}
+                                        >
+                                            {label}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Décompte live sous les blocs de date */}
+                            <div className="inline-flex items-center gap-1 sm:gap-1.5 font-mono text-xs sm:text-sm font-black tabular-nums">
+                                <span className="px-2 py-1 rounded-xl bg-white text-ope-orange shadow-2xs border border-[#c4dced]">
+                                    {countdown.jours}<span className="font-sans text-[10px] font-bold ml-0.5 text-gray-400">j</span>
+                                </span>
+                                <span className="px-2 py-1 rounded-xl bg-white text-ope-primary shadow-2xs border border-[#c4dced]">
+                                    {String(countdown.heures).padStart(2, "0")}<span className="font-sans text-[10px] font-bold ml-0.5 text-gray-400">h</span>
+                                </span>
+                                <span className="px-2 py-1 rounded-xl bg-white text-ope-primary shadow-2xs border border-[#c4dced]">
+                                    {String(countdown.minutes).padStart(2, "0")}<span className="font-sans text-[10px] font-bold ml-0.5 text-gray-400">m</span>
+                                </span>
+                                <span className="px-2 py-1 rounded-xl bg-white text-ope-primary shadow-2xs border border-[#c4dced]">
+                                    {String(countdown.secondes).padStart(2, "0")}<span className="font-sans text-[10px] font-bold ml-0.5 text-gray-400">s</span>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>

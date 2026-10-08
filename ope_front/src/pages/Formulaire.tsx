@@ -5,7 +5,7 @@ import QRCode from "qrcode";
 import campNationalCitoyen from "../assets/camp_natio.png";
 import api from "../services/api";
 
-export type DomainType = "STEAM" | "LP" | "MCC";
+export type DomainType = "STEAM" | "LP" | "MC2";
 
 export interface FormData {
   domaine: DomainType | "";
@@ -109,7 +109,7 @@ const HOUSES_BY_DOMAIN: Record<DomainType, string[]> = {
     "Artisanat et Métiers d'art",
     "Autre projet local",
   ],
-  MCC: [
+  MC2: [
     "Débats communautaires & Plaidoyer",
     "Fabrication de poubelles & Assainissement",
     "7 km de la Paix & Cohésion",
@@ -134,7 +134,7 @@ const STATUTS_PROJET_BY_DOMAIN: Record<DomainType, string[]> = {
     "J'ai une idée de projet local que je souhaite développer",
     "Je n'ai pas encore de projet, mais j'ai une vocation claire",
   ],
-  MCC: [
+  MC2: [
     "J'ai déjà mené une action citoyenne ou communautaire",
     "J'ai une idée d'action citoyenne que je souhaite mener",
     "Je n'ai pas encore mené d'action, mais j'ai une vocation citoyenne claire",
@@ -892,9 +892,9 @@ export default function Formulaire() {
 
                   {/* ── House 3 : Mouvement Citoyen ── */}
                   <div
-                    onClick={() => handleSelectDomain("MCC")}
+                    onClick={() => handleSelectDomain("MC2")}
                     className={`rounded-2xl p-5 transition-all duration-200 cursor-pointer flex flex-col justify-between gap-4 border-2 ${
-                      data.domaine === "MCC"
+                      data.domaine === "MC2"
                         ? "border-[#F15B29] bg-white shadow-md ring-2 ring-[#F15B29]/20"
                         : "border-slate-200 bg-white hover:border-slate-300 hover:shadow-xs"
                     }`}
@@ -920,12 +920,12 @@ export default function Formulaire() {
                       <div className="shrink-0">
                         <div
                           className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
-                            data.domaine === "MCC"
+                            data.domaine === "MC2"
                               ? "border-[#F15B29] bg-[#F15B29]"
                               : "border-slate-300 bg-white"
                           }`}
                         >
-                          {data.domaine === "MCC" && (
+                          {data.domaine === "MC2" && (
                             <div className="w-2 h-2 rounded-full bg-white" />
                           )}
                         </div>
@@ -936,7 +936,7 @@ export default function Formulaire() {
                         Mouvement Citoyen
                       </h3>
                       <p className="text-xs text-[#5C6B76] leading-relaxed mt-1">
-                        {t("form.mcc_desc")}
+                        {t("form.MC2_desc")}
                       </p>
                     </div>
                   </div>
@@ -1662,7 +1662,7 @@ export default function Formulaire() {
                           ? t("form.step4_placeholder_steam")
                           : data.domaine === "LP"
                             ? t("form.step4_placeholder_lp")
-                            : t("form.step4_placeholder_mcc")
+                            : t("form.step4_placeholder_MC2")
                       }
                       className={`w-full px-3.5 py-2.5 rounded-xl border text-sm focus:outline-none transition-colors ${
                         fieldErrors.descriptionProjet
@@ -1770,7 +1770,7 @@ export default function Formulaire() {
                     </div>
                   )}
 
-                  {data.domaine === "MCC" && (
+                  {data.domaine === "MC2" && (
                     <div className="space-y-4 pt-2 border-t border-ope-border/60">
                       <div>
                         <label className="block text-xs font-bold uppercase tracking-wider text-ope-text mb-1">

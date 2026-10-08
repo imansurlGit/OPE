@@ -26,7 +26,7 @@ export interface DashboardStats {
   domaines: {
     STEAM: number;
     LP: number;
-    MCC: number;
+    MC2: number;
   };
   regions: { region: string; count: number; percentage: number }[];
   max_region_count: number;

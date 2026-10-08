@@ -84,7 +84,7 @@ export default function SideBar({
     },
     {
       id: "membres" as AdminTab,
-      label: "Membres OPE",
+      label: "Équipe CNCEIZ",
       icon: (
         <svg
           className="w-5 h-5"

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import { membreService, type MembreEquipe } from "../services";
 import Pagination from "./Pagination";
@@ -277,7 +277,7 @@ export default function AdminMembres() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
-            Membres de l'OPE
+            Équipe CNCEIZ
           </h1>
         </div>
         <button
@@ -583,7 +583,7 @@ export default function AdminMembres() {
                   <h3 className="font-black text-gray-900 text-base">
                     {editingMembre ? "Modifier le membre" : "Ajouter un membre"}
                   </h3>
-                  <p className="text-[11px] text-gray-500">Équipe OPE Agadez — CNCEIZ 2026</p>
+                  <p className="text-[11px] text-gray-500">Équipe CNCEIZ 2026</p>
                 </div>
               </div>
               <button

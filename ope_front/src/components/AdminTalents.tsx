@@ -185,7 +185,7 @@ export default function AdminTalents() {
 
   // Export CSV
   const handleExportCSV = () => {
-    // Formatage de date ISO → JJ/MM/AAAA
+    // Formatage de date ISO ? JJ/MM/AAAA
     const fmtDate = (iso?: string) => {
       if (!iso) return "";
       try {
@@ -219,12 +219,12 @@ export default function AdminTalents() {
       switch (d) {
         case "STEAM": return "House STEAM (Sciences & Technologie)";
         case "LP": return "House LP (Entrepreneuriat Local)";
-        case "MCC": return "House MCC (Citoyenneté & Culture)";
+        case "MC2": return "House MC2 (Citoyenneté & Culture)";
         default: return d || "";
       }
     };
 
-    // ── Colonnes ──
+    // -- Colonnes --
     const headers = [
       "N° Dossier",
       "Nom",
@@ -242,7 +242,7 @@ export default function AdminTalents() {
       "Date d'Inscription",
     ].map((h) => `"${h}"`);
 
-    // ── Lignes de données ──
+    // -- Lignes de données --
     const rows = filteredCandidatures.map((c) => [
       `"${c.reference}"`,
       `"${c.nom}"`,
@@ -326,7 +326,7 @@ export default function AdminTalents() {
         return "bg-[#edf4f9] text-[#2F6084] border-orange-200";
       case "LP":
         return "bg-blue-50 text-[#2F6084] border-blue-200";
-      case "MCC":
+      case "MC2":
         return "bg-purple-50 text-purple-700 border-purple-200";
       default:
         return "bg-slate-100 text-slate-700 border-slate-200";
@@ -359,7 +359,7 @@ export default function AdminTalents() {
         </div>
       )}
 
-      {/* ── En-tête : Titre & Actions ── */}
+      {/* -- En-tête : Titre & Actions -- */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
@@ -415,7 +415,7 @@ export default function AdminTalents() {
         </div>
       </div>
 
-      {/* ── Cartes Synthétiques ── */}
+      {/* -- Cartes Synthétiques -- */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Total Admis */}
         <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#d0e4f0] shadow-2xs">
@@ -448,7 +448,7 @@ export default function AdminTalents() {
             {stats.total}
           </p>
           <p className="text-[11px] text-gray-400 mt-1 truncate">
-            {stats.soumis} en attente • {stats.en_revue} en cours
+            {stats.soumis} en attente · {stats.en_revue} en cours
           </p>
         </div>
 
@@ -477,7 +477,7 @@ export default function AdminTalents() {
             </span>
           </div>
           <p className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
-            {stats.steam} <span className="text-xs font-semibold text-gray-400">STEAM</span> · {stats.lp} <span className="text-xs font-semibold text-gray-400">LP</span> · {stats.mcc} <span className="text-xs font-semibold text-gray-400">MCC</span>
+            {stats.steam} <span className="text-xs font-semibold text-gray-400">STEAM</span> · {stats.lp} <span className="text-xs font-semibold text-gray-400">LP</span> · {stats.MC2} <span className="text-xs font-semibold text-gray-400">MC2</span>
           </p>
           <p className="text-[11px] text-gray-400 mt-1 truncate">
             {stats.regionsCount} régions mobilisées
@@ -485,7 +485,7 @@ export default function AdminTalents() {
         </div>
       </div>
 
-      {/* ── Barre d'Outils : Recherche & Filtres ── */}
+      {/* -- Barre d'Outils : Recherche & Filtres -- */}
       <div className="bg-white p-5 rounded-3xl border border-[#d0e4f0] shadow-2xs space-y-4">
         <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
           {/* Champ Recherche */}
@@ -511,7 +511,7 @@ export default function AdminTalents() {
                 onClick={() => setSearchQuery("")}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs font-bold"
               >
-                ✕
+                ?
               </button>
             )}
           </div>
@@ -578,7 +578,7 @@ export default function AdminTalents() {
             { key: "all", label: "Toutes les maisons", count: stats.total },
             { key: "STEAM", label: "House STEAM", count: stats.steam },
             { key: "LP", label: "House LP", count: stats.lp },
-            { key: "MCC", label: "House MCC", count: stats.mcc },
+            { key: "MC2", label: "House MC2", count: stats.MC2 },
           ].map((pill) => (
             <button
               key={pill.key}
@@ -596,7 +596,7 @@ export default function AdminTalents() {
         </div>
       </div>
 
-      {/* ── Chargement en cours ── */}
+      {/* -- Chargement en cours -- */}
       {isLoading ? (
         <div className="bg-white rounded-3xl border border-[#d0e4f0] p-12 text-center shadow-2xs flex flex-col items-center justify-center">
           <svg className="w-8 h-8 text-[#f15b29] animate-spin mb-3" viewBox="0 0 24 24" fill="none">
@@ -621,7 +621,7 @@ export default function AdminTalents() {
           </p>
         </div>
       ) : viewMode === "table" ? (
-        /* ── Vue 1 : TABLEAU MODERNE DES VRAIS TALENTS ── */
+        /* -- Vue 1 : TABLEAU MODERNE DES VRAIS TALENTS -- */
         <div className="bg-white rounded-3xl border border-[#d0e4f0] shadow-2xs overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
@@ -716,7 +716,7 @@ export default function AdminTalents() {
           </div>
         </div>
       ) : (
-        /* ── Vue 2 : CARTES EN GRILLE ── */
+        /* -- Vue 2 : CARTES EN GRILLE -- */
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {paginatedCandidatures.map((cand) => (
             <div
@@ -778,9 +778,9 @@ export default function AdminTalents() {
         />
       )}
 
-      {/* ═════════════════════════════════════════════════════════════════════
+      {/* ---------------------------------------------------------------------
           MODAL DE FICHE COMPLÈTE DU TALENT (ÉVALUATION & VALIDATION)
-          ═════════════════════════════════════════════════════════════════════ */}
+          --------------------------------------------------------------------- */}
       {selectedCandidate && createPortal(
         <div
           className="fixed inset-0 lg:left-64 xl:left-72 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
@@ -806,7 +806,7 @@ export default function AdminTalents() {
                     </span>
                   </div>
                   <p className="text-xs text-gray-500 font-mono mt-0.5">
-                    Dossier N° {selectedCandidate.reference} • Région de {selectedCandidate.region}
+                    Dossier N° {selectedCandidate.reference} · Région de {selectedCandidate.region}
                   </p>
                 </div>
               </div>
@@ -816,7 +816,7 @@ export default function AdminTalents() {
                 onClick={() => setSelectedCandidate(null)}
                 className="w-8 h-8 rounded-full bg-white border border-[#d0e4f0] flex items-center justify-center text-gray-500 hover:text-gray-900 cursor-pointer transition-colors"
               >
-                ✕
+                ?
               </button>
             </div>
 
@@ -883,7 +883,7 @@ export default function AdminTalents() {
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   <div>
-                    <span className="text-gray-400 block text-[10px]">Sexe & Âge</span>
+                    <span className="text-gray-400 block text-[10px]">Sexe & âge</span>
                     <span className="font-bold text-gray-900">
                       {selectedCandidate.sexe === "F" ? "Féminin" : "Masculin"} ({selectedCandidate.date_naissance || "—"})
                     </span>

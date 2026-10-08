@@ -62,29 +62,6 @@ export default function APropos() {
         },
     ];
 
-    const JALONS = [
-        {
-            annee: "Octobre 2026",
-            titre: "Concours de la mascotte",
-            desc: "Lancement officiel du grand concours national de la mascotte CNCEIZ 2026.",
-            status: "À venir",
-            highlight: false,
-        },
-        {
-            annee: "Novembre 2026",
-            titre: "Pré-Camps régionaux",
-            desc: "Pré-Camps dans les 8 régions du Niger et à Timia : 1 500 jeunes formés, 1 000 délégués sélectionnés.",
-            status: "Sélection",
-            highlight: false,
-        },
-        {
-            annee: "Décembre 2026",
-            titre: "Lancement du CNCEIZ",
-            desc: "Rassemblement national à Agadez : 7 jours d'ateliers, mentorat, pitch et actions citoyennes.",
-            status: "Événement Phare",
-            highlight: true,
-        },
-    ];
 
     return (
         <div className="pt-16 bg-ope-bg text-ope-text min-h-screen font-sans selection:bg-ope-orange selection:text-white">
@@ -129,52 +106,55 @@ export default function APropos() {
                         </p>
                     </div>
                 </div>
+            </section>
 
-                {/* ── LES 3 AXES D'ACTION (Backgrounds colorés) ─────────── */}
-                <div className="mt-6 pt-6 border-t border-ope-border/60">
-                    <h3 className="text-xs font-mono font-bold text-ope-text uppercase tracking-widest mb-4">
-                        Les 3 Axes Stratégiques du Camp
-                    </h3>
+            {/* ── RETOUR SUR EXCELLENCE (HOOD COLLEGE 2024 - REDESIGN) ── */}
+            <section id="hood-college" className="max-w-6xl mx-auto px-4 sm:px-6 py-6 md:py-8">
+                <div className="bg-white rounded-[2.5rem] p-6 sm:p-10 border border-ope-border shadow-xs">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                        
+                        {/* Texte & Titre */}
+                        <div className="lg:col-span-7 space-y-4">
+                            <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-ope-text tracking-tight leading-snug">
+                                L'étincelle de Hood College <span className="text-ope-orange">(USA, 2024)</span>
+                            </h2>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                        {/* Axe 01 - Orange */}
-                        <div className="bg-ope-orange text-white rounded-3xl p-6 shadow-md flex flex-col justify-between">
-                            <div>
-                                <span className="inline-block text-[11px] font-mono font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full bg-white/20 text-white mb-3">
-                                    AXE 01
-                                </span>
-                                <h4 className="font-extrabold text-lg text-white mb-2">Modèle STEAM</h4>
-                                <p className="text-xs sm:text-sm text-white/90 leading-relaxed">
-                                    Sciences, Technologies, Ingénierie, Arts et Mathématiques appliqués aux réalités locales.
-                                </p>
+                            <p className="text-sm sm:text-base text-ope-text-muted leading-relaxed">
+                                Été 2024. Huit jeunes ambassadeurs Nigériens portent haut les couleurs de la nation au Camp Mondial du UNESCO Center for Peace à Hood College. 
+                            </p>
+
+                            <p className="text-xs sm:text-sm text-ope-text-muted leading-relaxed">
+                                Victoires éclatantes à l'IMUN (Union Africaine), 1er Prix STEAM emmené par la Miss Mathématique Mariam, et 2 Awards prestigieux saluant l'engagement de l'OPE : cette flamme d'excellence revient aujourd'hui irriguer le territoire national, au pied de l'Aïr.
+                            </p>
+                        </div>
+
+                        {/* Grille de Chiffres / Palmarès */}
+                        <div className="lg:col-span-5 grid grid-cols-2 gap-3">
+                            <div className="bg-ope-bg p-4 rounded-2xl border border-ope-border text-center">
+                                <span className="block text-2xl font-black text-ope-primary">1er Prix</span>
+                                <span className="text-xs font-bold text-ope-text mt-0.5 block">STEAM</span>
+                                <span className="text-[10px] text-ope-text-muted">Projet de groupe</span>
+                            </div>
+
+                            <div className="bg-ope-bg p-4 rounded-2xl border border-ope-border text-center">
+                                <span className="block text-2xl font-black text-[#3b7c35]">2 Awards</span>
+                                <span className="text-xs font-bold text-ope-text mt-0.5 block">UNESCO</span>
+                                <span className="text-[10px] text-ope-text-muted">Center for Peace</span>
+                            </div>
+
+                            <div className="bg-ope-bg p-4 rounded-2xl border border-ope-border text-center">
+                                <span className="block text-2xl font-black text-ope-orange">Top 3</span>
+                                <span className="text-xs font-bold text-ope-text mt-0.5 block">IMUN UA</span>
+                                <span className="text-[10px] text-ope-text-muted">Modèle ONU</span>
+                            </div>
+
+                            <div className="bg-ope-bg p-4 rounded-2xl border border-ope-border text-center">
+                                <span className="block text-2xl font-black text-ope-text">8</span>
+                                <span className="text-xs font-bold text-ope-text mt-0.5 block">Délégués</span>
+                                <span className="text-[10px] text-ope-text-muted">USA 2024</span>
                             </div>
                         </div>
 
-                        {/* Axe 02 - Primary (Cyan / Blue) */}
-                        <div className="bg-ope-primary text-white rounded-3xl p-6 shadow-md flex flex-col justify-between">
-                            <div>
-                                <span className="inline-block text-[11px] font-mono font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full bg-white/20 text-white mb-3">
-                                    AXE 02
-                                </span>
-                                <h4 className="font-extrabold text-lg text-white mb-2">Modèle LP (Local Projects)</h4>
-                                <p className="text-xs sm:text-sm text-white/90 leading-relaxed">
-                                    Projets à fort impact valorisant les ressources et savoir-faire du Niger.
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Axe 03 - Green */}
-                        <div className="bg-[#2d6228] text-white rounded-3xl p-6 shadow-md flex flex-col justify-between">
-                            <div>
-                                <span className="inline-block text-[11px] font-mono font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full bg-white/20 text-white mb-3">
-                                    AXE 03
-                                </span>
-                                <h4 className="font-extrabold text-lg text-white mb-2">Modèle MC2</h4>
-                                <p className="text-xs sm:text-sm text-white/90 leading-relaxed">
-                                    Citoyen Communautaire : actions directes pour l'environnement et l'éducation.
-                                </p>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -220,96 +200,6 @@ export default function APropos() {
                             </div>
                         ))}
                     </div>
-                </div>
-            </section>
-
-            {/* ── RETOUR SUR EXCELLENCE (HOOD COLLEGE 2024 - REDESIGN) ── */}
-            <section id="hood-college" className="max-w-6xl mx-auto px-4 sm:px-6 py-6 md:py-8">
-                <div className="bg-white rounded-[2.5rem] p-6 sm:p-10 border border-ope-border shadow-xs">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                        
-                        {/* Texte & Titre */}
-                        <div className="lg:col-span-7 space-y-4">
-                            <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-ope-text tracking-tight leading-snug">
-                                L'étincelle de Hood College <span className="text-ope-orange">(USA, 2024)</span>
-                            </h2>
-
-                            <p className="text-sm sm:text-base text-ope-text-muted leading-relaxed">
-                                Été 2024. Huit jeunes ambassadeurs Nigériens portent haut les couleurs de la nation au Camp Mondial du UNESCO Center for Peace à Hood College. 
-                            </p>
-
-                            <p className="text-xs sm:text-sm text-ope-text-muted leading-relaxed">
-                                Victoires éclatantes à l'IMUN (Union Africaine), 1er Prix STEAM emmené par la Miss Mathématique Mariam, et 2 Awards prestigieux saluant l'engagement de l'OPE : cette flamme d'excellence revient aujourd'hui irriguer le territoire national, au pied de l'Aïr.
-                            </p>
-                        </div>
-
-                        {/* Grille de Chiffres / Palmarès */}
-                        <div className="lg:col-span-5 grid grid-cols-2 gap-3">
-                            <div className="bg-ope-bg p-4 rounded-2xl border border-ope-border text-center">
-                                <span className="block text-2xl font-black text-ope-orange">Top 3</span>
-                                <span className="text-xs font-bold text-ope-text mt-0.5 block">IMUN UA</span>
-                                <span className="text-[10px] text-ope-text-muted">Modèle ONU</span>
-                            </div>
-
-                            <div className="bg-ope-bg p-4 rounded-2xl border border-ope-border text-center">
-                                <span className="block text-2xl font-black text-ope-primary">1er Prix</span>
-                                <span className="text-xs font-bold text-ope-text mt-0.5 block">STEAM</span>
-                                <span className="text-[10px] text-ope-text-muted">Projet de groupe</span>
-                            </div>
-
-                            <div className="bg-ope-bg p-4 rounded-2xl border border-ope-border text-center">
-                                <span className="block text-2xl font-black text-[#3b7c35]">2 Awards</span>
-                                <span className="text-xs font-bold text-ope-text mt-0.5 block">UNESCO</span>
-                                <span className="text-[10px] text-ope-text-muted">Center for Peace</span>
-                            </div>
-
-                            <div className="bg-ope-bg p-4 rounded-2xl border border-ope-border text-center">
-                                <span className="block text-2xl font-black text-ope-text">8</span>
-                                <span className="text-xs font-bold text-ope-text mt-0.5 block">Délégués</span>
-                                <span className="text-[10px] text-ope-text-muted">USA 2024</span>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </section>
-
-            {/* ── TIMELINE DES JALONS ─────────────────────────────────── */}
-            <section id="parcours" className="max-w-6xl mx-auto px-4 sm:px-6 py-6 md:py-8 pb-12 sm:pb-16">
-                <div className="text-center max-w-xl mx-auto mb-6">
-                    <h2 className="text-2xl sm:text-3xl font-extrabold text-ope-text tracking-tight mt-1">
-                        Jalons
-                    </h2>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {JALONS.map((item, idx) => (
-                        <div
-                            key={idx}
-                            className={`relative rounded-3xl p-6 bg-white border transition-all ${
-                                item.highlight
-                                    ? "border-ope-orange shadow-md ring-1 ring-ope-orange/20"
-                                    : "border-ope-border shadow-xs"
-                            }`}
-                        >
-                            <div className="flex items-center justify-between mb-4">
-                                <span className={`text-[11px] font-bold px-3 py-1 rounded-full ${
-                                    item.highlight
-                                        ? "bg-ope-orange text-white"
-                                        : "bg-ope-bg text-ope-text-muted border border-ope-border"
-                                }`}>
-                                    {item.annee}
-                                </span>
-                            </div>
-
-                            <h3 className="font-extrabold text-base text-ope-text mb-2">
-                                {item.titre}
-                            </h3>
-                            <p className="text-xs text-ope-text-muted leading-relaxed">
-                                {item.desc}
-                            </p>
-                        </div>
-                    ))}
                 </div>
             </section>
         </div>

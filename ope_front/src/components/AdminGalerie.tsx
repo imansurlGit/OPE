@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import {
   galerieService,
@@ -24,7 +24,7 @@ const CATEGORIES_CONFIG: Record<
     bgSoft: "bg-[#FDF3EE]",
   },
   citoyen: {
-    label: "Actions Citoyennes (MCC)",
+    label: "Actions Citoyennes (MC2)",
     badgeClass: "bg-[#EAF5F2] text-[#1D6353] border-[#BDE0D6]",
     textColor: "text-[#1D6353]",
     bgSoft: "bg-[#EAF5F2]",
@@ -467,7 +467,7 @@ export default function AdminGalerie() {
           <option value="all">Toutes les catégories</option>
           <option value="steam">Modèles STEAM</option>
           <option value="local">Local Projects (LP)</option>
-          <option value="citoyen">Actions Citoyennes (MCC)</option>
+          <option value="citoyen">Actions Citoyennes (MC2)</option>
           <option value="ambiance">Ambiance & Cérémonies</option>
         </select>
 
@@ -901,7 +901,7 @@ export default function AdminGalerie() {
                     >
                       <option value="steam">Modèles STEAM</option>
                       <option value="local">Local Projects (LP)</option>
-                      <option value="citoyen">Actions Citoyennes (MCC)</option>
+                      <option value="citoyen">Actions Citoyennes (MC2)</option>
                       <option value="ambiance">Ambiance & Cérémonies</option>
                     </select>
                   </div>

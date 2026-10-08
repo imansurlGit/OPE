@@ -76,7 +76,7 @@ class TalentService {
 
     const steam = candidatures.filter((c) => c.domaine === "STEAM").length;
     const lp = candidatures.filter((c) => c.domaine === "LP").length;
-    const mcc = candidatures.filter((c) => c.domaine === "MCC").length;
+    const MC2 = candidatures.filter((c) => c.domaine === "MC2").length;
 
     const filles = candidatures.filter((c) => c.sexe === "F").length;
     const garcons = candidatures.filter((c) => c.sexe === "M").length;
@@ -93,7 +93,7 @@ class TalentService {
       soumis,
       steam,
       lp,
-      mcc,
+      MC2,
       filles,
       garcons,
       regionsCount,

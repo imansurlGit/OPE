@@ -1,6 +1,42 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { talentService, type Candidature } from "../services";
+
+interface Booklet {
+  id: string;
+  year: string;
+  title: string;
+  category: "current" | "past" | "upcoming";
+  filename: string;
+  downloadName: string;
+}
+
+const BOOKLETS: Booklet[] = [
+  {
+    id: "2026",
+    year: "2026",
+    title: "Livret des 1000 Talents",
+    category: "current",
+    filename: "livret-talents-2026.pdf",
+    downloadName: "Livret-Talents-2026-OPE.pdf",
+  },
+  {
+    id: "2025",
+    year: "2025",
+    title: "Livret des Talents 2025",
+    category: "past",
+    filename: "livret-talents-2025.pdf",
+    downloadName: "Livret-Talents-2025-OPE.pdf",
+  },
+  {
+    id: "2024",
+    year: "2024",
+    title: "Livret des Talents 2024",
+    category: "past",
+    filename: "livret-talents-2024.pdf",
+    downloadName: "Livret-Talents-2024-OPE.pdf",
+  },
+];
 
 interface DisplayTalent {
   id: string;
@@ -8,7 +44,7 @@ interface DisplayTalent {
   nom: string;
   region: string;
   ville?: string;
-  categorie: "STEAM" | "LP" | "MCC";
+  categorie: "STEAM" | "LP" | "MC2";
   house?: string;
   statut_projet?: string;
   description: string;
@@ -103,10 +139,10 @@ const REGIONS = [
   "Zinder",
 ];
 
-const CATEGORIES = ["Toutes les catégories", "STEAM", "LP", "MCC"];
+const CATEGORIES = ["Toutes les catégories", "STEAM", "LP", "MC2"];
 
 const BADGE_STYLES: Record<
-  "STEAM" | "LP" | "MCC",
+  "STEAM" | "LP" | "MC2",
   { label: string; bg: string; text: string; border: string }
 > = {
   STEAM: {
@@ -121,8 +157,8 @@ const BADGE_STYLES: Record<
     text: "text-[#BD5338]",
     border: "border-[#BD5338]",
   },
-  MCC: {
-    label: "House MCC",
+  MC2: {
+    label: "House MC2",
     bg: "bg-[#8C4A27] text-white",
     text: "text-[#8C4A27]",
     border: "border-[#8C4A27]",
@@ -162,7 +198,7 @@ function mapCandidatureToTalent(c: Candidature): DisplayTalent {
     nom: fullName,
     region: c.region || "Non renseignée",
     ville: c.ville_village,
-    categorie: (c.domaine as "STEAM" | "LP" | "MCC") || "STEAM",
+    categorie: (c.domaine as "STEAM" | "LP" | "MC2") || "STEAM",
     house: c.house_visee,
     statut_projet: c.statut_projet,
     description: desc,
@@ -196,6 +232,44 @@ export default function Talents() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTalent, setSelectedTalent] = useState<DisplayTalent | null>(null);
   const [displayCount, setDisplayCount] = useState(8);
+
+  // Gestion du menu déroulant des livrets
+  const [isBookletsOpen, setIsBookletsOpen] = useState(false);
+  const [downloadingBookletId, setDownloadingBookletId] = useState<string | null>(null);
+  const bookletsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (bookletsRef.current && !bookletsRef.current.contains(event.target as Node)) {
+        setIsBookletsOpen(false);
+      }
+    }
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsBookletsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  const handleDownloadBooklet = (booklet: Booklet) => {
+    setDownloadingBookletId(booklet.id);
+    const link = document.createElement("a");
+    link.href = `${import.meta.env.BASE_URL}livrets/${booklet.filename}`;
+    link.download = booklet.downloadName;
+    link.target = "_blank";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => {
+      setDownloadingBookletId(null);
+    }, 1200);
+  };
 
   // Charger les vrais talents depuis le backend API
   useEffect(() => {
@@ -264,7 +338,7 @@ export default function Talents() {
   return (
     <div className="pt-16 bg-ope-bg min-h-screen">
       {/* ── Section En-Tête ──────────────────────────────────────── */}
-      <section className="py-8 sm:py-12 px-4 sm:px-6 text-center">
+      <section className="pt-6 pb-8 sm:pt-10 sm:pb-12 px-4 sm:px-6 text-center">
         <div className="max-w-3xl mx-auto">
           <h1
             className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-4 tracking-tight animate-bounce bg-clip-text text-transparent"
@@ -278,13 +352,116 @@ export default function Talents() {
             {t("talents.subtitle")}
           </p>
         </div>
+
+        {/* Bouton Livrets — pleine largeur, collé à la marge droite de la page */}
+        <div className="flex justify-end mt-4">
+          <button
+            id="btn-livrets-talents"
+            type="button"
+            onClick={() => setIsBookletsOpen(true)}
+            className="inline-flex items-center gap-2 text-white text-xs font-semibold rounded-full px-4 py-2 shadow-md transition-all hover:scale-105 active:scale-95 cursor-pointer"
+            style={{ background: "#F15B29" }}
+          >
+            <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span>{t("talents.download_booklets", "Livrets des Talents")}</span>
+          </button>
+        </div>
       </section>
 
-      {/* ── Barre de Filtres & Recherche ─────────────────────────── */}
+      {/* ── Modale Livrets ───────────────────────────────────────── */}
+      {isBookletsOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: "rgba(0,0,0,0.45)" }}
+          onClick={() => setIsBookletsOpen(false)}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl border border-ope-border w-full max-w-sm sm:max-w-md p-4 text-left max-h-[80vh] overflow-y-auto"
+            role="dialog"
+            aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* En-tête modale */}
+            <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+              <span className="text-sm font-bold text-ope-text">
+                {t("talents.booklets_dropdown_title", "Livrets des Talents OPE")}
+              </span>
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] text-ope-text-muted font-medium">Format PDF</span>
+                <button
+                  type="button"
+                  onClick={() => setIsBookletsOpen(false)}
+                  className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                  aria-label="Fermer"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              {/* 1. Édition en cours */}
+              <div className="text-[10px] font-bold text-ope-text-muted uppercase tracking-wider px-1 pt-1 pb-0.5">
+                Édition en cours
+              </div>
+              {BOOKLETS.filter((b) => b.category === "current").map((b) => (
+                <div
+                  key={b.id}
+                  onClick={() => handleDownloadBooklet(b)}
+                  className="flex items-center justify-between p-2 rounded-xl hover:bg-[#f4f8fb] transition-colors cursor-pointer group"
+                >
+                  <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                    <div className="w-8 h-8 rounded-lg bg-[#e8f3f9] text-ope-primary flex flex-col items-center justify-center shrink-0 group-hover:bg-ope-primary group-hover:text-white transition-colors">
+                      <span className="text-[8px] font-black leading-none">PDF</span>
+                      <span className="text-[9px] font-bold leading-none mt-0.5">{b.year}</span>
+                    </div>
+                    <span className="text-xs font-bold text-ope-text group-hover:text-ope-primary transition-colors truncate">{b.title}</span>
+                  </div>
+                  <button type="button" disabled={downloadingBookletId === b.id} className="shrink-0 p-1.5 rounded-lg text-slate-400 group-hover:text-ope-orange group-hover:bg-white transition-all shadow-2xs" title={`Télécharger le livret ${b.year}`}>
+                    {downloadingBookletId === b.id ? (
+                      <svg className="w-4 h-4 animate-spin text-ope-orange" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" /></svg>
+                    ) : (
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    )}
+                  </button>
+                </div>
+              ))}
+
+              {/* 2. Années précédentes */}
+              <div className="text-[10px] font-bold text-ope-text-muted uppercase tracking-wider px-1 pt-2 pb-0.5 border-t border-slate-100 mt-1">Années précédentes</div>
+              {BOOKLETS.filter((b) => b.category === "past").map((b) => (
+                <div key={b.id} onClick={() => handleDownloadBooklet(b)} className="flex items-center justify-between p-2 rounded-xl hover:bg-[#f4f8fb] transition-colors cursor-pointer group">
+                  <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                    <div className="w-8 h-8 rounded-lg bg-[#e8f3f9] text-ope-primary flex flex-col items-center justify-center shrink-0 group-hover:bg-ope-primary group-hover:text-white transition-colors">
+                      <span className="text-[8px] font-black leading-none">PDF</span>
+                      <span className="text-[9px] font-bold leading-none mt-0.5">{b.year}</span>
+                    </div>
+                    <span className="text-xs font-bold text-ope-text group-hover:text-ope-primary transition-colors truncate">{b.title}</span>
+                  </div>
+                  <button type="button" disabled={downloadingBookletId === b.id} className="shrink-0 p-1.5 rounded-lg text-slate-400 group-hover:text-ope-orange group-hover:bg-white transition-all shadow-2xs" title={`Télécharger le livret ${b.year}`}>
+                    {downloadingBookletId === b.id ? (
+                      <svg className="w-4 h-4 animate-spin text-ope-orange" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" /></svg>
+                    ) : (
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    )}
+                  </button>
+                </div>
+              ))}
+
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Barre de Filtres & Recherche & Livrets ────────────────── */}
       <section className="px-4 sm:px-6 pb-8">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
-          {/* Sélecteurs de Filtres */}
-          <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+        <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 sm:gap-4">
+          {/* Sélecteurs de Filtres (Régions, Catégories) */}
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
             {/* Filtre Régions */}
             <div className="relative w-full sm:w-56">
               <select
@@ -350,8 +527,8 @@ export default function Talents() {
             </div>
           </div>
 
-          {/* Champ de Recherche */}
-          <div className="relative w-full md:w-80">
+          {/* Champ de Recherche uniquement */}
+          <div className="relative w-full sm:w-64 md:w-72">
             <input
               type="text"
               value={searchQuery}
@@ -368,12 +545,7 @@ export default function Talents() {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
         </div>

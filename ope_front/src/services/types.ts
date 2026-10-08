@@ -38,7 +38,7 @@ export type StatutCandidature =
   | "admis"
   | "rejete";
 
-export type DomaineCandidature = "STEAM" | "LP" | "MCC";
+export type DomaineCandidature = "STEAM" | "LP" | "MC2";
 
 export interface Candidature {
   id: number;
@@ -100,7 +100,7 @@ export interface TalentStats {
   soumis: number;
   steam: number;
   lp: number;
-  mcc: number;
+  MC2: number;
   filles: number;
   garcons: number;
   regionsCount: number;

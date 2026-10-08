@@ -6,7 +6,7 @@
     "news": "Labarai",
     "contact": "Tuntube Mu",
     "explore": "Bincika",
-    "members": "Mambobin OPE",
+    "members": "Ƙungiyar CNCEIZ",
     "categories": "Rukunoni 3",
     "sponsors": "Abokan Hulɗa & Masu Tallafi",
     "gallery": "Hotuna & Bidiyo",
@@ -47,7 +47,16 @@
         "items": ["Noma", "Kiwo", "Sana'o'in Hannu"]
       },
       "mcc": {
-        "title": "Tsarin MCC",
+        "title": "Tsarin MC2",
+        "subtitle": "Misalin Dan Kasa Mai Kishi da Al'umma",
+        "items": [
+          "Dasa itatuwa a wurin Courbouru",
+          "Gyaran kujeru da tebura na makaranta",
+          "Kera kwandunan shara na zamani"
+        ]
+      },
+      "MC2": {
+        "title": "Tsarin MC2",
         "subtitle": "Misalin Dan Kasa Mai Kishi da Al'umma",
         "items": [
           "Dasa itatuwa a wurin Courbouru",
@@ -60,10 +69,15 @@
   "countdown": {
     "title": "Haɗuwarmu a Agadez a ranar…",
     "description": "Shirya kanku don babban taron ƙirƙire-ƙirƙire na shekara. Wuraren zama suna da iyaka.",
+    "badge": "Sansanin 'Yan Ƙasa na Ƙasa",
     "day": "RANA",
     "month": "WATA",
     "year": "SHEKARA",
-    "day_val": "15",
+    "days": "KWANAKI",
+    "hours": "AWOYI",
+    "minutes": "MIN",
+    "seconds": "DAƘ",
+    "day_val": "25",
     "month_val": "DIS",
     "year_val": "2026"
   },
@@ -98,6 +112,9 @@
     "contact_talent": "Tuntuɓa",
     "no_results": "Babu wani gwarzo da ya dace da bincikenka.",
     "view_more": "Duba gaba",
+    "download_booklets": "Sauke Littattafan Gwarzaye",
+    "booklets_dropdown_title": "Littattafan Gwarzayen OPE",
+    "booklets_dropdown_desc": "Duba ko sauke littattafan gwarzaye na shekarun da suka gabata da masu zuwa.",
     "view_less": "Duba ƙasa"
   },
   "categories_page": {
@@ -107,14 +124,14 @@
     "steam_desc": "Kimiyya, Fasaha, Injiniyanci, Fasahar Zane da Lissafi. Ɗakin gwaje-gwajen fasahohin zamani.",
     "lp_title": "Ayyukan Cikin Gida (LP)",
     "lp_desc": "Kasuwanci da amfani da albarkatun cikin gida: aikin gona na zamani, kiwo da sana'o'in hannu na musamman.",
-    "mcc_title": "Misalin Dan Kasa Mai Kishi da Al'umma (MCC)",
+    "mcc_title": "Misalin Dan Kasa Mai Kishi da Al'umma (MC2)",
     "mcc_desc": "Kishin ƙasa, aikin gayya, tsabtar muhalli, zaman lafiya da haɗin kan al'umma.",
     "discover_domain": "Bincika wannan fanni",
     "apply_house": "Nemi shiga wannan House"
   },
   "membres": {
-    "title": "Ƙungiyar Masu Shiryawa",
-    "subtitle": "Gano fuskokin Ƙungiyar Haɓaka Ƙwarewa (OPE). Ƙungiya mai ƙwazo, mai son ƙirƙirar fasaha da ilimi don makomar matasan Agadez.",
+    "title": "Ƙungiyar CNCEIZ",
+    "subtitle": "Gano fuskokin masu shirya Camp National Citoyen (CNCEIZ). Ƙungiya mai ƙwazo don makomar matasan Nijar.",
     "board": "Kwamitin Gudanarwa",
     "mentors": "Masu Ba da Horo & Masana",
     "coordination": "Jagorancin Yankuna",

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
 import { partenaireService, type Partenaire, type PartenaireType } from "../services";
 import Pagination from "./Pagination";

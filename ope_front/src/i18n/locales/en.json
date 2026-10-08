@@ -6,7 +6,7 @@
     "news": "News",
     "contact": "Contact",
     "explore": "Explore",
-    "members": "OPE Members",
+    "members": "CNCEIZ Team",
     "categories": "The 3 Houses",
     "sponsors": "Partners & Sponsors",
     "gallery": "Multimedia Gallery",
@@ -47,7 +47,16 @@
         "items": ["Agriculture", "Livestock Breeding", "Craftsmanship"]
       },
       "mcc": {
-        "title": "MCC Models",
+        "title": "MC2 Models",
+        "subtitle": "Community Citizen Model",
+        "items": [
+          "Tree planting on the Courbouru site",
+          "School bench-table repair",
+          "Waste bin manufacturing"
+        ]
+      },
+      "MC2": {
+        "title": "MC2 Models",
         "subtitle": "Community Citizen Model",
         "items": [
           "Tree planting on the Courbouru site",
@@ -60,10 +69,15 @@
   "countdown": {
     "title": "Meet us in Agadez on…",
     "description": "Get ready for the most anticipated innovation event of the year. Spots are limited.",
+    "badge": "National Citizen Camp",
     "day": "DAY",
     "month": "MONTH",
     "year": "YEAR",
-    "day_val": "15",
+    "days": "DAYS",
+    "hours": "HOURS",
+    "minutes": "MIN",
+    "seconds": "SEC",
+    "day_val": "25",
     "month_val": "DEC",
     "year_val": "2026"
   },
@@ -98,6 +112,9 @@
     "contact_talent": "Contact",
     "no_results": "No talent matches your search criteria.",
     "view_more": "See more",
+    "download_booklets": "Download Talents Booklets",
+    "booklets_dropdown_title": "OPE Talents Booklets",
+    "booklets_dropdown_desc": "Browse or download booklets from previous, current, and upcoming editions.",
     "view_less": "See less"
   },
   "categories_page": {
@@ -107,14 +124,14 @@
     "steam_desc": "Science, Technology, Engineering, Art, and Mathematics. The incubator for cutting-edge technology.",
     "lp_title": "Local Projects (LP) House",
     "lp_desc": "Entrepreneurship rooted in local resources: agro-business, resilient livestock, and artisanal excellence.",
-    "mcc_title": "Community Citizen Model (MCC) House",
+    "mcc_title": "Community Citizen Model (MC2) House",
     "mcc_desc": "Civic engagement, public cleanliness, peace, and solidarity directly serving our communities.",
     "discover_domain": "Explore this domain",
     "apply_house": "Apply to this House"
   },
   "membres": {
-    "title": "The OPE Team",
-    "subtitle": "Dedicated men and women committed to the empowerment and success of Nigerien youth.",
+    "title": "The CNCEIZ Team",
+    "subtitle": "Dedicated men and women committed to the organization, empowerment, and success of the National Camp and youth.",
     "board": "Board of Directors",
     "mentors": "Mentors & Trainers",
     "coordination": "Regional Coordination",

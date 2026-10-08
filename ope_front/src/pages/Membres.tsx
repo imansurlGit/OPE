@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { membreService, type MembreEquipe } from "../services";
 
@@ -116,10 +116,10 @@ export default function Membres() {
           {/* ── En-tête de la page ─────────────────────────────────── */}
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-ope-text tracking-tight mb-4">
-              {t("membres.title", "L'Équipe OPE")}
+              {t("membres.title", "L'Équipe CNCEIZ")}
             </h1>
             <p className="text-xs sm:text-sm md:text-base text-ope-text-muted leading-relaxed">
-              {t("membres.subtitle", "Découvrez les femmes et les hommes engagés pour l'excellence et le rayonnement de la jeunesse.")}
+              {t("membres.subtitle", "Découvrez les femmes et les hommes engagés pour l'organisation et la réussite du Camp National et de la jeunesse.")}
             </p>
           </div>
 

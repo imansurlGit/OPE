@@ -96,7 +96,7 @@ export default function Admin() {
           {activeTab === "actualites" && <AdminActualites />}
 
           {/* ══════════════════════════════════════════════════
-              ONGLET : MEMBRES OPE
+              ONGLET : ÉQUIPE CNCEIZ
               ══════════════════════════════════════════════════ */}
           {activeTab === "membres" && <AdminMembres />}
 

@@ -6,7 +6,7 @@
     "news": "Alhabarey",
     "contact": "Cee Ir",
     "explore": "Korooshi",
-    "members": "OPE Kambe-izey",
+    "members": "CNCEIZ Kambe-izey",
     "categories": "Fuwey 3",
     "sponsors": "Gaakasinaykey",
     "gallery": "Biyey & Widiyowey",
@@ -47,7 +47,16 @@
         "items": ["Fari", "Alman Gaabuyaŋ", "Kambe Goyey"]
       },
       "mcc": {
-        "title": "MCC Fuwo",
+        "title": "MC2 Fuwo",
+        "subtitle": "Laabi Baakoytaray nda Baani Teerey",
+        "items": [
+          "Turi duma Courbouru nango ra",
+          "Lekol teebaley nda korayey hanseyaŋ",
+          "Kusu nda batama hanseyaŋ jinayey teeyaŋ"
+        ]
+      },
+      "MC2": {
+        "title": "MC2 Fuwo",
         "subtitle": "Laabi Baakoytaray nda Baani Teerey",
         "items": [
           "Turi duma Courbouru nango ra",
@@ -60,10 +69,15 @@
   "countdown": {
     "title": "Zaarey kaŋ cindi hala Agadez Kubayoo…",
     "description": "Wa soola teerey beero se neero ra. Gorodogey sinda booboyaŋ.",
+    "badge": "Jamano Gorodogoo",
     "day": "ZAARI",
     "month": "HANDU",
     "year": "JIIRI",
-    "day_val": "15",
+    "days": "ZAARU",
+    "hours": "GUURAY",
+    "minutes": "MIN",
+    "seconds": "DAK",
+    "day_val": "25",
     "month_val": "DEES",
     "year_val": "2026"
   },
@@ -98,6 +112,9 @@
     "contact_talent": "Cee",
     "no_results": "Boro kulu mana duwandi ceeciro ra.",
     "view_more": "Dii koyne",
+    "download_booklets": "Zanka Gwarzey Tira Zumandi",
+    "booklets_dropdown_title": "OPE Gwarzey Tira",
+    "booklets_dropdown_desc": "Dii wala zumandi jiiriyey kaŋ bisa nda hiino tirey.",
     "view_less": "Dii kayna"
   },
   "categories_page": {
@@ -107,14 +124,14 @@
     "steam_desc": "Bayray, Tekinoloji, Injiniyari, Al'aada nda Hiisabu. Tekinoloji fuwo beero.",
     "lp_title": "Kwaara Goyey Fuwo (LP)",
     "lp_desc": "Alhaku nda nafa kaŋ ga fatta kwaara jinayey ra : fari, alman gaabu nda kambe goy beeray.",
-    "mcc_title": "Laabi Baakoytaray Fuwo (MCC)",
+    "mcc_title": "Laabi Baakoytaray Fuwo (MC2)",
     "mcc_desc": "Laabi baakoytaray, batama hanseyaŋ, laafiya nda baani teerey kwaara borey se.",
     "discover_domain": "Dii fandoo wo",
     "apply_house": "Huru Fuwo wo ra"
   },
   "membres": {
-    "title": "Goy-teey Margoo",
-    "subtitle": "Bay borey kaŋ ga goy OPE margoo se zankey beereyaŋ nda i fondo cinyaŋ se Agadez ra.",
+    "title": "CNCEIZ Goy-teey Margoo",
+    "subtitle": "Bay borey kaŋ ga goy Camp National Citoyen (CNCEIZ) se zankey beereyaŋ nda i fondo cinyaŋ se.",
     "board": "Kwamiti Beero",
     "mentors": "Jine-diraykey",
     "coordination": "Yankey Kambe-koyey",
