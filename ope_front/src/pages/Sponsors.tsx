@@ -552,7 +552,7 @@ export default function Sponsors() {
           {hasError && (
             <ApiErrorState
               title="Impossible de charger les partenaires"
-              message="Une erreur réseau est survenue. Veuillez vérifier votre connexion."
+              message="Une erreur de connexion s'est produite. Vérifiez votre connexion Internet et réessayez."
               onRetry={() => window.location.reload()}
             />
           )}

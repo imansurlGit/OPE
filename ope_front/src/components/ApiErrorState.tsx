@@ -7,52 +7,47 @@ interface ApiErrorStateProps {
 
 export default function ApiErrorState({
   title = "Impossible de charger les données",
-  message = "Une erreur réseau est survenue. Veuillez vérifier votre connexion.",
+  message = "Une erreur de connexion s'est produite. Vérifiez votre connexion Internet et réessayez.",
   onRetry,
   className = "",
 }: ApiErrorStateProps) {
   return (
     <div
-      className={`mx-auto max-w-md rounded-2xl border border-red-200 bg-red-50 p-6 text-center text-red-800 ${className}`}
+      className={`py-14 sm:py-16 flex flex-col items-center justify-center text-center gap-3.5 sm:gap-4 ${className}`}
       role="alert"
     >
-      <svg
-        className="mx-auto h-8 w-8 text-red-500"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        aria-hidden="true"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-        />
-      </svg>
-      <h3 className="mt-3 text-sm font-bold">{title}</h3>
-      <p className="mt-1 text-xs text-red-600">{message}</p>
+      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-rose-50 flex items-center justify-center text-rose-400 shrink-0">
+        <svg
+          className="w-7 h-7 sm:w-8 sm:h-8"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={1.6}
+          aria-hidden="true"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 9v3m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      </div>
+
+      <h3 className="font-extrabold text-gray-800 text-base sm:text-lg">
+        {title}
+      </h3>
+
+      <p className="text-xs sm:text-sm text-gray-500 max-w-sm leading-relaxed">
+        {message}
+      </p>
+
       {onRetry && (
         <button
           type="button"
           onClick={onRetry}
-          className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-red-600 px-4 py-1.5 text-xs font-bold text-white shadow-2xs hover:bg-red-700 active:scale-95 transition"
+          className="mt-1 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-[#C25E38] hover:bg-[#a04a2a] active:scale-95 transition-all shadow-xs cursor-pointer"
         >
-          <svg
-            className="h-3.5 w-3.5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-            />
-          </svg>
-          <span>Réessayer</span>
+          Réessayer
         </button>
       )}
     </div>
