@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { galerieService, type MediaGalerie } from "../services";
+import ApiErrorState from "../components/ApiErrorState";
 
 type MediaCategory = "all" | "steam" | "local" | "citoyen" | "ambiance";
 
@@ -138,22 +139,12 @@ export default function Galerie() {
 
                     {/* ── Erreur réseau ── */}
                     {!isLoading && hasError && (
-                        <div className="relative z-10 py-20 flex flex-col items-center justify-center text-center gap-4">
-                            <div className="w-16 h-16 rounded-full bg-rose-50 flex items-center justify-center text-rose-400">
-                                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <h3 className="font-extrabold text-gray-800 text-base">Impossible de charger la galerie</h3>
-                            <p className="text-xs text-gray-500 max-w-xs">
-                                Une erreur de connexion s'est produite. Vérifiez votre connexion Internet et réessayez.
-                            </p>
-                            <button
-                                onClick={() => window.location.reload()}
-                                className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#BD5338] hover:bg-[#d44d1f] transition-colors cursor-pointer"
-                            >
-                                Réessayer
-                            </button>
+                        <div className="relative z-10 py-12">
+                            <ApiErrorState
+                                title="Impossible de charger la galerie"
+                                message="Une erreur réseau est survenue. Veuillez vérifier votre connexion."
+                                onRetry={() => window.location.reload()}
+                            />
                         </div>
                     )}
 

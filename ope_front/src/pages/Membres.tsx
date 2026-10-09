@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { membreService, type MembreEquipe } from "../services";
+import ApiErrorState from "../components/ApiErrorState";
 
 // ── Palette dynamique des badges de section ─────────────────────────────────
 const getSectionBadgeClass = (section: string) => {
@@ -181,15 +182,12 @@ export default function Membres() {
 
           {/* ── État d'erreur ──────────────────────────────────────── */}
           {error && (
-            <div className="mb-8 p-6 rounded-2xl bg-[#FEF2F2] border border-[#FECACA] text-center max-w-xl mx-auto">
-              <p className="text-xs text-[#B91C1C] mb-3">{error}</p>
-              <button
-                type="button"
-                onClick={fetchMembres}
-                className="px-4 py-2 rounded-xl bg-[#f15b29] text-white text-xs font-bold hover:bg-[#d44d1f] transition-colors cursor-pointer"
-              >
-                Réessayer
-              </button>
+            <div className="mb-8">
+              <ApiErrorState
+                title="Impossible de charger les membres de l'équipe"
+                message={error}
+                onRetry={fetchMembres}
+              />
             </div>
           )}
 

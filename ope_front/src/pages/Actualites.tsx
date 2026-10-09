@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { actualiteService, type Actualite, type ActualitePhase } from "../services";
+import ApiErrorState from "../components/ApiErrorState";
 
 // ── Config des phases (charte OPE) ─────────────────────────────────────────
 const PHASES_CONFIG: Record<
@@ -143,25 +144,11 @@ export default function Actualites() {
             </div>
           ) : error ? (
             /* État d'erreur */
-            <div className="bg-white rounded-3xl border border-[#d0e4f0] p-12 text-center">
-              <div className="w-14 h-14 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center mx-auto mb-4">
-                <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-              </div>
-              <h3 className="font-extrabold text-gray-900 text-base mb-2">
-                Une erreur est survenue
-              </h3>
-              <p className="text-xs text-gray-500 max-w-sm mx-auto mb-5 leading-relaxed">
-                {error}
-              </p>
-              <button
-                onClick={() => window.location.reload()}
-                className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#f15b29] hover:bg-[#d44d1f] cursor-pointer shadow-xs transition-colors"
-              >
-                Réessayer
-              </button>
-            </div>
+            <ApiErrorState
+              title="Impossible de charger les actualités"
+              message={error}
+              onRetry={() => window.location.reload()}
+            />
           ) : currentArticles.length === 0 ? (
             /* Empty state */
             <div className="text-center py-16 bg-ope-white rounded-3xl border border-ope-border p-8">

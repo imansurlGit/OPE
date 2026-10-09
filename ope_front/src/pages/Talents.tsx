@@ -6,6 +6,7 @@ import {
   type Candidature,
   type DocumentItem,
 } from "../services";
+import ApiErrorState from "../components/ApiErrorState";
 
 const resolveFileUrl = (url?: string | null) => {
   if (!url) return "";
@@ -635,27 +636,11 @@ export default function Talents() {
       {/* ── État d'erreur éventuel ────────────────────────────────── */}
       {error && (
         <section className="px-4 sm:px-6 pb-8">
-          <div className="max-w-2xl mx-auto bg-white border border-rose-200 rounded-2xl p-6 text-center shadow-xs">
-            <div className="w-12 h-12 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-3">
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-            </div>
-            <h3 className="font-extrabold text-gray-900 text-sm mb-1">
-              Erreur de chargement
-            </h3>
-            <p className="text-xs text-gray-500 mb-4">{error}</p>
-            <button
-              type="button"
-              onClick={() => setRetryTrigger((r) => r + 1)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#f15b29] text-white text-xs font-bold hover:bg-[#d44d1f] transition-colors cursor-pointer"
-            >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              <span>Réessayer</span>
-            </button>
-          </div>
+          <ApiErrorState
+            title="Impossible de charger les talents"
+            message={error}
+            onRetry={() => setRetryTrigger((r) => r + 1)}
+          />
         </section>
       )}
 

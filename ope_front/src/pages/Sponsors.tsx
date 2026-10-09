@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -7,6 +7,7 @@ import {
   type PartenaireType,
   type PartenaireCategorie,
 } from "../services";
+import ApiErrorState from "../components/ApiErrorState";
 
 /* =========================================================================
    Configuration Visuelle & Métadonnées des Paliers
@@ -549,27 +550,11 @@ export default function Sponsors() {
           )}
 
           {hasError && (
-            <div className="mx-auto max-w-md rounded-2xl border border-red-200 bg-red-50 p-6 text-center text-red-800">
-              <svg
-                className="mx-auto h-8 w-8 text-red-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                />
-              </svg>
-              <h3 className="mt-3 text-sm font-bold">
-                Impossible de charger les partenaires
-              </h3>
-              <p className="mt-1 text-xs text-red-600">
-                Une erreur réseau est survenue. Veuillez vérifier votre connexion.
-              </p>
-            </div>
+            <ApiErrorState
+              title="Impossible de charger les partenaires"
+              message="Une erreur réseau est survenue. Veuillez vérifier votre connexion."
+              onRetry={() => window.location.reload()}
+            />
           )}
 
           {!isLoading && !hasError && groupedByCategorie.length === 0 && (
