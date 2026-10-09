@@ -19,4 +19,6 @@ export { default as contactService } from "./contactService";
 export { default as galerieService } from "./galerieService";
 export * from "./partenaireService";
 export { default as partenaireService } from "./partenaireService";
+export * from "./documentService";
+export { default as documentService } from "./documentService";
 

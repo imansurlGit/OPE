@@ -9,6 +9,9 @@ class PartenaireService {
     if (filters?.type && filters.type !== "all") {
       params.append("type", filters.type);
     }
+    if (filters?.categorie && filters.categorie !== "all") {
+      params.append("categorie", filters.categorie);
+    }
     if (filters?.search?.trim()) {
       params.append("search", filters.search.trim());
     }

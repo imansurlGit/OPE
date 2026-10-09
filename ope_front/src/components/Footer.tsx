@@ -5,7 +5,7 @@ export default function Footer() {
     const { t } = useTranslation();
 
     return (
-        <footer id="footer" className="bg-ope-footer text-ope-white pt-12 pb-8 border-t border-white/10">
+        <footer id="footer" className="bg-ope-footer text-ope-white pt-12 pb-8">
             <div className="max-w-6xl mx-auto px-6">
                 {/* ── Grille principale 4 colonnes ── */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10 pb-10">

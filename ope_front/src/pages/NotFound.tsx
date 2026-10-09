@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import logoOpe from "../assets/logo_ope.png";
-import logoEvent from "../assets/logo_event.png";
+import logoEvent from "../assets/logo_event.jpeg";
 
 export default function NotFound() {
   return (

@@ -1,42 +1,17 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { talentService, type Candidature } from "../services";
+import {
+  talentService,
+  documentService,
+  type Candidature,
+  type DocumentItem,
+} from "../services";
 
-interface Booklet {
-  id: string;
-  year: string;
-  title: string;
-  category: "current" | "past" | "upcoming";
-  filename: string;
-  downloadName: string;
-}
-
-const BOOKLETS: Booklet[] = [
-  {
-    id: "2026",
-    year: "2026",
-    title: "Livret des 1000 Talents",
-    category: "current",
-    filename: "livret-talents-2026.pdf",
-    downloadName: "Livret-Talents-2026-OPE.pdf",
-  },
-  {
-    id: "2025",
-    year: "2025",
-    title: "Livret des Talents 2025",
-    category: "past",
-    filename: "livret-talents-2025.pdf",
-    downloadName: "Livret-Talents-2025-OPE.pdf",
-  },
-  {
-    id: "2024",
-    year: "2024",
-    title: "Livret des Talents 2024",
-    category: "past",
-    filename: "livret-talents-2024.pdf",
-    downloadName: "Livret-Talents-2024-OPE.pdf",
-  },
-];
+const resolveFileUrl = (url?: string | null) => {
+  if (!url) return "";
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  return `http://127.0.0.1:7777${url.startsWith("/") ? "" : "/"}${url}`;
+};
 
 interface DisplayTalent {
   id: string;
@@ -235,7 +210,9 @@ export default function Talents() {
 
   // Gestion du menu déroulant des livrets
   const [isBookletsOpen, setIsBookletsOpen] = useState(false);
-  const [downloadingBookletId, setDownloadingBookletId] = useState<string | null>(null);
+  const [booklets, setBooklets] = useState<DocumentItem[]>([]);
+  const [isLoadingBooklets, setIsLoadingBooklets] = useState(false);
+  const [downloadingBookletId, setDownloadingBookletId] = useState<number | string | null>(null);
   const bookletsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -257,12 +234,63 @@ export default function Talents() {
     };
   }, []);
 
-  const handleDownloadBooklet = (booklet: Booklet) => {
+  // Chargement des livrets depuis la table Document de la base de données
+  useEffect(() => {
+    let isMounted = true;
+    setIsLoadingBooklets(true);
+    documentService
+      .getDocuments({ type: "talent" })
+      .then((data) => {
+        if (!isMounted) return;
+        const list: DocumentItem[] = Array.isArray(data)
+          ? data
+          : (data as any)?.results || [];
+        if (list.length === 0) {
+          // Si aucun livret avec type="talent", récupérer tous les documents au cas où
+          documentService.getDocuments().then((all) => {
+            if (!isMounted) return;
+            const allList: DocumentItem[] = Array.isArray(all) ? all : (all as any)?.results || [];
+            const talentDocs = allList.filter((d) => d.type === "talent");
+            setBooklets(talentDocs.length > 0 ? talentDocs : allList);
+          }).catch(() => setBooklets([]));
+        } else {
+          setBooklets(list);
+        }
+      })
+      .catch((err) => {
+        if (!isMounted) return;
+        console.error("Erreur lors du chargement des livrets depuis la DB :", err);
+        setBooklets([]);
+      })
+      .finally(() => {
+        if (isMounted) setIsLoadingBooklets(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Répartition des livrets entre édition en cours et années précédentes
+  const { currentBooklets, pastBooklets } = useMemo(() => {
+    if (booklets.length === 0) return { currentBooklets: [], pastBooklets: [] };
+    const sorted = [...booklets].sort((a, b) => b.annee - a.annee);
+    const maxYear = sorted[0].annee;
+    return {
+      currentBooklets: sorted.filter((b) => b.annee >= maxYear),
+      pastBooklets: sorted.filter((b) => b.annee < maxYear),
+    };
+  }, [booklets]);
+
+  const handleDownloadBooklet = (booklet: DocumentItem) => {
+    if (!booklet.fichier) return;
     setDownloadingBookletId(booklet.id);
+    const fileUrl = resolveFileUrl(booklet.fichier);
     const link = document.createElement("a");
-    link.href = `${import.meta.env.BASE_URL}livrets/${booklet.filename}`;
-    link.download = booklet.downloadName;
+    link.href = fileUrl;
+    link.download = booklet.titre ? `${booklet.titre}.pdf` : `Livret-Talents-${booklet.annee}.pdf`;
     link.target = "_blank";
+    link.rel = "noopener noreferrer";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -404,54 +432,107 @@ export default function Talents() {
             </div>
 
             <div className="space-y-1">
-              {/* 1. Édition en cours */}
-              <div className="text-[10px] font-bold text-ope-text-muted uppercase tracking-wider px-1 pt-1 pb-0.5">
-                Édition en cours
-              </div>
-              {BOOKLETS.filter((b) => b.category === "current").map((b) => (
-                <div
-                  key={b.id}
-                  onClick={() => handleDownloadBooklet(b)}
-                  className="flex items-center justify-between p-2 rounded-xl hover:bg-[#f4f8fb] transition-colors cursor-pointer group"
-                >
-                  <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                    <div className="w-8 h-8 rounded-lg bg-[#e8f3f9] text-ope-primary flex flex-col items-center justify-center shrink-0 group-hover:bg-ope-primary group-hover:text-white transition-colors">
-                      <span className="text-[8px] font-black leading-none">PDF</span>
-                      <span className="text-[9px] font-bold leading-none mt-0.5">{b.year}</span>
-                    </div>
-                    <span className="text-xs font-bold text-ope-text group-hover:text-ope-primary transition-colors truncate">{b.title}</span>
-                  </div>
-                  <button type="button" disabled={downloadingBookletId === b.id} className="shrink-0 p-1.5 rounded-lg text-slate-400 group-hover:text-ope-orange group-hover:bg-white transition-all shadow-2xs" title={`Télécharger le livret ${b.year}`}>
-                    {downloadingBookletId === b.id ? (
-                      <svg className="w-4 h-4 animate-spin text-ope-orange" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" /></svg>
-                    ) : (
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                    )}
-                  </button>
+              {isLoadingBooklets ? (
+                <div className="py-8 text-center text-xs text-ope-text-muted flex items-center justify-center gap-2">
+                  <svg className="w-4 h-4 animate-spin text-ope-orange" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                  </svg>
+                  <span>Chargement des livrets...</span>
                 </div>
-              ))}
-
-              {/* 2. Années précédentes */}
-              <div className="text-[10px] font-bold text-ope-text-muted uppercase tracking-wider px-1 pt-2 pb-0.5 border-t border-slate-100 mt-1">Années précédentes</div>
-              {BOOKLETS.filter((b) => b.category === "past").map((b) => (
-                <div key={b.id} onClick={() => handleDownloadBooklet(b)} className="flex items-center justify-between p-2 rounded-xl hover:bg-[#f4f8fb] transition-colors cursor-pointer group">
-                  <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                    <div className="w-8 h-8 rounded-lg bg-[#e8f3f9] text-ope-primary flex flex-col items-center justify-center shrink-0 group-hover:bg-ope-primary group-hover:text-white transition-colors">
-                      <span className="text-[8px] font-black leading-none">PDF</span>
-                      <span className="text-[9px] font-bold leading-none mt-0.5">{b.year}</span>
-                    </div>
-                    <span className="text-xs font-bold text-ope-text group-hover:text-ope-primary transition-colors truncate">{b.title}</span>
-                  </div>
-                  <button type="button" disabled={downloadingBookletId === b.id} className="shrink-0 p-1.5 rounded-lg text-slate-400 group-hover:text-ope-orange group-hover:bg-white transition-all shadow-2xs" title={`Télécharger le livret ${b.year}`}>
-                    {downloadingBookletId === b.id ? (
-                      <svg className="w-4 h-4 animate-spin text-ope-orange" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" /></svg>
-                    ) : (
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                    )}
-                  </button>
+              ) : booklets.length === 0 ? (
+                <div className="py-8 text-center text-xs text-ope-text-muted">
+                  Aucun livret disponible pour le moment.
                 </div>
-              ))}
+              ) : (
+                <>
+                  {/* 1. Édition en cours */}
+                  {currentBooklets.length > 0 && (
+                    <>
+                      <div className="text-[10px] font-bold text-ope-text-muted uppercase tracking-wider px-1 pt-1 pb-0.5">
+                        Édition en cours
+                      </div>
+                      {currentBooklets.map((b) => (
+                        <div
+                          key={b.id}
+                          onClick={() => handleDownloadBooklet(b)}
+                          className="flex items-center justify-between p-2 rounded-xl hover:bg-[#f4f8fb] transition-colors cursor-pointer group"
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                            <div className="w-8 h-8 rounded-lg bg-[#e8f3f9] text-ope-primary flex flex-col items-center justify-center shrink-0 group-hover:bg-ope-primary group-hover:text-white transition-colors">
+                              <span className="text-[8px] font-black leading-none">PDF</span>
+                              <span className="text-[9px] font-bold leading-none mt-0.5">{b.annee}</span>
+                            </div>
+                            <span className="text-xs font-bold text-ope-text group-hover:text-ope-primary transition-colors truncate">
+                              {b.titre}
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            disabled={downloadingBookletId === b.id}
+                            className="shrink-0 p-1.5 rounded-lg text-slate-400 group-hover:text-ope-orange group-hover:bg-white transition-all shadow-2xs"
+                            title={`Télécharger le livret ${b.annee}`}
+                          >
+                            {downloadingBookletId === b.id ? (
+                              <svg className="w-4 h-4 animate-spin text-ope-orange" viewBox="0 0 24 24" fill="none">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                              </svg>
+                            ) : (
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                              </svg>
+                            )}
+                          </button>
+                        </div>
+                      ))}
+                    </>
+                  )}
 
+                  {/* 2. Années précédentes */}
+                  {pastBooklets.length > 0 && (
+                    <>
+                      <div className="text-[10px] font-bold text-ope-text-muted uppercase tracking-wider px-1 pt-2 pb-0.5 border-t border-slate-100 mt-1">
+                        Années précédentes
+                      </div>
+                      {pastBooklets.map((b) => (
+                        <div
+                          key={b.id}
+                          onClick={() => handleDownloadBooklet(b)}
+                          className="flex items-center justify-between p-2 rounded-xl hover:bg-[#f4f8fb] transition-colors cursor-pointer group"
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                            <div className="w-8 h-8 rounded-lg bg-[#e8f3f9] text-ope-primary flex flex-col items-center justify-center shrink-0 group-hover:bg-ope-primary group-hover:text-white transition-colors">
+                              <span className="text-[8px] font-black leading-none">PDF</span>
+                              <span className="text-[9px] font-bold leading-none mt-0.5">{b.annee}</span>
+                            </div>
+                            <span className="text-xs font-bold text-ope-text group-hover:text-ope-primary transition-colors truncate">
+                              {b.titre}
+                            </span>
+                          </div>
+                          <button
+                            type="button"
+                            disabled={downloadingBookletId === b.id}
+                            className="shrink-0 p-1.5 rounded-lg text-slate-400 group-hover:text-ope-orange group-hover:bg-white transition-all shadow-2xs"
+                            title={`Télécharger le livret ${b.annee}`}
+                          >
+                            {downloadingBookletId === b.id ? (
+                              <svg className="w-4 h-4 animate-spin text-ope-orange" viewBox="0 0 24 24" fill="none">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                              </svg>
+                            ) : (
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                              </svg>
+                            )}
+                          </button>
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>

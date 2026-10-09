@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
-import { partenaireService, type Partenaire, type PartenaireType } from "../services";
+import { partenaireService, type Partenaire, type PartenaireType, type PartenaireCategorie } from "../services";
 import Pagination from "./Pagination";
 
 const TYPE_CONFIG: Record<PartenaireType, { label: string; badgeClass: string; textColor: string }> = {
@@ -26,11 +26,31 @@ const TYPE_CONFIG: Record<PartenaireType, { label: string; badgeClass: string; t
   },
 };
 
+const CATEGORIE_CONFIG: Record<PartenaireCategorie, { label: string; badgeClass: string }> = {
+  platine: {
+    label: "Platine",
+    badgeClass: "bg-indigo-50 text-indigo-900 border-indigo-200",
+  },
+  or: {
+    label: "Or",
+    badgeClass: "bg-amber-50 text-amber-900 border-amber-200",
+  },
+  argent: {
+    label: "Argent",
+    badgeClass: "bg-slate-100 text-slate-800 border-slate-300",
+  },
+  bronze: {
+    label: "Bronze",
+    badgeClass: "bg-orange-50 text-orange-950 border-orange-200",
+  },
+};
+
 export default function AdminPartenaires() {
   const [partenaires, setPartenaires] = useState<Partenaire[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedType, setSelectedType] = useState<string>("all");
+  const [selectedCategorie, setSelectedCategorie] = useState<string>("all");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<"success" | "error">("success");
 
@@ -47,6 +67,7 @@ export default function AdminPartenaires() {
   // Form state
   const [formNom, setFormNom] = useState("");
   const [formType, setFormType] = useState<PartenaireType>("institution");
+  const [formCategorie, setFormCategorie] = useState<PartenaireCategorie>("bronze");
   const [formLogoFile, setFormLogoFile] = useState<File | null>(null);
   const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(null);
 
@@ -78,15 +99,16 @@ export default function AdminPartenaires() {
     const q = searchQuery.trim().toLowerCase();
     return partenaires.filter((p) => {
       const matchesType = selectedType === "all" || p.type === selectedType;
+      const matchesCategorie = selectedCategorie === "all" || p.categorie === selectedCategorie;
       const matchesSearch = q === "" || p.nom.toLowerCase().includes(q);
-      return matchesType && matchesSearch;
+      return matchesType && matchesCategorie && matchesSearch;
     });
-  }, [partenaires, selectedType, searchQuery]);
+  }, [partenaires, selectedType, selectedCategorie, searchQuery]);
 
   // Réinitialiser la page lors du changement de filtre
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedType, searchQuery]);
+  }, [selectedType, selectedCategorie, searchQuery]);
 
   // Partenaires paginés
   const paginatedPartenaires = useMemo(() => {
@@ -108,6 +130,7 @@ export default function AdminPartenaires() {
     setEditingPartenaire(null);
     setFormNom("");
     setFormType("institution");
+    setFormCategorie("bronze");
     setFormLogoFile(null);
     setLogoPreviewUrl(null);
     setIsModalOpen(true);
@@ -118,6 +141,7 @@ export default function AdminPartenaires() {
     setEditingPartenaire(p);
     setFormNom(p.nom);
     setFormType(p.type);
+    setFormCategorie(p.categorie || "bronze");
     setFormLogoFile(null);
     setLogoPreviewUrl(p.logo || null);
     setIsModalOpen(true);
@@ -145,6 +169,7 @@ export default function AdminPartenaires() {
       const formData = new FormData();
       formData.append("nom", formNom.trim());
       formData.append("type", formType);
+      formData.append("categorie", formCategorie);
       if (formLogoFile) formData.append("logo", formLogoFile);
 
       if (editingPartenaire) {
@@ -263,6 +288,17 @@ export default function AdminPartenaires() {
           <option value="ong">ONG</option>
           <option value="ambassade">Ambassade</option>
         </select>
+        <select
+          value={selectedCategorie}
+          onChange={(e) => setSelectedCategorie(e.target.value)}
+          className="bg-[#f4f8fb] border border-[#d0e4f0] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#f15b29] cursor-pointer"
+        >
+          <option value="all">Tous les paliers</option>
+          <option value="platine">Platine</option>
+          <option value="or">Or</option>
+          <option value="argent">Argent</option>
+          <option value="bronze">Bronze</option>
+        </select>
       </div>
 
       {/* ── Contenu ── */}
@@ -323,9 +359,16 @@ export default function AdminPartenaires() {
 
                 {/* Infos */}
                 <div className="p-4 flex-1 flex flex-col">
-                  <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full border self-start mb-2 ${typeInfo.badgeClass}`}>
-                    {typeInfo.label}
-                  </span>
+                  <div className="flex items-center gap-1.5 flex-wrap mb-2">
+                    <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full border ${typeInfo.badgeClass}`}>
+                      {typeInfo.label}
+                    </span>
+                    {p.categorie && (
+                      <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full border ${CATEGORIE_CONFIG[p.categorie]?.badgeClass || "bg-gray-100 text-gray-700 border-gray-200"}`}>
+                        {CATEGORIE_CONFIG[p.categorie]?.label || p.categorie}
+                      </span>
+                    )}
+                  </div>
                   <h3 className="font-extrabold text-gray-900 text-sm leading-snug flex-1">
                     {p.nom}
                   </h3>
@@ -417,20 +460,38 @@ export default function AdminPartenaires() {
               </div>
 
               {/* Type */}
-              <div>
-                <label className="block text-xs font-extrabold text-gray-800 mb-1">
-                  Type de partenaire
-                </label>
-                <select
-                  value={formType}
-                  onChange={(e) => setFormType(e.target.value as PartenaireType)}
-                  className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-3 py-2.5 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#f15b29] cursor-pointer"
-                >
-                  <option value="pays">Pays</option>
-                  <option value="institution">Institution</option>
-                  <option value="ong">ONG</option>
-                  <option value="ambassade">Ambassade</option>
-                </select>
+              {/* Type & Catégorie */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-extrabold text-gray-800 mb-1">
+                    Type de partenaire
+                  </label>
+                  <select
+                    value={formType}
+                    onChange={(e) => setFormType(e.target.value as PartenaireType)}
+                    className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-3 py-2.5 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#f15b29] cursor-pointer"
+                  >
+                    <option value="pays">Pays</option>
+                    <option value="institution">Institution</option>
+                    <option value="ong">ONG</option>
+                    <option value="ambassade">Ambassade</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-extrabold text-gray-800 mb-1">
+                    Palier / Catégorie
+                  </label>
+                  <select
+                    value={formCategorie}
+                    onChange={(e) => setFormCategorie(e.target.value as PartenaireCategorie)}
+                    className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-3 py-2.5 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#f15b29] cursor-pointer"
+                  >
+                    <option value="platine">Platine</option>
+                    <option value="or">Or</option>
+                    <option value="argent">Argent</option>
+                    <option value="bronze">Bronze</option>
+                  </select>
+                </div>
               </div>
 
               {/* Logo */}

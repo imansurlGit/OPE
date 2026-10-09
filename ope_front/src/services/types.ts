@@ -188,16 +188,36 @@ export interface MediaGalerieFilterParams {
 }
 
 export type PartenaireType = "pays" | "institution" | "ong" | "ambassade";
+export type PartenaireCategorie = "platine" | "or" | "argent" | "bronze";
 
 export interface Partenaire {
   id: number;
   nom: string;
   type: PartenaireType;
+  categorie?: PartenaireCategorie;
   logo?: string | null;
 }
 
 export interface PartenaireFilterParams {
   type?: string;
+  categorie?: string;
+  search?: string;
+}
+
+export type DocumentType = "archive" | "talent" | "rapport";
+
+export interface DocumentItem {
+  id: number;
+  titre: string;
+  type: DocumentType;
+  fichier: string;
+  annee: number;
+  created_at?: string;
+}
+
+export interface DocumentFilterParams {
+  type?: string;
+  annee?: number | string;
   search?: string;
 }
 
