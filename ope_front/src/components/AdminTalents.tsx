@@ -938,14 +938,6 @@ export default function AdminTalents() {
                       {selectedCandidate.etablissement || "—"} ({selectedCandidate.classe || "—"})
                     </span>
                   </div>
-                  <div>
-                    <span className="text-gray-400 block text-[10px]">Point Focal OPE</span>
-                    <span className="font-bold text-gray-900">{selectedCandidate.point_focal || "Direct"}</span>
-                  </div>
-                  <div>
-                    <span className="text-gray-400 block text-[10px]">Accès numérique</span>
-                    <span className="font-bold text-gray-900">{selectedCandidate.acces_numerique || "Non renseigné"}</span>
-                  </div>
                 </div>
 
                 {selectedCandidate.biographie && (
