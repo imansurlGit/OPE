@@ -12,6 +12,9 @@ class TalentService {
     if (filters?.domaine && filters.domaine !== "all") {
       params.append("domaine", filters.domaine);
     }
+    if (filters?.maison && filters.maison !== "all") {
+      params.append("maison", filters.maison);
+    }
     if (filters?.statut && filters.statut !== "all") {
       params.append("statut", filters.statut);
     }
@@ -74,9 +77,15 @@ class TalentService {
     const rejete = candidatures.filter((c) => c.statut === "rejete").length;
     const soumis = candidatures.filter((c) => c.statut === "soumis").length;
 
-    const steam = candidatures.filter((c) => c.domaine === "STEAM").length;
-    const lp = candidatures.filter((c) => c.domaine === "LP").length;
-    const MC2 = candidatures.filter((c) => c.domaine === "MC2").length;
+    const steam = candidatures.filter(
+      (c) => c.maison === "steam" || c.domaine === "STEAM",
+    ).length;
+    const lp = candidatures.filter(
+      (c) => c.maison === "local_project" || c.domaine === "LP",
+    ).length;
+    const MC2 = candidatures.filter(
+      (c) => c.maison === "mouvement_citoyen" || c.domaine === "MC2",
+    ).length;
 
     const filles = candidatures.filter((c) => c.sexe === "F").length;
     const garcons = candidatures.filter((c) => c.sexe === "M").length;

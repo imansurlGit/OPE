@@ -15,6 +15,13 @@ const REGIONS = [
   "Zinder",
 ];
 
+const getMaisonLabel = (maison?: string) =>
+  ({
+    steam: "STEAM",
+    local_project: "Local Project",
+    mouvement_citoyen: "Modèle Citoyen Communautaire ou MC2",
+  })[maison || ""] || maison || "";
+
 export default function AdminTalents() {
   const [candidatures, setCandidatures] = useState<Candidature[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -68,9 +75,17 @@ export default function AdminTalents() {
   const filteredCandidatures = useMemo(() => {
     return candidatures.filter((c) => {
       // Filtre Domaine
+      const maisonFilterValue =
+        c.maison === "local_project"
+          ? "LP"
+          : c.maison === "mouvement_citoyen"
+            ? "MC2"
+            : c.maison === "steam"
+              ? "STEAM"
+              : c.domaine;
       if (
         selectedDomaine !== "all" &&
-        c.domaine?.toUpperCase() !== selectedDomaine.toUpperCase()
+        maisonFilterValue?.toUpperCase() !== selectedDomaine.toUpperCase()
       ) {
         return false;
       }
@@ -96,7 +111,7 @@ export default function AdminTalents() {
         const email = (c.email || "").toLowerCase();
         const ville = (c.ville_village || "").toLowerCase();
         const projet = (c.description_projet || "").toLowerCase();
-        const house = (c.house_visee || "").toLowerCase();
+        const house = (getMaisonLabel(c.maison) || c.house_visee || "").toLowerCase();
 
         return (
           fullName.includes(q) ||
@@ -186,7 +201,7 @@ export default function AdminTalents() {
   // Export CSV
   const handleExportCSV = () => {
     // Formatage de date ISO ? JJ/MM/AAAA
-    const fmtDate = (iso?: string) => {
+    const fmtDate = (iso?: string | null) => {
       if (!iso) return "";
       try {
         // date_naissance est déjà YYYY-MM-DD, created_at est ISO 8601
@@ -217,9 +232,12 @@ export default function AdminTalents() {
 
     const fmtDomaine = (d?: string) => {
       switch (d) {
-        case "STEAM": return "House STEAM (Sciences & Technologie)";
-        case "LP": return "House LP (Entrepreneuriat Local)";
-        case "MC2": return "House MC2 (Citoyenneté & Culture)";
+        case "STEAM":
+        case "steam": return "House STEAM (Sciences & Technologie)";
+        case "LP":
+        case "local_project": return "House LP (Entrepreneuriat Local)";
+        case "MC2":
+        case "mouvement_citoyen": return "House MC2 (Citoyenneté & Culture)";
         default: return d || "";
       }
     };
@@ -249,8 +267,8 @@ export default function AdminTalents() {
       `"${c.prenom}"`,
       `"${fmtSexe(c.sexe)}"`,
       `"${fmtDate(c.date_naissance)}"`,
-      `"${fmtDomaine(c.domaine)}"`,
-      `"${c.house_visee || ""}"`,
+      `"${fmtDomaine(c.maison || c.domaine)}"`,
+      `"${getMaisonLabel(c.maison) || c.house_visee || ""}"`,
       `"${c.region || ""}"`,
       `"${c.ville_village || ""}"`,
       `"${c.telephone_candidat || ""}"`,
@@ -323,10 +341,13 @@ export default function AdminTalents() {
   const getDomaineBadge = (domaine: string) => {
     switch (domaine) {
       case "STEAM":
+      case "steam":
         return "bg-[#edf4f9] text-[#2F6084] border-orange-200";
       case "LP":
+      case "local_project":
         return "bg-blue-50 text-[#2F6084] border-blue-200";
       case "MC2":
+      case "mouvement_citoyen":
         return "bg-purple-50 text-purple-700 border-purple-200";
       default:
         return "bg-slate-100 text-slate-700 border-slate-200";
@@ -668,11 +689,14 @@ export default function AdminTalents() {
                     {/* Maison & House */}
                     <td className="py-3 px-4 max-w-[220px]">
                       <div className="space-y-0.5">
-                        <span className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-black uppercase border ${getDomaineBadge(cand.domaine)}`}>
-                          {cand.domaine}
+                        <span className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-black uppercase border ${getDomaineBadge(cand.maison || cand.domaine || "")}`}>
+                          {getMaisonLabel(cand.maison) || cand.domaine}
                         </span>
-                        <p className="text-xs font-semibold text-gray-800 truncate" title={cand.house_visee}>
-                          {cand.house_visee || "—"}
+                        <p
+                          className="text-xs font-semibold text-gray-800 truncate"
+                          title={cand.innovation_nom || getMaisonLabel(cand.maison) || cand.house_visee}
+                        >
+                          {cand.innovation_nom || getMaisonLabel(cand.maison) || cand.house_visee || "—"}
                         </p>
                       </div>
                     </td>
@@ -739,14 +763,14 @@ export default function AdminTalents() {
                       </span>
                     </div>
                   </div>
-                  <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase border ${getDomaineBadge(cand.domaine)}`}>
-                    {cand.domaine}
+                  <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase border ${getDomaineBadge(cand.maison || cand.domaine || "")}`}>
+                    {getMaisonLabel(cand.maison) || cand.domaine}
                   </span>
                 </div>
 
                 <div className="space-y-1.5 my-3">
                   <p className="text-xs font-bold text-gray-800 line-clamp-1">
-                    {cand.house_visee || "Projet en cours"}
+                    {getMaisonLabel(cand.maison) || cand.house_visee || "Projet en cours"}
                   </p>
                   <p className="text-[11px] text-gray-500 line-clamp-2 leading-relaxed">
                     {cand.description_projet || cand.motivation || "Aucune description"}
@@ -801,8 +825,8 @@ export default function AdminTalents() {
                     <h2 className="text-lg sm:text-xl font-black text-gray-900">
                       {selectedCandidate.prenom} {selectedCandidate.nom}
                     </h2>
-                    <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase border ${getDomaineBadge(selectedCandidate.domaine)}`}>
-                      {selectedCandidate.domaine}
+                    <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase border ${getDomaineBadge(selectedCandidate.maison || selectedCandidate.domaine || "")}`}>
+                      {getMaisonLabel(selectedCandidate.maison) || selectedCandidate.domaine}
                     </span>
                   </div>
                   <p className="text-xs text-gray-500 font-mono mt-0.5">
@@ -941,7 +965,9 @@ export default function AdminTalents() {
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="text-gray-400 block text-[10px]">House Spécifique</span>
-                      <span className="font-extrabold text-gray-900 text-sm">{selectedCandidate.house_visee || "Non spécifiée"}</span>
+                      <span className="font-extrabold text-gray-900 text-sm">
+                        {getMaisonLabel(selectedCandidate.maison) || selectedCandidate.house_visee || "Non spécifiée"}
+                      </span>
                     </div>
                     <span className="px-2.5 py-1 rounded-lg bg-blue-50 text-[#2F6084] font-bold text-xs border border-blue-100">
                       {selectedCandidate.statut_projet || "En cours"}

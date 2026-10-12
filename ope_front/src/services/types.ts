@@ -38,54 +38,85 @@ export type StatutCandidature =
   | "admis"
   | "rejete";
 
-export type DomaineCandidature = "STEAM" | "LP" | "MC2";
+export type CategorieCandidature = "junior" | "senior";
+export type MaisonCandidature = "steam" | "local_project" | "mouvement_citoyen";
 
 export interface Candidature {
   id: number;
   reference: string;
-  domaine: DomaineCandidature;
+  categorie: CategorieCandidature;
+  maison?: MaisonCandidature | "";
+  statut: StatutCandidature;
+
+  // Communs
   nom: string;
   prenom: string;
-  date_naissance: string;
-  sexe: "M" | "F";
-  region: string;
-  ville_village: string;
-  nationalite: string;
-  etablissement?: string;
+  telephone?: string;
+  region_ville?: string;
+
+  // Junior
+  age?: number | null;
   classe?: string;
-  telephone_candidat?: string;
-  email: string;
+  etablissement?: string;
   telephone_tuteur?: string;
-  point_focal?: string;
-  biographie?: string;
-  house_visee: string;
-  house_visee_autre?: string;
-  statut_projet: string;
-  description_projet: string;
-  filiere?: string;
-  moyenne_recente?: string;
-  nom_recommandant?: string;
-  tel_recommandant?: string;
-  frequence_engagement?: string;
-  motivation: string;
-  acces_numerique: string;
-  photo_identite?: string | null;
+  nom_tuteur?: string;
+  mascotte_nom?: string;
+  mascotte_pourquoi?: string;
+  mascotte_dessin?: string | null;
+  mascotte_signification?: string;
+  autorisation_parent?: boolean;
+  accord_utilisation_dessin?: boolean;
+
+  // Senior
+  sexe?: "M" | "F" | "";
+  date_naissance?: string | null;
+  email?: string;
   piece_identite?: string | null;
-  bulletins_scolaires?: string | null;
-  autorisation_parentale?: string | null;
-  preuve_projet?: string | null;
-  lettre_recommandation?: string | null;
-  certification: boolean;
-  confirmation_parent: boolean;
-  statut: StatutCandidature;
+  photo_identite?: string | null;
+  domaine_steam?: string;
+  domaine_steam_autre?: string;
+  innovation_nom?: string;
+  innovation_description?: string;
+  stade_developpement?: string;
+  preuves_realisation?: string | null;
+  lien_portfolio?: string;
+  participe_defile?: boolean;
+  oeuvre_defile?: string;
+  facilitateur_juniors?: boolean;
+  souhaite_stand?: boolean;
+  concours_prix_innovation?: boolean;
+  disponible_camps?: boolean;
+  accepte_conditions?: boolean;
+
+  // Admin / Suivi
   note_interne?: string;
   score_evaluation?: number;
   created_at?: string;
   updated_at?: string;
+
+  // Compatibilité legacy
+  domaine?: string;
+  region?: string;
+  ville_village?: string;
+  house_visee?: string;
+  telephone_candidat?: string;
+  description_projet?: string;
+  motivation?: string;
+  biographie?: string;
+  statut_projet?: string;
+  filiere?: string;
+  moyenne_recente?: string;
+  bulletins_scolaires?: string | null;
+  autorisation_parentale?: string | null;
+  preuve_projet?: string | null;
+  lettre_recommandation?: string | null;
+  certification?: boolean;
+  confirmation_parent?: boolean;
 }
 
 export interface TalentFilterParams {
   domaine?: string;
+  maison?: MaisonCandidature | "all";
   statut?: string;
   region?: string;
   search?: string;
@@ -220,4 +251,3 @@ export interface DocumentFilterParams {
   annee?: number | string;
   search?: string;
 }
-
