@@ -27,7 +27,6 @@ export const SuccessView: React.FC<SuccessViewProps> = ({
   contactEmail,
   onNewApplication,
 }) => {
-  const { t } = useTranslation();
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
 
   useEffect(() => {
