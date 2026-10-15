@@ -8,10 +8,14 @@ import {
 } from "../services";
 import ApiErrorState from "../components/ApiErrorState";
 
+const API_MEDIA_BASE = (
+  import.meta.env.VITE_API_URL || "http://127.0.0.1:7777/api"
+).replace(/\/api\/?$/, "");
+
 const resolveFileUrl = (url?: string | null) => {
   if (!url) return "";
   if (url.startsWith("http://") || url.startsWith("https://")) return url;
-  return `http://127.0.0.1:7777${url.startsWith("/") ? "" : "/"}${url}`;
+  return `${API_MEDIA_BASE}${url.startsWith("/") ? "" : "/"}${url}`;
 };
 
 interface DisplayTalent {
