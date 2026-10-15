@@ -50,7 +50,7 @@
         "title": "MC2 Models",
         "subtitle": "Community Citizen Model",
         "items": [
-          "Tree planting on the Courbouru site",
+          "Tree planting on the Kourboubou site",
           "School bench-table repair",
           "Waste bin manufacturing"
         ]
@@ -59,7 +59,7 @@
         "title": "MC2 Models",
         "subtitle": "Community Citizen Model",
         "items": [
-          "Tree planting on the Courbouru site",
+          "Tree planting on the Kourboubou site",
           "School bench-table repair",
           "Waste bin manufacturing"
         ]
@@ -185,7 +185,7 @@
     "address_val": "Agadez, Republic of Niger",
     "phone_label": "Phone",
     "phone_val": "Available during opening hours",
-    "email_val": "contact@ope.ne",
+    "email_val": "ope.organization@gmail.com",
     "hours_label": "Opening Hours",
     "hours_val": "Mon - Fri: 8:00 AM - 5:30 PM"
   },
@@ -334,7 +334,6 @@
     "err_nom": "Please enter a valid last name (at least 2 letters, no numbers).",
     "err_prenom": "Please enter a valid first name (at least 2 letters, no numbers).",
     "err_dob": "Please enter your date of birth.",
-    "err_dob_age": "Candidate age must be between 10 and 35 years old to attend the camp.",
     "err_sex": "Please indicate your gender.",
     "err_ville": "Please indicate your city or village (at least 2 characters).",
     "err_email": "Please provide a valid email address (e.g. applicant@domain.com).",
@@ -356,6 +355,15 @@
     "err_cert": "Please check the confirmation box to continue.",
     "err_confirm_parent": "The parent or legal guardian must confirm the minor's application.",
     "err_file_size": "Selected file exceeds maximum allowed size (10 MB)."
+  },
+  "popup": {
+    "mascotte": {
+      "title": "CNCEIZ Agadez 2026 Mascot Contest",
+      "subtitle": "Imagine the Agadez Camp mascot and give it a name. Show your talent! Submit your drawing and compete to win contest prizes.",
+      "participate": "I participate!",
+      "later": "Later",
+      "close": "Close window"
+    }
   },
   "languages": {
     "title": "Language",

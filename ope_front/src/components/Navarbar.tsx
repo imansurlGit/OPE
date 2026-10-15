@@ -16,12 +16,11 @@ export default function Navbar() {
     { label: t("nav.about"), to: "/apropos" },
     { label: t("nav.talents"), to: "/talents" },
     { label: t("nav.news"), to: "/actualites" },
-    { label: t("nav.contact"), to: "/contact" },
   ];
 
   // Liens secondaires regroupés dans "Explorer"
   const DROPDOWN_LINKS = [
-    { label: t("nav.members"), to: "/membres" },
+    { label: t("nav.acteurs"), to: "/acteurs"},
     { label: t("nav.categories"), to: "/categories" },
     { label: t("nav.sponsors"), to: "/sponsors" },
     { label: t("nav.gallery"), to: "/galerie" },
@@ -120,6 +119,22 @@ export default function Navbar() {
               </div>
             </ul>
           </li>
+
+          {/* ── Contact (après Explorer, complètement à droite) ── */}
+          <li>
+            <NavLink
+              to="/contact"
+              className={({ isActive }) =>
+                `px-3 py-2 text-[11px] font-semibold uppercase tracking-wider transition-colors duration-150 ${
+                  isActive
+                    ? "text-ope-orange underline underline-offset-4 decoration-ope-orange"
+                    : "text-ope-text-muted hover:text-ope-primary"
+                }`
+              }
+            >
+              {t("nav.contact")}
+            </NavLink>
+          </li>
         </ul>
 
         {/* ── Zone 3 : Switcher de Langue & CTA (droite) ── */}
@@ -160,7 +175,7 @@ export default function Navbar() {
         }`}
       >
         <div className="bg-ope-white border-t border-ope-border px-4 py-3 flex flex-col gap-1">
-          {[...MAIN_LINKS, ...DROPDOWN_LINKS].map((link) => (
+          {[...MAIN_LINKS, ...DROPDOWN_LINKS, { label: t("nav.contact"), to: "/contact" }].map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
@@ -178,7 +193,7 @@ export default function Navbar() {
             </NavLink>
           ))}
           <NavLink
-            to="/participer"
+            to="/formulaire"
             className="mt-2 mb-2 px-5 py-2.5 rounded-full text-sm font-semibold text-ope-white bg-ope-orange text-center shadow-sm"
             onClick={() => setMenuOpen(false)}
           >

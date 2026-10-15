@@ -113,19 +113,19 @@ export default function Footer() {
                             <div>
                                 <span className="block text-white/50 text-[11px]">{t("footer.email_label")}</span>
                                 <a
-                                    href="mailto:contact@ope-niger.org"
+                                    href="mailto:ope.organization@gmail.com"
                                     className="text-white/90 hover:text-ope-orange transition-colors font-medium break-all"
                                 >
-                                    contact@ope-niger.org
+                                    ope.organization@gmail.com
                                 </a>
                             </div>
                             <div>
                                 <span className="block text-white/50 text-[11px]">{t("footer.phone_label")}</span>
                                 <a
-                                    href="tel:+22790000000"
+                                    href="tel:+22783316565"
                                     className="text-white/90 hover:text-ope-orange transition-colors font-medium"
                                 >
-                                    +227 90 00 00 00 / 96 00 00 00
+                                    +227 83 31 65 65
                                 </a>
                             </div>
                         </div>

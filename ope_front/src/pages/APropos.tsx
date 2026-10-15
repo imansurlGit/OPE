@@ -1,5 +1,4 @@
-import inspireImg from "../assets/apropos-inspire.jpg";
-import coverImg from "../assets/apropos-inspire.jpg";
+import coverImg from "../assets/apropos.png";
 
 export default function APropos() {
     const SECTIONS_THEMATIQUES = [
@@ -24,7 +23,7 @@ export default function APropos() {
             ),
             titre: "Hub de technologie & d'innovation",
             sousTitre: "Quand la jeunesse invente l'avenir du Niger.",
-            desc: "Intelligence artificielle, robotique, biotechnologie, art et mathématiques : les ateliers STEAM placent les jeunes au cœur de la création. Concours de pitch, expositions de projets locaux et solutions pensées pour les réalités du pays font d'Agadez un laboratoire d'idées à ciel ouvert.\n\nNous catalysons la création de startups et d'initiatives à fort impact social et économique.",
+            desc: "Intelligence artificielle, robotique, biotechnologie, art et mathématiques : les ateliers STEAM placent les jeunes au cœur de la création. Pitch, expositions, défilé scientifique et technologique, de projets locaux et solutions pensées pour les réalités du pays font d'Agadez un laboratoire d'idées à ciel ouvert.\n\nNous catalysons la création de startups et d'initiatives à fort impact social et économique.",
             span: "md:col-span-2",
         },
         {
@@ -69,9 +68,9 @@ export default function APropos() {
             {/* ── HERO BANNER IMMERSIF (PLEINE LARGEUR) ────────────────── */}
             <section className="relative w-full h-[190px] sm:h-[250px] md:h-[290px] overflow-hidden shadow-sm border-b border-ope-border">
                 <img
-                    src={coverImg || inspireImg}
+                    src={coverImg}
                     alt="Camp CNCEIZ Agadez"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-[center_55%]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
                 {/* Titre en incrustation */}
@@ -96,10 +95,10 @@ export default function APropos() {
 
                     <div className="prose prose-neutral text-ope-text-muted text-sm sm:text-base leading-relaxed space-y-4 max-w-4xl">
                         <p className="text-base sm:text-lg text-ope-text font-medium leading-relaxed border-l-2 border-ope-orange pl-4 italic">
-                            Centre historique inscrit au patrimoine mondial de l'UNESCO, Agadez veille depuis des siècles sur les routes du savoir. C'est ici que l'OPE réunit la jeunesse pour le Camp National Citoyen de l'Excellence et de l'Innovation (CNCEIZ).
+                            Centre historique inscrit au patrimoine mondial de l'UNESCO, Agadez veille depuis des siècles sur les routes du savoir. C'est ici que l'Organisation pour la Promotion de l'Excellence (OPE) réunit la jeunesse pour le Camp National Citoyen de l'Excellence et de l'Innovation (CNCEIZ).
                         </p>
                         <p>
-                            Héritier de la brillante participation du Niger au Camp Mondial du UNESCO Center for Peace en 2024 à Hood College, le camp poursuit une ambition claire : former une jeunesse compétente, engagée et fière.
+                            Héritier de la brillante participation du Niger au Camp Mondial de l'UNESCO Center for Peace en 2024 à Hood College, le camp poursuit une ambition claire : former une jeunesse compétente, engagée et fière.
                         </p>
                         <p>
                             Le parcours débute en novembre 2026 avec des Pré-Camps dans les huit régions et à Timia pour former 1 500 jeunes. En décembre, 1 000 délégués se retrouveront à Agadez pour sept jours de création intensive.
@@ -120,11 +119,11 @@ export default function APropos() {
                             </h2>
 
                             <p className="text-sm sm:text-base text-ope-text-muted leading-relaxed">
-                                Été 2024. Huit jeunes ambassadeurs Nigériens portent haut les couleurs de la nation au Camp Mondial du UNESCO Center for Peace à Hood College. 
+                                Été 2024. Huit jeunes ambassadeurs nigériens portent haut les couleurs de la nation au Camp Mondial de l'UNESCO Center for Peace à Hood College. 
                             </p>
 
                             <p className="text-xs sm:text-sm text-ope-text-muted leading-relaxed">
-                                Victoires éclatantes à l'IMUN (Union Africaine), 1er Prix STEAM emmené par la Miss Mathématique Mariam, et 2 Awards prestigieux saluant l'engagement de l'OPE : cette flamme d'excellence revient aujourd'hui irriguer le territoire national, au pied de l'Aïr.
+                                Victoires éclatantes à l'IMUN (International Model of United Nation) (Union Africaine), 1er Prix STEAM emmené par l'equipe Sigma de la Miss Mathématique Mariam Harouna Koché, et 2 Awards prestigieux saluant l'engagement de l'OPE : cette flamme d'excellence revient aujourd'hui irriguer le territoire national, au pied de l'Aïr.
                             </p>
                         </div>
 
@@ -133,7 +132,7 @@ export default function APropos() {
                             <div className="bg-ope-bg p-4 rounded-2xl border border-ope-border text-center">
                                 <span className="block text-2xl font-black text-ope-primary">1er Prix</span>
                                 <span className="text-xs font-bold text-ope-text mt-0.5 block">STEAM</span>
-                                <span className="text-[10px] text-ope-text-muted">Projet de groupe</span>
+                                <span className="text-[10px] text-ope-text-muted">Groupe OMEGA</span>
                             </div>
 
                             <div className="bg-ope-bg p-4 rounded-2xl border border-ope-border text-center">
@@ -170,7 +169,7 @@ export default function APropos() {
                             </h2>
                         </div>
                         <p className="text-xs sm:text-sm text-ope-text-muted max-w-md">
-                            Une structure pensée pour déclencher des vocations et apporter des solutions concrètes au Sahel.
+                            Un cadre pensée pour déclencher des vocations et apporter des solutions concrètes au Sahel.
                         </p>
                     </div>
 

@@ -32,7 +32,6 @@ export interface JuniorData {
   // Étape 1 : Qui es-tu ?
   nom: string;
   prenom: string;
-  age: string; // 8 à 17
   classe: ClasseJunior;
   etablissement: string;
   regionVille: string;
@@ -56,7 +55,6 @@ export interface SeniorData {
   nom: string;
   prenom: string;
   sexe: "M" | "F" | "";
-  dateNaissance: string;
   regionVille: string;
   telephone: string;
   email: string;
@@ -109,7 +107,6 @@ export const INITIAL_JUNIOR_DATA: JuniorData = {
   categorie: "junior",
   nom: "",
   prenom: "",
-  age: "",
   classe: "",
   etablissement: "",
   regionVille: "",
@@ -128,7 +125,6 @@ export const INITIAL_SENIOR_DATA: SeniorData = {
   nom: "",
   prenom: "",
   sexe: "",
-  dateNaissance: "",
   regionVille: "",
   telephone: "",
   email: "",
@@ -161,6 +157,11 @@ export const REGIONS_NIGER = [
   "Zinder",
   "Diaspora / Autre",
 ];
+
+export const REGIONS_NIGER_OPTIONS: { value: string; label: string }[] = REGIONS_NIGER.map((r) => ({
+  value: r,
+  label: r,
+}));
 
 export const MAISON_OPTIONS: { value: MaisonType; label: string; subtitle: string; icon: "steam" | "local" | "citoyen" }[] = [
   {

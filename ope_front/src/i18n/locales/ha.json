@@ -50,7 +50,7 @@
         "title": "Tsarin MC2",
         "subtitle": "Misalin Dan Kasa Mai Kishi da Al'umma",
         "items": [
-          "Dasa itatuwa a wurin Courbouru",
+          "Dasa itatuwa a wurin Kourboubou",
           "Gyaran kujeru da tebura na makaranta",
           "Kera kwandunan shara na zamani"
         ]
@@ -59,7 +59,7 @@
         "title": "Tsarin MC2",
         "subtitle": "Misalin Dan Kasa Mai Kishi da Al'umma",
         "items": [
-          "Dasa itatuwa a wurin Courbouru",
+          "Dasa itatuwa a wurin Kourboubou",
           "Gyaran kujeru da tebura na makaranta",
           "Kera kwandunan shara na zamani"
         ]
@@ -179,7 +179,7 @@
     "address_val": "Agadez, Jamhuriyar Nijar",
     "phone_label": "Lambar Waya",
     "phone_val": "Ana samun sa a lokutan aiki",
-    "email_val": "contact@ope.ne",
+    "email_val": "ope.organization@gmail.com",
     "hours_label": "Lokutan Aiki",
     "hours_val": "Litinin - Jumma'a : 08:00 - 17:30",
     "form_title": "Aiko Mana da Saƙo",
@@ -334,7 +334,6 @@
     "err_nom": "Da fatan za a bayar da sunan iyali mai inganci (aƙalla haruffa 2).",
     "err_prenom": "Da fatan za a bayar da suna mai inganci (aƙalla haruffa 2).",
     "err_dob": "Da fatan za a bayar da ranar haihuwa.",
-    "err_dob_age": "Shekarun ɗan takara dole ne su kasance tsakanin shekaru 10 zuwa 35.",
     "err_sex": "Da fatan za a nuna jinsinka.",
     "err_ville": "Da fatan za a nuna garinka ko ƙauyenka (aƙalla haruffa 2).",
     "err_email": "Da fatan za a bayar da adireshin imel mai inganci.",

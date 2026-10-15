@@ -145,43 +145,62 @@ function mapCandidatureToTalent(c: Candidature): DisplayTalent {
   const photoUrl =
     c.photo_identite && c.photo_identite.trim() !== ""
       ? c.photo_identite
-      : null;
+      : c.mascotte_dessin && c.mascotte_dessin.trim() !== ""
+        ? c.mascotte_dessin
+        : null;
 
   const prenom = c.prenom || "";
   const nom = c.nom || "";
   const fullName = `${prenom} ${nom}`.trim() || `Talent ${c.reference || c.id}`;
 
   const desc =
+    c.innovation_description ||
+    c.mascotte_signification ||
     c.description_projet ||
     c.motivation ||
     c.biographie ||
     "Candidat sélectionné pour l'Opération 1000 Talents au Camp National Citoyen d'Agadez.";
 
   const fullDesc =
+    c.innovation_description ||
+    c.mascotte_signification ||
     c.description_projet ||
     c.biographie ||
     c.motivation ||
     "Dossier de candidature retenu au sein du camp.";
 
+  const maison = c.maison || c.domaine;
+  const categorie: "STEAM" | "LP" | "MC2" =
+    maison === "steam" || maison === "STEAM"
+      ? "STEAM"
+      : maison === "local_project" || maison === "LP"
+        ? "LP"
+        : maison === "mouvement_citoyen" || maison === "MC2"
+          ? "MC2"
+          : "STEAM";
+
   const tags: string[] = [];
+  if (c.innovation_nom) tags.push(c.innovation_nom);
+  if (c.mascotte_nom) tags.push(c.mascotte_nom);
+  if (c.domaine_steam) tags.push(c.domaine_steam);
   if (c.house_visee) tags.push(c.house_visee);
   if (c.statut_projet) tags.push(c.statut_projet);
-  if (c.domaine && !tags.includes(c.domaine)) tags.push(c.domaine);
+  if (maison && !tags.includes(maison)) tags.push(maison);
 
   return {
     id: String(c.id),
     reference: c.reference || `CNCEIZ-${c.id}`,
     nom: fullName,
-    region: c.region || "Non renseignée",
-    ville: c.ville_village,
-    categorie: (c.domaine as "STEAM" | "LP" | "MC2") || "STEAM",
-    house: c.house_visee,
-    statut_projet: c.statut_projet,
+    region: c.region_ville || c.region || "Non renseignée",
+    ville: c.ville_village || c.region_ville,
+    categorie,
+    house: c.house_visee || c.maison,
+    statut_projet: c.stade_developpement || c.statut_projet,
     description: desc,
     descriptionComplete: fullDesc,
-    motivation: c.motivation,
+    motivation: c.motivation || c.mascotte_pourquoi,
     photo: photoUrl,
-    tags: tags.length > 0 ? tags : [c.domaine || "STEAM"],
+    tags: tags.length > 0 ? tags : [categorie],
     etablissement: c.etablissement,
   };
 }
@@ -300,25 +319,24 @@ export default function Talents() {
     }, 1200);
   };
 
-  // Charger les vrais talents depuis le backend API
+  // Charger les vrais talents depuis le backend API (uniquement les candidats admis)
   useEffect(() => {
     let isMounted = true;
     setIsLoading(true);
     setError(null);
 
     talentService
-      .getTalents()
+      .getTalents({ statut: "admis" })
       .then((data) => {
         if (!isMounted) return;
         const rawItems: Candidature[] = Array.isArray(data)
           ? data
           : (data as any)?.results || [];
 
-        // On affiche en priorité les talents admis, ou tous les dossiers disponibles
+        // Ne conserver que les candidats dont le statut est "admis"
         const admitted = rawItems.filter((c) => c.statut === "admis");
-        const list = admitted.length > 0 ? admitted : rawItems;
 
-        const mapped = list.map((c) => mapCandidatureToTalent(c));
+        const mapped = admitted.map((c) => mapCandidatureToTalent(c));
         setTalents(shuffleArray(mapped));
       })
       .catch((err) => {
@@ -539,99 +557,101 @@ export default function Talents() {
         </div>
       )}
 
-      {/* ── Barre de Filtres & Recherche & Livrets ────────────────── */}
-      <section className="px-4 sm:px-6 pb-8">
-        <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 sm:gap-4">
-          {/* Sélecteurs de Filtres (Régions, Catégories) */}
-          <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
-            {/* Filtre Régions */}
-            <div className="relative w-full sm:w-56">
-              <select
-                value={selectedRegion}
+      {/* ── Barre de Filtres & Recherche (affichée uniquement s'il y a des talents dans la base) ── */}
+      {!isLoading && !error && talents.length > 0 && (
+        <section className="px-4 sm:px-6 pb-8">
+          <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 sm:gap-4">
+            {/* Sélecteurs de Filtres (Régions, Catégories) */}
+            <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
+              {/* Filtre Régions */}
+              <div className="relative w-full sm:w-56">
+                <select
+                  value={selectedRegion}
+                  onChange={(e) => {
+                    setSelectedRegion(e.target.value);
+                    setDisplayCount(8);
+                  }}
+                  className="w-full bg-white border border-ope-border text-ope-text text-xs sm:text-sm font-semibold rounded-xl px-4 py-3 appearance-none focus:outline-none focus:border-ope-primary cursor-pointer pr-10 shadow-2xs transition-colors"
+                >
+                  {REGIONS.map((r) => (
+                    <option key={r} value={r}>
+                      {r}
+                    </option>
+                  ))}
+                </select>
+                <svg
+                  className="w-4 h-4 text-ope-text-muted absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+
+              {/* Filtre Catégories */}
+              <div className="relative w-full sm:w-56">
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => {
+                    setSelectedCategory(e.target.value);
+                    setDisplayCount(8);
+                  }}
+                  className="w-full bg-white border border-ope-border text-ope-text text-xs sm:text-sm font-semibold rounded-xl px-4 py-3 appearance-none focus:outline-none focus:border-ope-primary cursor-pointer pr-10 shadow-2xs transition-colors"
+                >
+                  {CATEGORIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c === "Toutes les catégories"
+                        ? t("talents.all_domains")
+                        : c}
+                    </option>
+                  ))}
+                </select>
+                <svg
+                  className="w-4 h-4 text-ope-text-muted absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            {/* Champ de Recherche uniquement */}
+            <div className="relative w-full sm:w-64 md:w-72">
+              <input
+                type="text"
+                value={searchQuery}
                 onChange={(e) => {
-                  setSelectedRegion(e.target.value);
+                  setSearchQuery(e.target.value);
                   setDisplayCount(8);
                 }}
-                className="w-full bg-white border border-ope-border text-ope-text text-xs sm:text-sm font-semibold rounded-xl px-4 py-3 appearance-none focus:outline-none focus:border-ope-primary cursor-pointer pr-10 shadow-2xs transition-colors"
-              >
-                {REGIONS.map((r) => (
-                  <option key={r} value={r}>
-                    {r}
-                  </option>
-                ))}
-              </select>
+                placeholder={t("talents.search_placeholder")}
+                className="w-full bg-white border border-ope-border text-ope-text text-xs sm:text-sm font-medium rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-ope-primary shadow-2xs placeholder:text-ope-text-muted transition-colors"
+              />
               <svg
-                className="w-4 h-4 text-ope-text-muted absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+                className="w-4 h-4 text-ope-text-muted absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </div>
-
-            {/* Filtre Catégories */}
-            <div className="relative w-full sm:w-56">
-              <select
-                value={selectedCategory}
-                onChange={(e) => {
-                  setSelectedCategory(e.target.value);
-                  setDisplayCount(8);
-                }}
-                className="w-full bg-white border border-ope-border text-ope-text text-xs sm:text-sm font-semibold rounded-xl px-4 py-3 appearance-none focus:outline-none focus:border-ope-primary cursor-pointer pr-10 shadow-2xs transition-colors"
-              >
-                {CATEGORIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c === "Toutes les catégories"
-                      ? t("talents.all_domains")
-                      : c}
-                  </option>
-                ))}
-              </select>
-              <svg
-                className="w-4 h-4 text-ope-text-muted absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
           </div>
-
-          {/* Champ de Recherche uniquement */}
-          <div className="relative w-full sm:w-64 md:w-72">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setDisplayCount(8);
-              }}
-              placeholder={t("talents.search_placeholder")}
-              className="w-full bg-white border border-ope-border text-ope-text text-xs sm:text-sm font-medium rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:border-ope-primary shadow-2xs placeholder:text-ope-text-muted transition-colors"
-            />
-            <svg
-              className="w-4 h-4 text-ope-text-muted absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ── État d'erreur éventuel ────────────────────────────────── */}
       {error && (
@@ -666,8 +686,25 @@ export default function Talents() {
             </div>
           )}
 
-          {/* Aucun résultat */}
-          {!isLoading && !error && visibleTalents.length === 0 && (
+          {/* 1. Base vide : les 1 000 talents sont à venir */}
+          {!isLoading && !error && talents.length === 0 && (
+            <div className="text-center py-20 px-6 bg-white rounded-3xl border border-ope-border max-w-3xl mx-auto shadow-2xs">
+              <div className="w-16 h-16 rounded-2xl bg-[#1d3d52] text-[#f15b29] flex items-center justify-center mx-auto mb-4 shadow-sm">
+                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <span className="inline-block px-3 py-1 rounded-full bg-[#1d3d52] text-white text-xs font-bold uppercase tracking-wider mb-3">
+                BIENTÔT
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-[#1d3d52] tracking-tight mb-3">
+                Nos 1 000 talents
+              </h2>
+            </div>
+          )}
+
+          {/* 2. Filtres actifs sans correspondance */}
+          {!isLoading && !error && talents.length > 0 && visibleTalents.length === 0 && (
             <div className="text-center py-16 bg-ope-white rounded-3xl border border-ope-border">
               <div className="w-12 h-12 rounded-full bg-[#edf4f9] text-ope-primary flex items-center justify-center mx-auto mb-3">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>

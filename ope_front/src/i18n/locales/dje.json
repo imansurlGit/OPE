@@ -50,7 +50,7 @@
         "title": "MC2 Fuwo",
         "subtitle": "Laabi Baakoytaray nda Baani Teerey",
         "items": [
-          "Turi duma Courbouru nango ra",
+          "Turi duma Kourboubou nango ra",
           "Lekol teebaley nda korayey hanseyaŋ",
           "Kusu nda batama hanseyaŋ jinayey teeyaŋ"
         ]
@@ -59,7 +59,7 @@
         "title": "MC2 Fuwo",
         "subtitle": "Laabi Baakoytaray nda Baani Teerey",
         "items": [
-          "Turi duma Courbouru nango ra",
+          "Turi duma Kourboubou nango ra",
           "Lekol teebaley nda korayey hanseyaŋ",
           "Kusu nda batama hanseyaŋ jinayey teeyaŋ"
         ]
@@ -179,7 +179,7 @@
     "address_val": "Agadez, Jamhuriyar Nijar",
     "phone_label": "Telifon",
     "phone_val": "A go no goy waate ra",
-    "email_val": "contact@ope.ne",
+    "email_val": "ope.organization@gmail.com",
     "hours_label": "Goy Zaarey",
     "hours_val": "Atini - Alzuma : 08:00 - 17:30",
     "form_title": "Sanba Ir se Iragaw",
@@ -334,7 +334,6 @@
     "err_nom": "Hantum war baaba maa cimi (bisa harfu 2).",
     "err_prenom": "Hantum war maa cimi (bisa harfu 2).",
     "err_dob": "Hantum war hayyaŋ zaari.",
-    "err_dob_age": "Hurukoy jiiri tilas no m'a kani jiiri 10 hala 35 ra.",
     "err_sex": "Fahamandi war jinsi.",
     "err_ville": "Fahamandi war kwaara wala dundey (bisa harfu 2).",
     "err_email": "Hantum imeyil adiresi cimi.",

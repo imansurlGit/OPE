@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import api from "../services/api";
+import { createCandidatureMascotte } from "../services/mascotteApi";
 import type {
   CategorieType,
   MaisonType,
@@ -21,40 +22,15 @@ import {
   SENIOR_STEPS,
 } from "../types/formulaire";
 
-function getAgeFromDateOfBirth(dateOfBirth: string): number | null {
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateOfBirth);
-  if (!match) return null;
 
-  const [, yearValue, monthValue, dayValue] = match;
-  const year = Number(yearValue);
-  const month = Number(monthValue);
-  const day = Number(dayValue);
-  const birthDate = new Date(year, month - 1, day);
-
-  if (
-    birthDate.getFullYear() !== year ||
-    birthDate.getMonth() !== month - 1 ||
-    birthDate.getDate() !== day
-  ) {
-    return null;
-  }
-
-  const today = new Date();
-  let age = today.getFullYear() - year;
-  if (
-    today.getMonth() < month - 1 ||
-    (today.getMonth() === month - 1 && today.getDate() < day)
-  ) {
-    age -= 1;
-  }
-  return age;
-}
-
-export function useCandidatureForm() {
+export function useCandidatureForm(
+  initialCategory: CategorieType = "",
+  initialMaison: MaisonType = ""
+) {
   const { t } = useTranslation();
 
-  const [categorie, setCategorie] = useState<CategorieType>("");
-  const [maison, setMaison] = useState<MaisonType>("");
+  const [categorie, setCategorie] = useState<CategorieType>(initialCategory);
+  const [maison, setMaison] = useState<MaisonType>(initialMaison);
   const [step, setStep] = useState<number>(1);
 
   const [juniorData, setJuniorData] = useState<JuniorData>(INITIAL_JUNIOR_DATA);
@@ -81,8 +57,8 @@ export function useCandidatureForm() {
   }, []);
 
   const changeCategory = useCallback(() => {
-    setCategorie("");
-    setMaison("");
+    setCategorie(initialCategory);
+    setMaison(initialMaison);
     setStep(1);
     setJuniorData(INITIAL_JUNIOR_DATA);
     setSeniorData(INITIAL_SENIOR_DATA);
@@ -92,7 +68,7 @@ export function useCandidatureForm() {
     setErrorMessage(null);
     setIsSubmitted(false);
     setCandidateRef("");
-  }, []);
+  }, [initialCategory, initialMaison]);
 
   // ── GESTION DES CHAMPS ──
   const updateJuniorField = useCallback(
@@ -189,16 +165,10 @@ export function useCandidatureForm() {
     if (currentStep === 1) {
       if (!juniorData.nom.trim()) errs.nom = t("form.err_nom", "Le nom est obligatoire.");
       if (!juniorData.prenom.trim()) errs.prenom = t("form.err_prenom", "Le prénom est obligatoire.");
-      if (!juniorData.age) {
-        errs.age = t("form.junior.err_age", "L'âge est obligatoire.");
-      } else {
-        const ageInput = juniorData.age.trim();
-        const ageNum = Number(ageInput);
-        if (!/^\d+$/.test(ageInput) || !Number.isInteger(ageNum) || ageNum < 8 || ageNum > 17) {
-          errs.age = t("form.junior.err_age_range", "L'âge doit être compris entre 8 et 17 ans.");
-        }
-      }
       if (!juniorData.classe) errs.classe = t("form.junior.err_classe", "La classe est obligatoire.");
+      if (!juniorData.regionVille || !juniorData.regionVille.trim()) {
+        errs.regionVille = t("form.junior.err_region", "La région de résidence est obligatoire.");
+      }
       if (!juniorData.telephoneTuteur.trim()) {
         errs.telephoneTuteur = t("form.junior.err_tel_tuteur", "Le téléphone du parent/tuteur est obligatoire.");
       } else if (!PHONE_REGEX.test(juniorData.telephoneTuteur.trim())) {
@@ -243,23 +213,8 @@ export function useCandidatureForm() {
       if (!seniorData.nom.trim()) errs.nom = t("form.err_nom", "Le nom est obligatoire.");
       if (!seniorData.prenom.trim()) errs.prenom = t("form.err_prenom", "Le prénom est obligatoire.");
       if (!seniorData.sexe) errs.sexe = t("form.senior.err_sexe", "Le sexe est obligatoire.");
-      if (!seniorData.dateNaissance) {
-        errs.dateNaissance = t("form.senior.err_date_naissance", "La date de naissance est obligatoire.");
-      } else {
-        const age = getAgeFromDateOfBirth(seniorData.dateNaissance);
-        if (age === null) {
-          errs.dateNaissance = t("form.senior.err_date_naissance", "La date de naissance est invalide.");
-        } else if (new Date(seniorData.dateNaissance) > new Date()) {
-          errs.dateNaissance = t("form.senior.err_date_futur", "La date de naissance ne peut pas être future.");
-        } else if (age < 10 || age > 35) {
-          errs.dateNaissance = t(
-            "form.senior.err_age_range",
-            "L'âge doit être compris entre 10 et 35 ans.",
-          );
-        }
-      }
-      if (!seniorData.regionVille.trim()) {
-        errs.regionVille = t("form.senior.err_region_ville", "La région ou ville est obligatoire.");
+      if (!seniorData.regionVille || !seniorData.regionVille.trim()) {
+        errs.regionVille = t("form.senior.err_region", "La région de résidence est obligatoire.");
       }
       if (!seniorData.telephone.trim()) {
         errs.telephone = t("form.err_phone", "Le numéro de téléphone est obligatoire.");
@@ -360,7 +315,6 @@ export function useCandidatureForm() {
       if (categorie === "junior") {
         formData.append("nom", juniorData.nom.trim());
         formData.append("prenom", juniorData.prenom.trim());
-        formData.append("age", juniorData.age.trim());
         formData.append("classe", juniorData.classe);
         formData.append("etablissement", juniorData.etablissement.trim());
         formData.append("region_ville", juniorData.regionVille.trim());
@@ -382,7 +336,6 @@ export function useCandidatureForm() {
         formData.append("nom", seniorData.nom.trim());
         formData.append("prenom", seniorData.prenom.trim());
         formData.append("sexe", seniorData.sexe);
-        formData.append("date_naissance", seniorData.dateNaissance);
         formData.append("region_ville", seniorData.regionVille.trim());
         formData.append("telephone", seniorData.telephone.trim());
         formData.append("email", seniorData.email.trim());
@@ -413,24 +366,55 @@ export function useCandidatureForm() {
         }
       }
 
-      const res = await api.post<{
-        id: number;
-        reference?: string;
-        [key: string]: any;
-      }>("candidatures/", formData, { requiresAuth: false });
+      let ref = "";
 
-      if (!res || !res.reference) {
-        throw new Error(
-          "Le serveur n'a pas renvoyé de numéro de dossier officiel. Veuillez contacter l'administration de l'OPE.",
-        );
+      if (categorie === "junior") {
+        const mascotteRes = await createCandidatureMascotte(formData);
+        ref = mascotteRes.reference;
+        try {
+          localStorage.setItem("ope_mascotte_candidature_submitted", "true");
+        } catch {
+          // ignore storage error
+        }
+      } else {
+        const res = await api.post<{
+          id: number;
+          reference?: string;
+          [key: string]: any;
+        }>("candidatures/", formData, { requiresAuth: false });
+
+        if (!res || !res.reference) {
+          throw new Error(
+            "Le serveur n'a pas renvoyé de numéro de dossier officiel. Veuillez contacter l'administration de l'OPE.",
+          );
+        }
+        ref = res.reference;
       }
 
-      setCandidateRef(res.reference);
+      setCandidateRef(ref);
       setIsSubmitted(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err: any) {
       console.error("Erreur de soumission candidature :", err);
+
+      // Si l'API renvoie des erreurs de champ précises pour le parcours junior
+      if (categorie === "junior" && err?.fieldErrors) {
+        setJuniorErrors((prev) => ({
+          ...prev,
+          nom: err.fieldErrors.nom || prev.nom,
+          prenom: err.fieldErrors.prenom || prev.prenom,
+          classe: err.fieldErrors.classe || prev.classe,
+          telephoneTuteur: err.fieldErrors.telephone_tuteur || prev.telephoneTuteur,
+          nomTuteur: err.fieldErrors.nom_tuteur || prev.nomTuteur,
+          mascotteNom: err.fieldErrors.mascotte_nom || prev.mascotteNom,
+          mascotteDessin: err.fieldErrors.mascotte_dessin || prev.mascotteDessin,
+          autorisationParent: err.fieldErrors.autorisation_parent || prev.autorisationParent,
+          accordUtilisationDessin: err.fieldErrors.accord_utilisation_dessin || prev.accordUtilisationDessin,
+        }));
+      }
+
       const detail =
+        err?.message ||
         err?.data?.detail ||
         err?.data?.message ||
         (err?.data && typeof err.data === "object"
@@ -438,7 +422,6 @@ export function useCandidatureForm() {
               .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(", ") : v}`)
               .join(" | ")
           : null) ||
-        err?.message ||
         "Une erreur est survenue lors de l'enregistrement de votre candidature. Veuillez vérifier les informations saisies.";
       setErrorMessage(detail);
       window.scrollTo({ top: 0, behavior: "smooth" });

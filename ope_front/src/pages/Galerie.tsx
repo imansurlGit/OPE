@@ -1,9 +1,7 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { galerieService, type MediaGalerie } from "../services";
 import ApiErrorState from "../components/ApiErrorState";
-
-type MediaCategory = "all" | "steam" | "local" | "citoyen" | "ambiance";
 
 const SHAPES = [
     "rounded-tl-3xl rounded-br-3xl rounded-tr-lg rounded-bl-lg",
@@ -20,7 +18,6 @@ function getSpanClass(m: MediaGalerie, idx: number): string {
 
 export default function Galerie() {
     const { t } = useTranslation();
-    const [activeCat, setActiveCat] = useState<MediaCategory>("all");
     const [selectedMedia, setSelectedMedia] = useState<MediaGalerie | null>(null);
     const [medias, setMedias] = useState<MediaGalerie[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -49,31 +46,18 @@ export default function Galerie() {
         return () => { isMounted = false; };
     }, []);
 
-    const categories: { key: MediaCategory; label: string }[] = [
-        { key: "all", label: t("galerie.all") },
-        { key: "steam", label: t("galerie.workshops") },
-        { key: "local", label: t("galerie.local") },
-        { key: "citoyen", label: t("galerie.community") },
-        { key: "ambiance", label: t("galerie.ceremonies") },
-    ];
-
-    const filteredMedias = useMemo(() => {
-        if (activeCat === "all") return medias;
-        return medias.filter((m) => m.categorie === activeCat);
-    }, [activeCat, medias]);
-
     const currentIndex = selectedMedia
-        ? filteredMedias.findIndex((m) => m.id === selectedMedia.id)
+        ? medias.findIndex((m) => m.id === selectedMedia.id)
         : -1;
 
     const handlePrev = () => {
-        if (currentIndex > 0) setSelectedMedia(filteredMedias[currentIndex - 1]);
-        else setSelectedMedia(filteredMedias[filteredMedias.length - 1]);
+        if (currentIndex > 0) setSelectedMedia(medias[currentIndex - 1]);
+        else setSelectedMedia(medias[medias.length - 1]);
     };
 
     const handleNext = () => {
-        if (currentIndex < filteredMedias.length - 1) setSelectedMedia(filteredMedias[currentIndex + 1]);
-        else setSelectedMedia(filteredMedias[0]);
+        if (currentIndex < medias.length - 1) setSelectedMedia(medias[currentIndex + 1]);
+        else setSelectedMedia(medias[0]);
     };
 
     return (
@@ -84,29 +68,9 @@ export default function Galerie() {
                     <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-ope-text leading-tight mb-3 tracking-tight">
                         {t("galerie.title")}
                     </h1>
-                    <p className="text-xs sm:text-sm text-ope-text-muted leading-relaxed max-w-xl mx-auto mb-6">
+                    <p className="text-xs sm:text-sm text-ope-text-muted leading-relaxed max-w-xl mx-auto">
                         {t("galerie.subtitle")}
                     </p>
-
-                    {/* Filtres */}
-                    <div className="inline-flex items-center justify-center flex-wrap gap-2 p-1.5 rounded-full bg-white border border-ope-border shadow-2xs">
-                        {categories.map((cat) => {
-                            const isActive = activeCat === cat.key;
-                            return (
-                                <button
-                                    key={cat.key}
-                                    onClick={() => setActiveCat(cat.key)}
-                                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer ${
-                                        isActive
-                                            ? "bg-[#BD5338] text-white shadow-xs"
-                                            : "text-ope-text-muted hover:text-ope-text"
-                                    }`}
-                                >
-                                    {cat.label}
-                                </button>
-                            );
-                        })}
-                    </div>
                 </div>
             </section>
 
@@ -148,39 +112,25 @@ export default function Galerie() {
                         </div>
                     )}
 
-                    {/* ── Galerie vide (API répond mais aucun média) ── */}
-                    {!isLoading && !hasError && filteredMedias.length === 0 && (
+                    {/* ── Galerie vide ── */}
+                    {!isLoading && !hasError && medias.length === 0 && (
                         <div className="relative z-10 py-20 flex flex-col items-center justify-center text-center gap-4">
                             <div className="w-16 h-16 rounded-full bg-[#FDF3EE] flex items-center justify-center text-[#BD5338]">
                                 <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                             </div>
-                            <h3 className="font-extrabold text-gray-800 text-base">
-                                {activeCat === "all"
-                                    ? "La galerie est encore vide"
-                                    : "Aucune photo dans cette catégorie"}
-                            </h3>
+                            <h3 className="font-extrabold text-gray-800 text-base">La galerie est encore vide</h3>
                             <p className="text-xs text-gray-500 max-w-xs">
-                                {activeCat === "all"
-                                    ? "Les photos et vidéos du camp seront ajoutées ici prochainement."
-                                    : "Essayez une autre catégorie ou revenez plus tard."}
+                                Les photos et vidéos du camp seront ajoutées ici prochainement.
                             </p>
-                            {activeCat !== "all" && (
-                                <button
-                                    onClick={() => setActiveCat("all")}
-                                    className="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-[#BD5338] hover:bg-[#d44d1f] transition-colors cursor-pointer"
-                                >
-                                    Voir toutes les photos
-                                </button>
-                            )}
                         </div>
                     )}
 
                     {/* ── Mosaïque ── */}
-                    {!isLoading && !hasError && filteredMedias.length > 0 && (
+                    {!isLoading && !hasError && medias.length > 0 && (
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3.5 relative z-10">
-                            {filteredMedias.map((item, idx) => (
+                            {medias.map((item, idx) => (
                                 <div
                                     key={item.id}
                                     onClick={() => setSelectedMedia(item)}
@@ -192,7 +142,7 @@ export default function Galerie() {
                                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                                    <div className="absolute bottom-3 right-3 w-3 h-3 rounded-full bg-white/70 backdrop-blur-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none ring-2 ring-[#BD5338]" />
+                                    <div className="absolute bottom-3 right-3 w-3 h-3 rounded-full bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none ring-2 ring-[#BD5338]" />
                                 </div>
                             ))}
                         </div>

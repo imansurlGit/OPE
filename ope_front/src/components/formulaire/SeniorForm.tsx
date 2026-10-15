@@ -4,6 +4,7 @@ import type { SeniorData, SeniorErrors } from "../../types/formulaire";
 import {
   DOMAINES_STEAM_OPTIONS,
   STADES_DEVELOPPEMENT_OPTIONS,
+  REGIONS_NIGER_OPTIONS,
 } from "../../types/formulaire";
 import {
   TextField,
@@ -88,16 +89,15 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
               onChange={(e) => onChangeField("sexe", e.target.value as SeniorData["sexe"])}
               error={fieldErrors.sexe}
             />
-            <TextField
-              label={t("form.senior.date_naissance", "Date de naissance")}
-              name="dateNaissance"
-              type="date"
+            <SelectField
+              label={t("form.senior.region", "Région de résidence")}
+              name="regionVille"
               required
-              max={new Date().toISOString().split("T")[0]}
-              helperText="Âge accepté : de 10 à 35 ans."
-              value={data.dateNaissance}
-              onChange={(e) => onChangeField("dateNaissance", e.target.value)}
-              error={fieldErrors.dateNaissance}
+              options={REGIONS_NIGER_OPTIONS}
+              placeholder="Sélectionnez votre région"
+              value={data.regionVille}
+              onChange={(e) => onChangeField("regionVille", e.target.value)}
+              error={fieldErrors.regionVille}
             />
           </div>
 
@@ -123,16 +123,6 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
               error={fieldErrors.email}
             />
           </div>
-
-          <TextField
-            label={t("form.senior.region_ville", "Région / Ville de résidence")}
-            name="regionVille"
-            required
-            placeholder="Ex: Niamey, Commune 3 ou Agadez"
-            value={data.regionVille}
-            onChange={(e) => onChangeField("regionVille", e.target.value)}
-            error={fieldErrors.regionVille}
-          />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
             <FileField

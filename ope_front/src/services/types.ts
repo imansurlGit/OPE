@@ -55,7 +55,6 @@ export interface Candidature {
   region_ville?: string;
 
   // Junior
-  age?: number | null;
   classe?: string;
   etablissement?: string;
   telephone_tuteur?: string;
@@ -69,7 +68,6 @@ export interface Candidature {
 
   // Senior
   sexe?: "M" | "F" | "";
-  date_naissance?: string | null;
   email?: string;
   piece_identite?: string | null;
   photo_identite?: string | null;

@@ -48,6 +48,20 @@ class TalentService {
   }
 
   /**
+   * Crée un nouveau talent depuis l'interface d'administration
+   */
+  public async createTalent(
+    data: FormData | Record<string, any>
+  ): Promise<Candidature> {
+    return api.post<Candidature>(this.endpoint, data, {
+      requiresAuth: false,
+      headers: {
+        "X-Admin-Action": "true",
+      },
+    });
+  }
+
+  /**
    * Met à jour partiellement un talent (statut, note_interne, score, etc.)
    */
   public async updateTalent(

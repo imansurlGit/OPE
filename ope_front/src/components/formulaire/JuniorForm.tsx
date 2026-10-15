@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import type { JuniorData, JuniorErrors } from "../../types/formulaire";
-import { CLASSES_JUNIOR_OPTIONS } from "../../types/formulaire";
+import { CLASSES_JUNIOR_OPTIONS, REGIONS_NIGER_OPTIONS } from "../../types/formulaire";
 import {
   TextField,
   TextAreaField,
@@ -68,19 +68,6 @@ export const JuniorForm: React.FC<JuniorFormProps> = ({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <TextField
-              label={t("form.junior.age", "Ton âge (entre 8 et 17 ans)")}
-              name="age"
-              type="number"
-              min={8}
-              max={17}
-              step={1}
-              required
-              placeholder="Ex: 13"
-              value={data.age}
-              onChange={(e) => onChangeField("age", e.target.value)}
-              error={fieldErrors.age}
-            />
             <SelectField
               label={t("form.junior.classe", "Ta classe actuelle")}
               name="classe"
@@ -91,9 +78,6 @@ export const JuniorForm: React.FC<JuniorFormProps> = ({
               onChange={(e) => onChangeField("classe", e.target.value as JuniorData["classe"])}
               error={fieldErrors.classe}
             />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <TextField
               label={t("form.junior.etablissement", "Nom de ton collège")}
               name="etablissement"
@@ -102,15 +86,18 @@ export const JuniorForm: React.FC<JuniorFormProps> = ({
               onChange={(e) => onChangeField("etablissement", e.target.value)}
               error={fieldErrors.etablissement}
             />
-            <TextField
-              label={t("form.junior.region_ville", "Ville ou région de résidence")}
-              name="regionVille"
-              placeholder="Ex: Agadez, Commune 1"
-              value={data.regionVille}
-              onChange={(e) => onChangeField("regionVille", e.target.value)}
-              error={fieldErrors.regionVille}
-            />
           </div>
+
+          <SelectField
+            label={t("form.junior.region", "Région de résidence")}
+            name="regionVille"
+            required
+            options={REGIONS_NIGER_OPTIONS}
+            placeholder="Sélectionne ta région"
+            value={data.regionVille}
+            onChange={(e) => onChangeField("regionVille", e.target.value)}
+            error={fieldErrors.regionVille}
+          />
 
           <TextField
             label={t("form.junior.tel_tuteur", "Numéro de téléphone d'un parent ou tuteur")}
@@ -251,8 +238,8 @@ export const JuniorForm: React.FC<JuniorFormProps> = ({
                 <strong className="text-[#193549]">{data.prenom} {data.nom}</strong>
               </div>
               <div>
-                <span className="text-slate-400">Âge & Classe :</span>{" "}
-                <strong className="text-[#193549]">{data.age} ans • {data.classe}</strong>
+                <span className="text-slate-400">Classe :</span>{" "}
+                <strong className="text-[#193549]">{data.classe}</strong>
               </div>
               <div>
                 <span className="text-slate-400">Collège :</span>{" "}

@@ -314,7 +314,7 @@ export default function Accueil() {
                         <div className="text-center md:text-left max-w-md">
                             <h2
                                 id="countdown-title"
-                                className="text-xl sm:text-3xl font-extrabold text-ope-text mb-2 tracking-tight"
+                                className="text-xl sm:text-2xl font-extrabold text-ope-text mb-2 tracking-tight"
                             >
                                 {t("countdown.title")}
                             </h2>

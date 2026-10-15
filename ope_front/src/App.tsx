@@ -13,19 +13,27 @@ import Contact from "./pages/Contact";
 import Sponsors from "./pages/Sponsors";
 import Galerie from "./pages/Galerie";
 import Formulaire from "./pages/Formulaire";
+import ConcoursMascotte from "./pages/ConcoursMascotte";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
+import Acteurs from "./pages/Acteurs";
 import NotFound from "./pages/NotFound";
+import MascotteCtaPopup from "./components/MascotteCtaPopup";
 
 function Layout() {
   const location = useLocation();
-  const hideFooter = location.pathname === "/formulaire" || location.pathname === "/login" || location.pathname.startsWith("/admin");
+  const hideFooter =
+    location.pathname === "/formulaire" ||
+    location.pathname === "/concours-mascotte" ||
+    location.pathname === "/login" ||
+    location.pathname.startsWith("/admin");
   const hideNavbar = location.pathname === "/login" || location.pathname.startsWith("/admin");
 
   return (
     <div className="flex flex-col min-h-screen">
       <ScrollToTop />
       {!hideNavbar && <Navbar />}
+      <MascotteCtaPopup />
       <main className="flex-1">
         <ErrorBoundary>
           <Routes>
@@ -39,7 +47,9 @@ function Layout() {
             <Route path="/galerie" element={<Galerie />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/formulaire" element={<Formulaire />} />
+            <Route path="/concours-mascotte" element={<ConcoursMascotte />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/acteurs" element={<Acteurs />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

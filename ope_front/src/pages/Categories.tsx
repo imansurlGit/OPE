@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -55,7 +55,8 @@ const CATEGORIES: Category[] = [
         "Solutions solaires intelligentes",
         "Drones de cartographie agricole",
       ],
-      criteres: "Ouvert aux passionnes de tech, etudiants et createurs ayant un prototype ou une idee innovante.",
+      criteres:
+        "Ouvert aux passionnes de tech, etudiants et createurs ayant un prototype ou une idee innovante.",
     },
   },
   {
@@ -88,7 +89,8 @@ const CATEGORIES: Category[] = [
         "Transformation du cuir & bijouterie touaregue",
         "Alimentation betail eco-responsable",
       ],
-      criteres: "Destine aux porteurs de projets a fort ancrage local, cooperatives et artisans innovants.",
+      criteres:
+        "Destine aux porteurs de projets a fort ancrage local, cooperatives et artisans innovants.",
     },
   },
   {
@@ -117,11 +119,12 @@ const CATEGORIES: Category[] = [
         "Sensibilisation au vivre-ensemble et a la cohesion sociale",
       ],
       exemples: [
-        "Plantation d'arbres sur le site de Courbouru",
+        "Plantation d'arbres sur le site de Kourboubou",
         "Reparation de tables-bancs",
         "Confection et deploiement de poubelles eco-concues",
       ],
-      criteres: "Pour les jeunes engages dans la vie citoyenne, leaders associatifs et benevoles actifs.",
+      criteres:
+        "Pour les jeunes engages dans la vie citoyenne, leaders associatifs et benevoles actifs.",
     },
   },
 ];
@@ -153,12 +156,22 @@ export default function Categories() {
               className="bg-white rounded-2xl p-6 shadow-sm border border-ope-border flex flex-col justify-between transition-all duration-200 hover:shadow-md hover:-translate-y-0.5"
             >
               <div>
-                <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-5 ${cat.color.iconBg} ${cat.color.iconColor}`}>
+                <div
+                  className={`w-11 h-11 rounded-xl flex items-center justify-center mb-5 ${cat.color.iconBg} ${cat.color.iconColor}`}
+                >
                   {cat.icon}
                 </div>
-                <h3 className="text-lg font-black text-ope-text mb-1 tracking-tight">{cat.title}</h3>
-                <p className={`text-[10px] font-extrabold tracking-widest uppercase mb-4 ${cat.color.tagColor}`}>{cat.tag}</p>
-                <p className="text-xs sm:text-sm text-ope-text-muted leading-relaxed mb-6">{cat.desc}</p>
+                <h3 className="text-lg font-black text-ope-text mb-1 tracking-tight">
+                  {cat.title}
+                </h3>
+                <p
+                  className={`text-[10px] font-extrabold tracking-widest uppercase mb-4 ${cat.color.tagColor}`}
+                >
+                  {cat.tag}
+                </p>
+                <p className="text-xs sm:text-sm text-ope-text-muted leading-relaxed mb-6">
+                  {cat.desc}
+                </p>
               </div>
               <button
                 onClick={() => setSelectedCat(cat)}
@@ -175,8 +188,12 @@ export default function Categories() {
       <section className="pb-24 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto bg-white rounded-2xl p-8 sm:p-10 border border-ope-border flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
           <div className="text-center sm:text-left max-w-xl">
-            <h3 className="text-lg sm:text-xl font-black text-ope-text mb-2 tracking-tight">{t("apropos.title")}</h3>
-            <p className="text-xs sm:text-sm text-ope-text-muted leading-relaxed">{t("apropos.description")}</p>
+            <h3 className="text-lg sm:text-xl font-black text-ope-text mb-2 tracking-tight">
+              {t("apropos.title")}
+            </h3>
+            <p className="text-xs sm:text-sm text-ope-text-muted leading-relaxed">
+              {t("apropos.description")}
+            </p>
           </div>
           <NavLink
             to="/formulaire"
@@ -203,29 +220,56 @@ export default function Categories() {
               className="absolute top-4 right-4 w-8 h-8 rounded-full bg-ope-bg flex items-center justify-center text-ope-text-muted hover:bg-ope-border transition-colors cursor-pointer"
               aria-label="Fermer"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
 
             <div className="flex items-center gap-3 mb-4 pr-8">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${selectedCat.color.iconBg} ${selectedCat.color.iconColor}`}>
+              <div
+                className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${selectedCat.color.iconBg} ${selectedCat.color.iconColor}`}
+              >
                 {selectedCat.icon}
               </div>
               <div>
-                <h3 className="text-lg font-black text-ope-text leading-tight">{selectedCat.title}</h3>
-                <p className={`text-[10px] font-extrabold uppercase tracking-wider ${selectedCat.color.tagColor}`}>{selectedCat.tag}</p>
+                <h3 className="text-lg font-black text-ope-text leading-tight">
+                  {selectedCat.title}
+                </h3>
+                <p
+                  className={`text-[10px] font-extrabold uppercase tracking-wider ${selectedCat.color.tagColor}`}
+                >
+                  {selectedCat.tag}
+                </p>
               </div>
             </div>
 
-            <p className="text-xs sm:text-sm text-ope-text-muted leading-relaxed mb-5">{selectedCat.desc}</p>
+            <p className="text-xs sm:text-sm text-ope-text-muted leading-relaxed mb-5">
+              {selectedCat.desc}
+            </p>
 
             <div className="mb-4">
-              <h4 className="text-xs font-black text-ope-text uppercase tracking-wider mb-2">Objectifs Cles</h4>
+              <h4 className="text-xs font-black text-ope-text uppercase tracking-wider mb-2">
+                Objectifs Cles
+              </h4>
               <ul className="space-y-1.5">
                 {selectedCat.details.objectifs.map((obj, i) => (
-                  <li key={i} className="text-xs text-ope-text-muted flex items-start gap-2">
-                    <span className={`w-1.5 h-1.5 rounded-full shrink-0 mt-1.5 ${selectedCat.color.dotColor}`} />
+                  <li
+                    key={i}
+                    className="text-xs text-ope-text-muted flex items-start gap-2"
+                  >
+                    <span
+                      className={`w-1.5 h-1.5 rounded-full shrink-0 mt-1.5 ${selectedCat.color.dotColor}`}
+                    />
                     {obj}
                   </li>
                 ))}
@@ -233,10 +277,15 @@ export default function Categories() {
             </div>
 
             <div className="mb-4">
-              <h4 className="text-xs font-black text-ope-text uppercase tracking-wider mb-2">Exemples de Projets</h4>
+              <h4 className="text-xs font-black text-ope-text uppercase tracking-wider mb-2">
+                Exemples de Projets
+              </h4>
               <div className="flex flex-wrap gap-2">
                 {selectedCat.details.exemples.map((ex, i) => (
-                  <span key={i} className="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-ope-bg text-ope-text border border-ope-border">
+                  <span
+                    key={i}
+                    className="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-ope-bg text-ope-text border border-ope-border"
+                  >
                     {ex}
                   </span>
                 ))}
@@ -245,7 +294,9 @@ export default function Categories() {
 
             <div className="mb-6 p-3 rounded-xl bg-ope-bg border border-ope-border">
               <p className="text-xs text-ope-text">
-                <span className="font-black text-ope-orange">Eligibilite : </span>
+                <span className="font-black text-ope-orange">
+                  Eligibilite :{" "}
+                </span>
                 {selectedCat.details.criteres}
               </p>
             </div>

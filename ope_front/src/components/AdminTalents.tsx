@@ -1,7 +1,8 @@
-﻿import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { talentService, type Candidature } from "../services";
 import Pagination from "./Pagination";
+import { AddTalentModal } from "./AddTalentModal";
 
 const REGIONS = [
   "Toutes",
@@ -35,6 +36,7 @@ export default function AdminTalents() {
   const [toastType, setToastType] = useState<"success" | "error">("success");
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -198,141 +200,150 @@ export default function AdminTalents() {
     }
   };
 
-  // Export CSV
-  const handleExportCSV = () => {
-    // Formatage de date ISO ? JJ/MM/AAAA
-    const fmtDate = (iso?: string | null) => {
-      if (!iso) return "";
-      try {
-        // date_naissance est déjà YYYY-MM-DD, created_at est ISO 8601
-        const d = new Date(iso);
-        if (isNaN(d.getTime())) return iso;
-        const day = String(d.getDate()).padStart(2, "0");
-        const month = String(d.getMonth() + 1).padStart(2, "0");
-        const year = d.getFullYear();
-        return `${day}/${month}/${year}`;
-      } catch {
-        return iso;
-      }
-    };
+  // Export Excel (XLSX stylisé)
+  const handleExportExcel = () => {
+    import("xlsx").then((XLSX) => {
+      const fmtDate = (iso?: string | null) => {
+        if (!iso) return "";
+        try {
+          const d = new Date(iso);
+          if (isNaN(d.getTime())) return iso;
+          return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
+        } catch { return iso; }
+      };
 
-    const fmtSexe = (s?: string) =>
-      s === "F" ? "Féminin" : s === "M" ? "Masculin" : s || "";
+      const fmtSexe = (s?: string) =>
+        s === "F" ? "Féminin" : s === "M" ? "Masculin" : s || "";
 
-    const fmtStatut = (s?: string) => {
-      switch (s) {
-        case "admis": return "Admis";
-        case "preselectionne": return "Pré-sélectionné";
-        case "en_revue": return "En cours d'examen";
-        case "rejete": return "Non retenu";
-        case "soumis": return "Soumis";
-        default: return s || "";
-      }
-    };
+      const fmtStatut = (s?: string) => {
+        switch (s) {
+          case "admis": return "Admis au camp";
+          case "soumis":
+          default: return "Dossier soumis";
+        }
+      };
 
-    const fmtDomaine = (d?: string) => {
-      switch (d) {
-        case "STEAM":
-        case "steam": return "House STEAM (Sciences & Technologie)";
-        case "LP":
-        case "local_project": return "House LP (Entrepreneuriat Local)";
-        case "MC2":
-        case "mouvement_citoyen": return "House MC2 (Citoyenneté & Culture)";
-        default: return d || "";
-      }
-    };
+      const fmtDomaine = (d?: string) => {
+        switch (d) {
+          case "STEAM": case "steam": return "House STEAM (Sciences & Technologie)";
+          case "LP": case "local_project": return "House LP (Entrepreneuriat Local)";
+          case "MC2": case "mouvement_citoyen": return "House MC2 (Citoyenneté & Culture)";
+          default: return d || "";
+        }
+      };
 
-    // -- Colonnes --
-    const headers = [
-      "N° Dossier",
-      "Nom",
-      "Prénom",
-      "Sexe",
-      "Date de Naissance",
-      "Maison d'Excellence",
-      "Projet / House Spécifique",
-      "Région",
-      "Ville / Village",
-      "Téléphone Candidat",
-      "Email",
-      "Statut",
-      "Score /100",
-      "Date d'Inscription",
-    ].map((h) => `"${h}"`);
+      // ── En-tête ──
+      const COLS = [
+        "N° Dossier", "Nom", "Prénom", "Sexe",
+        "Maison d'Excellence", "Projet / Maison spécifique",
+        "Région", "Ville / Village",
+        "Téléphone", "Email",
+        "Statut", "Score /100", "Date d'inscription",
+      ];
 
-    // -- Lignes de données --
-    const rows = filteredCandidatures.map((c) => [
-      `"${c.reference}"`,
-      `"${c.nom}"`,
-      `"${c.prenom}"`,
-      `"${fmtSexe(c.sexe)}"`,
-      `"${fmtDate(c.date_naissance)}"`,
-      `"${fmtDomaine(c.maison || c.domaine)}"`,
-      `"${getMaisonLabel(c.maison) || c.house_visee || ""}"`,
-      `"${c.region || ""}"`,
-      `"${c.ville_village || ""}"`,
-      `"${c.telephone_candidat || ""}"`,
-      `"${c.email}"`,
-      `"${fmtStatut(c.statut)}"`,
-      c.score_evaluation || 0,
-      `"${fmtDate(c.created_at)}"`,
-    ]);
+      // ── Données ──
+      const dataRows = filteredCandidatures.map((c) => [
+        c.reference,
+        c.nom,
+        c.prenom,
+        fmtSexe(c.sexe),
+        fmtDomaine(c.maison || c.domaine),
+        getMaisonLabel(c.maison) || c.house_visee || "",
+        c.region || "",
+        c.ville_village || "",
+        c.telephone_candidat || "",
+        c.email,
+        fmtStatut(c.statut),
+        c.score_evaluation ?? 0,
+        fmtDate(c.created_at),
+      ]);
 
-    const csvContent =
-      "\uFEFF" +
-      [headers.join(";"), ...rows.map((e) => e.join(";"))].join("\r\n");
+      // ── Construction worksheet ──
+      const ws = XLSX.utils.aoa_to_sheet([COLS, ...dataRows]);
 
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    const fileDate = new Date()
-      .toLocaleDateString("fr-FR")
-      .replace(/\//g, "-");
-    link.setAttribute(
-      "download",
-      `OPE_1000_Talents_CNCEIZ2026_${fileDate}.csv`
-    );
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+      // Styles en-tête (fond bleu foncé CNCEIZ, texte blanc, gras)
+      const headerStyle = {
+        fill: { fgColor: { rgb: "193549" } },
+        font: { bold: true, color: { rgb: "FFFFFF" }, sz: 11, name: "Calibri" },
+        alignment: { horizontal: "center", vertical: "center", wrapText: true },
+        border: {
+          bottom: { style: "medium", color: { rgb: "F15B29" } },
+        },
+      };
+
+      // Appliquer le style à chaque cellule d'en-tête
+      COLS.forEach((_, idx) => {
+        const cellRef = XLSX.utils.encode_cell({ r: 0, c: idx });
+        if (!ws[cellRef]) ws[cellRef] = {};
+        ws[cellRef].s = headerStyle;
+      });
+
+      // Styles alternés pour les lignes de données
+      dataRows.forEach((row, rowIdx) => {
+        const isEven = rowIdx % 2 === 0;
+        row.forEach((_, colIdx) => {
+          const cellRef = XLSX.utils.encode_cell({ r: rowIdx + 1, c: colIdx });
+          if (!ws[cellRef]) ws[cellRef] = {};
+          ws[cellRef].s = {
+            fill: { fgColor: { rgb: isEven ? "F4F7F9" : "FFFFFF" } },
+            font: { sz: 10, name: "Calibri" },
+            alignment: { vertical: "center" },
+            border: {
+              bottom: { style: "thin", color: { rgb: "E2E8F0" } },
+              right: { style: "thin", color: { rgb: "E2E8F0" } },
+            },
+          };
+        });
+      });
+
+      // Largeurs de colonnes automatiques
+      const colWidths = COLS.map((header, idx) => {
+        const maxDataLen = dataRows.reduce((max, row) => {
+          const val = String(row[idx] ?? "");
+          return Math.max(max, val.length);
+        }, 0);
+        return { wch: Math.max(header.length, maxDataLen) + 3 };
+      });
+      ws["!cols"] = colWidths;
+
+      // Figer la première ligne (en-tête)
+      ws["!freeze"] = { xSplit: 0, ySplit: 1, topLeftCell: "A2", activePane: "bottomLeft" };
+
+      // Hauteur de la ligne d'en-tête
+      ws["!rows"] = [{ hpt: 30 }];
+
+      // ── Workbook ──
+      const wb = XLSX.utils.book_new();
+      wb.Props = {
+        Title: "1000 Talents CNCEIZ Agadez 2026",
+        Subject: "Candidatures OPE",
+        Author: "CNCEIZ Agadez 2026",
+        CreatedDate: new Date(),
+      };
+      XLSX.utils.book_append_sheet(wb, ws, "Candidatures");
+
+      // ── Téléchargement ──
+      const fileDate = new Date().toLocaleDateString("fr-FR").replace(/\//g, "-");
+      XLSX.writeFile(wb, `OPE_1000_Talents_CNCEIZ2026_${fileDate}.xlsx`, { bookType: "xlsx", cellStyles: true });
+    });
   };
 
-  // Helper pour les badges de statut
+  // Helper pour les badges de statut (uniquement : Admis au camp ou Dossier soumis)
   const renderStatutBadge = (statut: Candidature["statut"]) => {
     switch (statut) {
       case "admis":
         return (
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            Admis
+            Admis au camp
           </span>
         );
-      case "preselectionne":
-        return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-[#2F6084] border border-blue-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#2F6084]" />
-            Pré-sélectionné
-          </span>
-        );
-      case "en_revue":
-        return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-            En examen
-          </span>
-        );
-      case "rejete":
-        return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-red-50 text-red-700 border border-red-200">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-            Non retenu
-          </span>
-        );
+      case "soumis":
       default:
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
-            Soumis
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+            Dossier soumis
           </span>
         );
     }
@@ -393,7 +404,18 @@ export default function AdminTalents() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5 self-start sm:self-auto">
+        <div className="flex items-center gap-2.5 self-start sm:self-auto flex-wrap">
+          <button
+            type="button"
+            onClick={() => setIsAddModalOpen(true)}
+            className="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-[#193549] hover:bg-[#122838] active:scale-95 cursor-pointer shadow-xs transition-all flex items-center gap-2"
+          >
+            <svg className="w-4 h-4 text-[#f15b29]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+            </svg>
+            <span>Ajouter un talent</span>
+          </button>
+
           <button
             type="button"
             onClick={fetchCandidatures}
@@ -419,9 +441,9 @@ export default function AdminTalents() {
 
           <button
             type="button"
-            onClick={handleExportCSV}
+            onClick={handleExportExcel}
             disabled={filteredCandidatures.length === 0}
-            className="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-[#f15b29] hover:bg-[#d44d1f] active:scale-95 cursor-pointer shadow-xs transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-700 active:scale-95 cursor-pointer shadow-xs transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -431,7 +453,7 @@ export default function AdminTalents() {
                 d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
               />
             </svg>
-            <span>Exporter CSV ({filteredCandidatures.length})</span>
+            <span>Exporter Excel ({filteredCandidatures.length})</span>
           </button>
         </div>
       </div>
@@ -469,7 +491,7 @@ export default function AdminTalents() {
             {stats.total}
           </p>
           <p className="text-[11px] text-gray-400 mt-1 truncate">
-            {stats.soumis} en attente · {stats.en_revue} en cours
+            {stats.soumis} soumis · {stats.admis} admis au camp
           </p>
         </div>
 
@@ -546,11 +568,8 @@ export default function AdminTalents() {
               className="px-3 py-2.5 rounded-xl border border-[#d0e4f0] bg-white text-xs font-bold text-gray-700 focus:outline-none focus:border-[#f15b29] cursor-pointer"
             >
               <option value="all">Tous les statuts</option>
-              <option value="admis">Admis uniquement</option>
-              <option value="preselectionne">Pré-sélectionnés</option>
-              <option value="en_revue">En cours d'examen</option>
-              <option value="soumis">Dossiers soumis</option>
-              <option value="rejete">Non retenus</option>
+              <option value="admis">Admis au camp</option>
+              <option value="soumis">Dossier soumis</option>
             </select>
 
             {/* Région */}
@@ -839,8 +858,11 @@ export default function AdminTalents() {
                 type="button"
                 onClick={() => setSelectedCandidate(null)}
                 className="w-8 h-8 rounded-full bg-white border border-[#d0e4f0] flex items-center justify-center text-gray-500 hover:text-gray-900 cursor-pointer transition-colors"
+                title="Fermer"
               >
-                ?
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
 
@@ -863,11 +885,8 @@ export default function AdminTalents() {
                       onChange={(e) => setEditStatut(e.target.value as Candidature["statut"])}
                       className="w-full px-3 py-2 rounded-xl border border-gray-300 bg-white font-bold text-xs focus:border-[#f15b29] focus:outline-none cursor-pointer"
                     >
-                      <option value="admis">Admis au Camp National (Les 1 000)</option>
-                      <option value="preselectionne">Pré-sélectionné (Pré-camp)</option>
-                      <option value="en_revue">En cours d'examen</option>
+                      <option value="admis">Admis au camp</option>
                       <option value="soumis">Dossier soumis</option>
-                      <option value="rejete">Non retenu</option>
                     </select>
                   </div>
 
@@ -907,9 +926,9 @@ export default function AdminTalents() {
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   <div>
-                    <span className="text-gray-400 block text-[10px]">Sexe & âge</span>
+                    <span className="text-gray-400 block text-[10px]">Sexe</span>
                     <span className="font-bold text-gray-900">
-                      {selectedCandidate.sexe === "F" ? "Féminin" : "Masculin"} ({selectedCandidate.date_naissance || "—"})
+                      {selectedCandidate.sexe === "F" ? "Féminin" : selectedCandidate.sexe === "M" ? "Masculin" : "—"}
                     </span>
                   </div>
                   <div>
@@ -1025,6 +1044,19 @@ export default function AdminTalents() {
         </div>,
         document.body
       )}
+
+      {/* Modal d'ajout de talent par l'administration */}
+      <AddTalentModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSuccess={(newTalent) => {
+          setCandidatures((prev) => [newTalent, ...prev]);
+          showToast(
+            `Le talent ${newTalent.prenom} ${newTalent.nom} (Dossier ${newTalent.reference}) a été ajouté avec succès.`,
+            "success"
+          );
+        }}
+      />
     </div>
   );
 }

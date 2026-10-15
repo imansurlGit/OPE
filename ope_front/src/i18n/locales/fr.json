@@ -7,6 +7,7 @@
     "contact": "Contact",
     "explore": "Explorer",
     "members": "Équipe CNCEIZ",
+    "acteurs": "Les Acteurs",
     "categories": "Les 3 Catégories",
     "sponsors": "Partenaires & Sponsors",
     "gallery": "Galerie Multimédia",
@@ -50,8 +51,8 @@
         "title": "Modèles MC2",
         "subtitle": "Modèle de Citoyen Communautaire",
         "items": [
-          "Plantation d'arbres sur le site de Courbouru",
-          "Réparation de tables-bancs",
+          "Plantation d'arbres sur le site de Kourboubou",
+          "Sen de tables-bancs",
           "Confection de poubelles"
         ]
       },
@@ -59,15 +60,15 @@
         "title": "Modèles MC2",
         "subtitle": "Modèle de Citoyen Communautaire",
         "items": [
-          "Plantation d'arbres sur le site de Courbouru",
-          "Réparation de tables-bancs",
-          "Confection de poubelles"
+          "Plantation d'arbres sur le site de Kourboubou",
+          "Sensibilisation back to school",
+          "7km de la paix"
         ]
       }
     }
   },
   "countdown": {
-    "title": "Rendez-vous à Agadez le…",
+    "title": "Rendez-vous biennal à Agadez le…",
     "description": "Préparez-vous pour l'événement d'innovation le plus attendu de l'année. Les places sont limitées.",
     "badge": "Camp National Citoyen",
     "day": "JOUR",
@@ -185,7 +186,7 @@
     "address_val": "Agadez, République du Niger",
     "phone_label": "Téléphone",
     "phone_val": "Disponible aux horaires de permanence",
-    "email_val": "contact@ope.ne",
+    "email_val": "ope.organization@gmail.com",
     "hours_label": "Heures d'ouverture",
     "hours_val": "Lun - Ven : 08h00 - 17h30"
   },
@@ -231,10 +232,11 @@
     "junior": {
       "step1_title": "Étape 1 : Qui es-tu ?",
       "step1_subtitle": "Renseigne tes coordonnées et celles de ton collège pour participer au concours.",
-      "age": "Ton âge (entre 8 et 17 ans)",
       "classe": "Ta classe actuelle",
       "etablissement": "Nom de ton collège",
-      "region_ville": "Ville ou région de résidence",
+      "region": "Région de résidence",
+      "region_ville": "Région de résidence",
+      "err_region": "La région de résidence est obligatoire.",
       "tel_tuteur": "Numéro de téléphone d'un parent ou tuteur",
       "step2_title": "Étape 2 : Ta mascotte",
       "step2_subtitle": "Présente ta mascotte, ce qu'elle symbolise pour le Niger et télécharge ton dessin.",
@@ -247,8 +249,6 @@
       "nom_tuteur": "Nom complet du parent ou tuteur légal",
       "accord_parent": "Mon parent ou tuteur m'autorise à participer au concours",
       "accord_dessin": "J'accepte que l'OPE utilise mon dessin pour le concours",
-      "err_age": "L'âge est obligatoire.",
-      "err_age_range": "L'âge doit être compris entre 8 et 17 ans.",
       "err_classe": "La classe est obligatoire.",
       "err_tel_tuteur": "Le téléphone du parent/tuteur est obligatoire.",
       "err_mascotte_nom": "Le nom de la mascotte est obligatoire.",
@@ -261,10 +261,10 @@
       "step1_title": "Étape 1 : Identité & Contact",
       "step1_subtitle": "Renseignez vos informations personnelles et justificatifs d'identité.",
       "sexe": "Sexe",
-      "date_naissance": "Date de naissance",
       "telephone": "Numéro de téléphone",
       "email": "Adresse e-mail",
-      "region_ville": "Région / Ville de résidence",
+      "region": "Région de résidence",
+      "region_ville": "Région de résidence",
       "piece_identite": "Copie de la pièce d'identité",
       "photo_identite": "Photo d'identité récente",
       "step2_title": "Étape 2 : Votre innovation",
@@ -286,9 +286,8 @@
       "disponible_camps": "Disponible pendant les périodes des précamps et du Camp à Agadez",
       "accepte_conditions": "J'accepte les conditions de participation du CNCEIZ Agadez 2026",
       "err_sexe": "Le sexe est obligatoire.",
-      "err_date_naissance": "La date de naissance est obligatoire.",
-      "err_date_futur": "La date de naissance ne peut pas être dans le futur.",
-      "err_region_ville": "La région ou ville est obligatoire.",
+      "err_region": "La région de résidence est obligatoire.",
+      "err_region_ville": "La région de résidence est obligatoire.",
       "err_domaine": "Le domaine STEAM est obligatoire.",
       "err_domaine_autre": "Veuillez préciser le domaine STEAM.",
       "err_innovation_nom": "Le nom de l'innovation est obligatoire.",
@@ -428,7 +427,6 @@
     "err_nom": "Veuillez renseigner un nom valide (au moins 2 lettres, sans chiffres).",
     "err_prenom": "Veuillez renseigner un prénom valide (au moins 2 lettres, sans chiffres).",
     "err_dob": "Veuillez renseigner votre date de naissance.",
-    "err_dob_age": "L'âge du candidat doit être compris entre 10 et 35 ans pour participer au camp.",
     "err_sex": "Veuillez indiquer votre sexe.",
     "err_ville": "Veuillez indiquer votre ville ou village (au moins 2 caractères).",
     "err_email": "Veuillez renseigner une adresse e-mail valide (ex: candidat@domaine.com).",
@@ -450,6 +448,15 @@
     "err_cert": "Veuillez cocher la case de confirmation pour continuer.",
     "err_confirm_parent": "Le parent ou tuteur légal doit confirmer la candidature du mineur.",
     "err_file_size": "Le fichier sélectionné dépasse la taille maximale autorisée (10 Mo)."
+  },
+  "popup": {
+    "mascotte": {
+      "title": "Concours de la mascotte CNCEIZ Agadez 2026",
+      "subtitle": "Imagine la mascotte du Camp d'Agadez et donne-lui un nom. Montre ton talent ! Dépose ton dessin et tente de remporter les prix du concours.",
+      "participate": "Je participe !",
+      "later": "Plus tard",
+      "close": "Fermer la fenêtre"
+    }
   },
   "languages": {
     "title": "Langue",
