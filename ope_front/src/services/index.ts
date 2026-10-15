@@ -21,4 +21,5 @@ export * from "./partenaireService";
 export { default as partenaireService } from "./partenaireService";
 export * from "./documentService";
 export { default as documentService } from "./documentService";
-
+export * from "./mascotteApi";
+export { default as mascotteApi } from "./mascotteApi";

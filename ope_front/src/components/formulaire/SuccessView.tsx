@@ -34,7 +34,7 @@ export const SuccessView: React.FC<SuccessViewProps> = ({
     const qrPayload = JSON.stringify({
       ref: reference,
       nom: `${prenom} ${nom}`,
-      categorie: categorie === "junior" ? "Junior (Mascotte)" : "Senior (STEAM)",
+      categorie: categorie === "junior" ? "Talent Junior" : "Talent Senior (STEAM)",
       statut: "soumis",
       date: new Date().toLocaleDateString("fr-FR"),
       event: "CNCEIZ Agadez 2026",
@@ -145,10 +145,6 @@ export const SuccessView: React.FC<SuccessViewProps> = ({
             <span>Statut :</span>
             <span>Dossier soumis</span>
           </div>
-
-          <p className="text-[10px] text-slate-400 mt-3 font-medium">
-            Présentez ce QR code lors des convocations aux pré-camps et à l'accueil du Camp.
-          </p>
         </div>
       </div>
 

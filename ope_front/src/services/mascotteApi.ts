@@ -2,6 +2,7 @@
  * Service API pour le Concours de la Mascotte CNCEIZ Agadez 2026.
  * Gestion robuste de l'envoi multipart/form-data, du timeout et du typage des erreurs.
  */
+import api from "./api";
 
 const API_BASE_URL = (
   import.meta.env.VITE_API_URL || "http://127.0.0.1:7777/api"
@@ -14,6 +15,34 @@ export interface CandidatureMascotteResponse {
   mascotte_nom: string;
   classe: string;
   created_at: string;
+}
+
+export interface CandidatMascotteItem {
+  id: number;
+  reference: string;
+  nom: string;
+  prenom: string;
+  classe: "6e" | "5e" | "4e" | "3e" | string;
+  etablissement?: string;
+  region_ville?: string;
+  telephone_tuteur: string;
+  nom_tuteur: string;
+  mascotte_nom: string;
+  mascotte_pourquoi?: string;
+  mascotte_signification?: string;
+  mascotte_dessin: string;
+  autorisation_parent: boolean;
+  accord_utilisation_dessin: boolean;
+  statut: "en_attente" | "valide" | "rejete";
+  created_at: string;
+  updated_at?: string;
+}
+
+export interface MascotteFilterParams {
+  search?: string;
+  statut?: string;
+  classe?: string;
+  region?: string;
 }
 
 export interface CandidatureMascottePayload {
@@ -39,6 +68,9 @@ export interface MascotteApiError {
   fieldErrors?: Record<string, string>;
 }
 
+/**
+ * Soumission publique d'une candidature au concours de la mascotte
+ */
 export async function createCandidatureMascotte(
   formData: FormData,
   timeoutMs = 45000
@@ -136,6 +168,56 @@ export async function createCandidatureMascotte(
   }
 }
 
+/**
+ * Récupération authentifiée (Admin) de la liste des candidats à la mascotte
+ */
+export async function getCandidaturesMascotte(
+  params?: MascotteFilterParams
+): Promise<CandidatMascotteItem[]> {
+  const query = new URLSearchParams();
+  if (params?.search) query.set("search", params.search);
+  if (params?.statut && params.statut !== "all") query.set("statut", params.statut);
+  if (params?.classe && params.classe !== "all") query.set("classe", params.classe);
+  if (params?.region && params.region !== "Toutes" && params.region !== "all") {
+    query.set("region", params.region);
+  }
+
+  const qStr = query.toString();
+  const endpoint = `mascotte/candidatures/${qStr ? `?${qStr}` : ""}`;
+  const res = await api.get<CandidatMascotteItem[] | { results: CandidatMascotteItem[] }>(endpoint);
+  return Array.isArray(res) ? res : (res as any)?.results || [];
+}
+
+/**
+ * Mise à jour authentifiée (Admin) du statut ou des données d'un candidat
+ */
+export async function updateCandidatureMascotte(
+  id: number,
+  data: Partial<CandidatMascotteItem> | FormData
+): Promise<CandidatMascotteItem> {
+  return await api.patch<CandidatMascotteItem>(`mascotte/candidatures/${id}/`, data);
+}
+
+/**
+ * Suppression authentifiée (Admin) d'une candidature
+ */
+export async function deleteCandidatureMascotte(id: number): Promise<void> {
+  await api.delete(`mascotte/candidatures/${id}/`);
+}
+
+/**
+ * Création authentifiée (Admin) d'une candidature avec possibilité de choisir le statut
+ */
+export async function createCandidatureMascotteAdmin(
+  formData: FormData
+): Promise<CandidatMascotteItem> {
+  return await api.post<CandidatMascotteItem>("mascotte/candidatures/", formData);
+}
+
 export default {
   createCandidatureMascotte,
+  getCandidaturesMascotte,
+  updateCandidatureMascotte,
+  deleteCandidatureMascotte,
+  createCandidatureMascotteAdmin,
 };

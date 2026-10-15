@@ -5,6 +5,7 @@ import { CategoryChoice } from "../components/formulaire/CategoryChoice";
 import { JuniorForm } from "../components/formulaire/JuniorForm";
 import { SeniorForm } from "../components/formulaire/SeniorForm";
 import { SuccessView } from "../components/formulaire/SuccessView";
+import { MascotteSuccessView } from "../components/formulaire/MascotteSuccessView";
 import { JUNIOR_STEPS, SENIOR_STEPS } from "../types/formulaire";
 
 export default function Formulaire() {
@@ -39,26 +40,47 @@ export default function Formulaire() {
 
   // ── VUE DE SUCCÈS APRÈS ENREGISTREMENT ──
   if (isSubmitted) {
-    const isJunior = categorie === "junior";
-    const nom = isJunior ? juniorData.nom : seniorData.nom;
-    const prenom = isJunior ? juniorData.prenom : seniorData.prenom;
-    const regionVille = isJunior ? juniorData.regionVille : seniorData.regionVille;
-    const badgeTag = isJunior
-      ? "Concours Mascotte"
-      : seniorData.domaineSteam === "autre"
+    if (categorie === "junior") {
+      return (
+        <div className="min-h-screen pt-12 pb-24 px-4 sm:px-6 bg-[#F4F7F9] flex flex-col items-center">
+          <div className="w-full max-w-3xl mt-6">
+            <MascotteSuccessView
+              reference={candidateRef}
+              nom={juniorData.nom}
+              prenom={juniorData.prenom}
+              classe={juniorData.classe}
+              etablissement={juniorData.etablissement}
+              regionVille={juniorData.regionVille}
+              mascotteNom={juniorData.mascotteNom}
+              mascottePourquoi={juniorData.mascottePourquoi}
+              mascotteSignification={juniorData.mascotteSignification}
+              dessinUrl={juniorData.mascotteDessin?.previewUrl}
+              telephoneTuteur={juniorData.telephoneTuteur}
+              nomTuteur={juniorData.nomTuteur}
+              onNewApplication={changeCategory}
+            />
+          </div>
+        </div>
+      );
+    }
+
+    // ── VUE DE SUCCÈS POUR LES TALENTS (SENIOR) ──
+    const nom = seniorData.nom;
+    const prenom = seniorData.prenom;
+    const regionVille = seniorData.regionVille;
+    const badgeTag =
+      seniorData.domaineSteam === "autre"
         ? seniorData.domaineSteamAutre || "Innovation"
         : seniorData.domaineSteam.toUpperCase();
-    const photoUrl = isJunior
-      ? juniorData.mascotteDessin?.previewUrl
-      : seniorData.photoIdentite?.previewUrl;
-    const contactEmail = isJunior ? undefined : seniorData.email;
+    const photoUrl = seniorData.photoIdentite?.previewUrl;
+    const contactEmail = seniorData.email;
 
     return (
       <div className="min-h-screen pt-12 pb-24 px-4 sm:px-6 bg-[#F4F7F9] flex flex-col items-center">
         <div className="w-full max-w-2xl mt-8">
           <SuccessView
             reference={candidateRef}
-            categorie={categorie as "junior" | "senior"}
+            categorie="senior"
             nom={nom}
             prenom={prenom}
             regionVille={regionVille}

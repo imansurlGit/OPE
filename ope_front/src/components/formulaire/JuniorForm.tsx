@@ -108,7 +108,6 @@ export const JuniorForm: React.FC<JuniorFormProps> = ({
             value={data.telephoneTuteur}
             onChange={(e) => onChangeField("telephoneTuteur", e.target.value)}
             error={fieldErrors.telephoneTuteur}
-            helperText="Ce numéro sera utilisé pour informer ton représentant légal de ta participation."
           />
         </div>
       )}

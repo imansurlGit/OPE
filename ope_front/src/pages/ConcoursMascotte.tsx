@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useCandidatureForm } from "../hooks/useCandidatureForm";
 import { JuniorForm } from "../components/formulaire/JuniorForm";
-import { SuccessView } from "../components/formulaire/SuccessView";
+import { MascotteSuccessView } from "../components/formulaire/MascotteSuccessView";
 import { JUNIOR_STEPS } from "../types/formulaire";
 
 export default function ConcoursMascotte() {
@@ -31,19 +31,24 @@ export default function ConcoursMascotte() {
   const currentStepConfig = activeSteps[step - 1] || activeSteps[0];
   const maxSteps = activeSteps.length;
 
-  // ── ÉCRAN DE SUCCÈS ──
+  // ── ÉCRAN DE SUCCÈS DÉDIÉ AU CONCOURS DE LA MASCOTTE ──
   if (isSubmitted) {
     return (
       <div className="min-h-screen pt-12 pb-24 px-4 sm:px-6 bg-[#F4F7F9] flex flex-col items-center">
-        <div className="w-full max-w-2xl mt-8">
-          <SuccessView
+        <div className="w-full max-w-3xl mt-6">
+          <MascotteSuccessView
             reference={candidateRef}
-            categorie="junior"
             nom={juniorData.nom}
             prenom={juniorData.prenom}
+            classe={juniorData.classe}
+            etablissement={juniorData.etablissement}
             regionVille={juniorData.regionVille}
-            badgeTag="Concours Mascotte"
-            photoUrl={juniorData.mascotteDessin?.previewUrl}
+            mascotteNom={juniorData.mascotteNom}
+            mascottePourquoi={juniorData.mascottePourquoi}
+            mascotteSignification={juniorData.mascotteSignification}
+            dessinUrl={juniorData.mascotteDessin?.previewUrl}
+            telephoneTuteur={juniorData.telephoneTuteur}
+            nomTuteur={juniorData.nomTuteur}
             onNewApplication={changeCategory}
           />
         </div>
@@ -83,25 +88,25 @@ export default function ConcoursMascotte() {
                 return (
                   <div
                     key={s.key}
-                    className={`flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl border transition-all ${
+                    className={`flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl border-2 transition-all ${
                       isCurrent
-                        ? "bg-orange-50/70 border-[#F15B29] text-[#193549] shadow-xs"
+                        ? "bg-[#F15B29] border-[#F15B29] text-white shadow-sm"
                         : isPassed
-                          ? "bg-slate-50 border-slate-200 text-slate-700"
-                          : "bg-slate-50/50 border-slate-100 text-slate-400"
+                          ? "bg-[#18794E] border-[#18794E] text-white shadow-xs"
+                          : "bg-slate-100 border-slate-200 text-slate-700"
                     }`}
                   >
                     <div
                       className={`w-6 h-6 sm:w-7 sm:h-7 rounded-xl flex items-center justify-center text-xs font-bold shrink-0 transition-colors ${
                         isCurrent
-                          ? "bg-[#F15B29] text-white"
+                          ? "bg-white text-[#F15B29]"
                           : isPassed
-                            ? "bg-emerald-500 text-white"
-                            : "bg-slate-200 text-slate-500"
+                            ? "bg-white text-[#18794E]"
+                            : "bg-white text-slate-700 border border-slate-300"
                       }`}
                     >
                       {isPassed ? (
-                        <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg className="w-3.5 h-3.5 text-[#18794E]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                         </svg>
                       ) : (
@@ -109,8 +114,16 @@ export default function ConcoursMascotte() {
                       )}
                     </div>
                     <div className="hidden sm:block min-w-0">
-                      <p className="text-xs font-bold truncate leading-tight">{s.label}</p>
-                      <p className="text-[10px] text-slate-400 truncate">{s.shortLabel}</p>
+                      <p className="text-xs font-bold truncate leading-tight">
+                        {s.label}
+                      </p>
+                      <p
+                        className={`text-[10px] font-medium truncate ${
+                          isCurrent || isPassed ? "text-white" : "text-slate-500"
+                        }`}
+                      >
+                        {s.shortLabel}
+                      </p>
                     </div>
                   </div>
                 );
@@ -152,7 +165,7 @@ export default function ConcoursMascotte() {
                   type="button"
                   onClick={handlePrev}
                   disabled={isSubmitting}
-                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-sm transition-colors cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-sm transition-colors cursor-pointer disabled:bg-slate-100 disabled:text-slate-400 disabled:border-slate-200 flex items-center justify-center gap-2"
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -174,7 +187,7 @@ export default function ConcoursMascotte() {
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="w-full sm:w-auto px-7 py-3 rounded-xl bg-[#F15B29] hover:bg-[#d94d1f] text-white font-bold text-sm shadow-md shadow-orange-500/20 transition-all cursor-pointer flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-7 py-3 rounded-xl bg-[#F15B29] hover:bg-[#d94d1f] text-white font-bold text-sm shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
                 >
                   Continuer vers l'étape suivante
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -186,13 +199,13 @@ export default function ConcoursMascotte() {
                   type="button"
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#F15B29] to-[#ff7444] hover:from-[#e04e1e] hover:to-[#f15b29] text-white font-black text-sm shadow-lg shadow-orange-500/30 transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#F15B29] to-[#ff7444] hover:from-[#e04e1e] hover:to-[#f15b29] text-white font-black text-sm shadow-md transition-all cursor-pointer flex items-center justify-center gap-2 disabled:bg-slate-200 disabled:text-slate-400 disabled:from-slate-200 disabled:to-slate-200 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <>
                       <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                        <circle className="text-[#fca583]" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="text-white" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                       </svg>
                       Envoi de ton dessin en cours...
                     </>
