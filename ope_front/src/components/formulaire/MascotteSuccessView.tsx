@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import QRCode from "qrcode";
 import campNationalCitoyen from "../../assets/camp_natio.png";
 
@@ -35,7 +34,6 @@ export const MascotteSuccessView: React.FC<MascotteSuccessViewProps> = ({
   onNewApplication,
 }) => {
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
-  const [copiedRef, setCopiedRef] = useState(false);
 
   useEffect(() => {
     if (!reference) return;
@@ -62,17 +60,6 @@ export const MascotteSuccessView: React.FC<MascotteSuccessViewProps> = ({
       .then((url) => setQrCodeUrl(url))
       .catch((err) => console.error("Erreur génération QR code mascotte:", err));
   }, [reference, prenom, nom, mascotteNom, etablissement]);
-
-  const handleCopyRef = () => {
-    if (!reference) return;
-    navigator.clipboard.writeText(reference);
-    setCopiedRef(true);
-    setTimeout(() => setCopiedRef(false), 2500);
-  };
-
-  const handlePrint = () => {
-    window.print();
-  };
 
   const explanation = mascotteSignification || mascottePourquoi;
 
@@ -198,7 +185,7 @@ export const MascotteSuccessView: React.FC<MascotteSuccessViewProps> = ({
                     Tuteur Légal Référent
                   </span>
                   <span className="text-xs font-bold text-[#193549]">
-                    {nomTuteur || "Parent / Tuteur"}
+                    {nomTuteur || "Parent / Tuteur"}{telephoneTuteur ? ` (${telephoneTuteur})` : ""}
                   </span>
                 </div>
               </div>
