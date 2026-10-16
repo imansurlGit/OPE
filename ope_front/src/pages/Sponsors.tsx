@@ -26,36 +26,36 @@ const CATEGORIES_CONFIG: Record<PartenaireCategorie, CategorieConfig> = {
   platine: {
     id: "platine",
     label: "Platine",
-    accent: "#3A6073",
-    softAccent: "rgba(58, 96, 115, 0.08)",
-    borderAccent: "rgba(58, 96, 115, 0.35)",
+    accent: "#1E3A52",
+    softAccent: "#EEF4F8",
+    borderAccent: "#C5D8E8",
     logoHeight: "h-28 sm:h-32",
     cardWidth: "w-[280px] sm:w-[320px] md:w-[360px]",
   },
   or: {
     id: "or",
     label: "Or",
-    accent: "#C18A2B",
-    softAccent: "rgba(193, 138, 43, 0.08)",
-    borderAccent: "rgba(193, 138, 43, 0.35)",
+    accent: "#9E6B15",
+    softAccent: "#FEF7EA",
+    borderAccent: "#F2D8A7",
     logoHeight: "h-24 sm:h-28",
     cardWidth: "w-[240px] sm:w-[280px] md:w-[300px]",
   },
   argent: {
     id: "argent",
     label: "Argent",
-    accent: "#6B7C8E",
-    softAccent: "rgba(107, 124, 142, 0.08)",
-    borderAccent: "rgba(107, 124, 142, 0.30)",
+    accent: "#475569",
+    softAccent: "#F1F5F9",
+    borderAccent: "#CBD5E1",
     logoHeight: "h-20 sm:h-24",
     cardWidth: "w-[210px] sm:w-[240px] md:w-[260px]",
   },
   bronze: {
     id: "bronze",
     label: "Bronze",
-    accent: "#B96C45",
-    softAccent: "rgba(185, 108, 69, 0.08)",
-    borderAccent: "rgba(185, 108, 69, 0.28)",
+    accent: "#A3522C",
+    softAccent: "#FDF3EE",
+    borderAccent: "#F3D0C1",
     logoHeight: "h-16 sm:h-20",
     cardWidth: "w-[180px] sm:w-[210px] md:w-[230px]",
   },
@@ -69,10 +69,10 @@ const CATEGORIE_ORDER: PartenaireCategorie[] = [
 ];
 
 const MONOGRAM_GRADIENTS: Record<PartenaireCategorie, string> = {
-  platine: "from-[#3A6073] to-[#1E3A52]",
-  or: "from-[#C18A2B] to-[#8C5D15]",
-  argent: "from-[#6B7C8E] to-[#42505E]",
-  bronze: "from-[#B96C45] to-[#7A3F22]",
+  platine: "from-[#1E3A52] to-[#3A6073]",
+  or: "from-[#9E6B15] to-[#C18A2B]",
+  argent: "from-[#475569] to-[#64748B]",
+  bronze: "from-[#A3522C] to-[#C25E38]",
 };
 
 /* =========================================================================
@@ -162,7 +162,7 @@ function getInitials(nom: string): string {
 }
 
 /* =========================================================================
-   Carte Partenaire Individuelle (Design Minimaliste & Épuré)
+   Carte Partenaire Individuelle (Design Moderne, Épuré & Premium)
    ========================================================================= */
 
 function PartnerCard({ p }: { p: Partenaire }) {
@@ -173,47 +173,59 @@ function PartnerCard({ p }: { p: Partenaire }) {
 
   return (
     <article
-      className={`group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border bg-white transition-all duration-300 hover:-translate-y-1 ${
+      className={`group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl bg-white border transition-all duration-300 ease-out hover:-translate-y-1.5 ${
         isPlatine
-          ? "p-6 shadow-md hover:shadow-xl hover:border-[#3A6073]"
+          ? "p-5 sm:p-6 shadow-sm hover:shadow-xl"
           : isOr
-            ? "p-5 shadow-sm hover:shadow-lg hover:border-[#C18A2B]"
-            : "p-4 shadow-2xs hover:shadow-md"
+            ? "p-4 sm:p-5 shadow-xs hover:shadow-lg"
+            : "p-3.5 sm:p-4 shadow-xs hover:shadow-md"
       }`}
       style={{ borderColor: config.borderAccent }}
     >
-      {/* Liseré supérieur subtil du palier */}
-      <div
-        className="absolute inset-x-0 top-0 h-1 transition-all duration-300 group-hover:h-1.5"
-        style={{ backgroundColor: config.accent }}
-        aria-hidden="true"
-      />
-
-      <div>
-        <div className="mb-3 flex items-center justify-between">
+      <div className="flex flex-col h-full justify-between">
+        {/* Header de la carte : Badge officiel & Symbole d'accréditation */}
+        <div className="mb-3.5 flex items-center justify-between">
           <span
-            className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider"
-            style={{ backgroundColor: config.softAccent, color: config.accent }}
+            className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider border"
+            style={{
+              backgroundColor: config.softAccent,
+              color: config.accent,
+              borderColor: config.borderAccent,
+            }}
           >
-            <TierIcon tier={category} className="h-3 w-3" />
+            <TierIcon tier={category} className="h-3 w-3 shrink-0" />
             <span>{config.label}</span>
+          </span>
+
+          <span
+            className="flex h-5 w-5 items-center justify-center rounded-full transition-colors"
+            style={{ color: config.accent }}
+            title={`Partenaire Officiel ${config.label}`}
+          >
+            <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clipRule="evenodd"
+              />
+            </svg>
           </span>
         </div>
 
-        {/* Zone Logo : Propre, blanche, aérée */}
+        {/* Zone Logo : Écrin épuré, centré et lumineux */}
         <div
-          className={`flex ${config.logoHeight} w-full items-center justify-center rounded-xl border border-slate-100 bg-slate-50/50 p-3 transition-transform duration-300 group-hover:scale-[1.01]`}
+          className={`flex ${config.logoHeight} w-full items-center justify-center rounded-xl border border-slate-100 bg-[#FAFCFD] p-3 sm:p-4 transition-all duration-300 group-hover:bg-white group-hover:border-slate-200`}
         >
           {p.logo ? (
             <img
               src={p.logo}
               alt={`Logo de ${p.nom}`}
-              className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
+              className="max-h-full max-w-full object-contain transition-transform duration-300 ease-out group-hover:scale-105"
               loading="lazy"
             />
           ) : (
             <div
-              className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${MONOGRAM_GRADIENTS[category]} text-lg font-black tracking-tight text-white shadow-sm`}
+              className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${MONOGRAM_GRADIENTS[category]} text-base sm:text-lg font-black tracking-tight text-white shadow-xs transition-transform duration-300 group-hover:scale-105`}
               aria-label={`Initiales de ${p.nom}`}
             >
               {getInitials(p.nom)}
@@ -221,15 +233,23 @@ function PartnerCard({ p }: { p: Partenaire }) {
           )}
         </div>
 
-        {/* Nom du sponsor */}
+        {/* Pied de la carte : Nom et sous-titre officiel */}
         <div className="mt-3.5 text-center">
           <h3
-            className={`line-clamp-2 font-extrabold leading-tight text-ope-text ${
-              isPlatine ? "text-base sm:text-lg" : isOr ? "text-sm sm:text-base" : "text-xs sm:text-sm"
+            className={`font-black leading-snug text-ope-text transition-colors group-hover:text-[#193549] line-clamp-2 ${
+              isPlatine
+                ? "text-sm sm:text-base"
+                : isOr
+                  ? "text-xs sm:text-sm"
+                  : "text-xs font-bold"
             }`}
+            title={p.nom}
           >
             {p.nom}
           </h3>
+          <p className="mt-1 text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+            Partenaire Officiel
+          </p>
         </div>
       </div>
     </article>
