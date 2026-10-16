@@ -1,30 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
-import { partenaireService, type Partenaire, type PartenaireType, type PartenaireCategorie } from "../services";
+import { partenaireService, type Partenaire, type PartenaireCategorie } from "../services";
 import Pagination from "./Pagination";
-
-const TYPE_CONFIG: Record<PartenaireType, { label: string; badgeClass: string; textColor: string }> = {
-  pays: {
-    label: "Pays",
-    badgeClass: "bg-[#EBF2F7] text-[#193549] border-[#C5D8E8]",
-    textColor: "text-[#193549]",
-  },
-  institution: {
-    label: "Institution",
-    badgeClass: "bg-[#FDF3EE] text-[#f15b29] border-[#F0C5AE]",
-    textColor: "text-[#f15b29]",
-  },
-  ong: {
-    label: "ONG",
-    badgeClass: "bg-[#EAF5F2] text-[#1D6353] border-[#BDE0D6]",
-    textColor: "text-[#1D6353]",
-  },
-  ambassade: {
-    label: "Ambassade",
-    badgeClass: "bg-[#FEF6E9] text-[#9A6700] border-[#FCE1B4]",
-    textColor: "text-[#9A6700]",
-  },
-};
 
 const CATEGORIE_CONFIG: Record<PartenaireCategorie, { label: string; badgeClass: string }> = {
   platine: {
@@ -49,7 +26,6 @@ export default function AdminPartenaires() {
   const [partenaires, setPartenaires] = useState<Partenaire[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedType, setSelectedType] = useState<string>("all");
   const [selectedCategorie, setSelectedCategorie] = useState<string>("all");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<"success" | "error">("success");
@@ -66,7 +42,6 @@ export default function AdminPartenaires() {
 
   // Form state
   const [formNom, setFormNom] = useState("");
-  const [formType, setFormType] = useState<PartenaireType>("institution");
   const [formCategorie, setFormCategorie] = useState<PartenaireCategorie>("bronze");
   const [formLogoFile, setFormLogoFile] = useState<File | null>(null);
   const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(null);
@@ -98,17 +73,16 @@ export default function AdminPartenaires() {
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     return partenaires.filter((p) => {
-      const matchesType = selectedType === "all" || p.type === selectedType;
       const matchesCategorie = selectedCategorie === "all" || p.categorie === selectedCategorie;
       const matchesSearch = q === "" || p.nom.toLowerCase().includes(q);
-      return matchesType && matchesCategorie && matchesSearch;
+      return matchesCategorie && matchesSearch;
     });
-  }, [partenaires, selectedType, selectedCategorie, searchQuery]);
+  }, [partenaires, selectedCategorie, searchQuery]);
 
   // Réinitialiser la page lors du changement de filtre
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedType, selectedCategorie, searchQuery]);
+  }, [selectedCategorie, searchQuery]);
 
   // Partenaires paginés
   const paginatedPartenaires = useMemo(() => {
@@ -119,17 +93,16 @@ export default function AdminPartenaires() {
   // ── Stats ─────────────────────────────────────────────────────────────────
   const stats = useMemo(() => ({
     total: partenaires.length,
-    pays: partenaires.filter((p) => p.type === "pays").length,
-    institution: partenaires.filter((p) => p.type === "institution").length,
-    ong: partenaires.filter((p) => p.type === "ong").length,
-    ambassade: partenaires.filter((p) => p.type === "ambassade").length,
+    platine: partenaires.filter((p) => p.categorie === "platine").length,
+    or: partenaires.filter((p) => p.categorie === "or").length,
+    argent: partenaires.filter((p) => p.categorie === "argent").length,
+    bronze: partenaires.filter((p) => p.categorie === "bronze").length,
   }), [partenaires]);
 
   // ── Ouvrir modal création ─────────────────────────────────────────────────
   const openCreateModal = () => {
     setEditingPartenaire(null);
     setFormNom("");
-    setFormType("institution");
     setFormCategorie("bronze");
     setFormLogoFile(null);
     setLogoPreviewUrl(null);
@@ -140,7 +113,6 @@ export default function AdminPartenaires() {
   const openEditModal = (p: Partenaire) => {
     setEditingPartenaire(p);
     setFormNom(p.nom);
-    setFormType(p.type);
     setFormCategorie(p.categorie || "bronze");
     setFormLogoFile(null);
     setLogoPreviewUrl(p.logo || null);
@@ -168,7 +140,6 @@ export default function AdminPartenaires() {
     try {
       const formData = new FormData();
       formData.append("nom", formNom.trim());
-      formData.append("type", formType);
       formData.append("categorie", formCategorie);
       if (formLogoFile) formData.append("logo", formLogoFile);
 
@@ -232,7 +203,7 @@ export default function AdminPartenaires() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
-            Partenaires & Sponsors
+            Partenaires &amp; Sponsors
           </h1>
         </div>
         <button
@@ -251,10 +222,10 @@ export default function AdminPartenaires() {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
         {[
           { label: "Total", value: stats.total, color: "text-gray-900" },
-          { label: "Pays", value: stats.pays, color: "text-[#193549]" },
-          { label: "Institutions", value: stats.institution, color: "text-[#f15b29]" },
-          { label: "ONG", value: stats.ong, color: "text-[#1D6353]" },
-          { label: "Ambassades", value: stats.ambassade, color: "text-[#9A6700]" },
+          { label: "Platine", value: stats.platine, color: "text-indigo-700" },
+          { label: "Or", value: stats.or, color: "text-amber-700" },
+          { label: "Argent", value: stats.argent, color: "text-slate-600" },
+          { label: "Bronze", value: stats.bronze, color: "text-orange-700" },
         ].map((s) => (
           <div key={s.label} className="bg-white p-4 rounded-2xl border border-[#d0e4f0] shadow-2xs">
             <span className={`text-[11px] font-bold uppercase tracking-wider block ${s.color}`}>{s.label}</span>
@@ -277,17 +248,6 @@ export default function AdminPartenaires() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
-        <select
-          value={selectedType}
-          onChange={(e) => setSelectedType(e.target.value)}
-          className="bg-[#f4f8fb] border border-[#d0e4f0] rounded-xl px-3 py-2 text-xs font-bold text-gray-700 focus:outline-none focus:border-[#f15b29] cursor-pointer"
-        >
-          <option value="all">Tous les types</option>
-          <option value="pays">Pays</option>
-          <option value="institution">Institution</option>
-          <option value="ong">ONG</option>
-          <option value="ambassade">Ambassade</option>
-        </select>
         <select
           value={selectedCategorie}
           onChange={(e) => setSelectedCategorie(e.target.value)}
@@ -316,7 +276,7 @@ export default function AdminPartenaires() {
           </div>
           <h3 className="font-extrabold text-gray-900 text-base mb-1">Aucun partenaire trouvé</h3>
           <p className="text-xs text-gray-400 max-w-sm mx-auto mb-5">
-            {searchQuery || selectedType !== "all"
+            {searchQuery || selectedCategorie !== "all"
               ? "Aucun partenaire ne correspond à vos filtres. Essayez de modifier votre recherche."
               : "Aucun partenaire n'a encore été ajouté. Commencez par en créer un."}
           </p>
@@ -332,9 +292,7 @@ export default function AdminPartenaires() {
         /* ── Grille de cartes ── */
         <div className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {paginatedPartenaires.map((p) => {
-            const typeInfo = TYPE_CONFIG[p.type];
-            return (
+            {paginatedPartenaires.map((p) => (
               <div
                 key={p.id}
                 className="bg-white rounded-3xl border border-[#d0e4f0] shadow-2xs hover:shadow-md transition-all duration-300 overflow-hidden group flex flex-col"
@@ -360,9 +318,6 @@ export default function AdminPartenaires() {
                 {/* Infos */}
                 <div className="p-4 flex-1 flex flex-col">
                   <div className="flex items-center gap-1.5 flex-wrap mb-2">
-                    <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full border ${typeInfo.badgeClass}`}>
-                      {typeInfo.label}
-                    </span>
                     {p.categorie && (
                       <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full border ${CATEGORIE_CONFIG[p.categorie]?.badgeClass || "bg-gray-100 text-gray-700 border-gray-200"}`}>
                         {CATEGORIE_CONFIG[p.categorie]?.label || p.categorie}
@@ -392,8 +347,7 @@ export default function AdminPartenaires() {
                   </button>
                 </div>
               </div>
-              );
-            })}
+            ))}
           </div>
 
           {/* Pagination */}
@@ -459,39 +413,21 @@ export default function AdminPartenaires() {
                 />
               </div>
 
-              {/* Type */}
-              {/* Type & Catégorie */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-extrabold text-gray-800 mb-1">
-                    Type de partenaire
-                  </label>
-                  <select
-                    value={formType}
-                    onChange={(e) => setFormType(e.target.value as PartenaireType)}
-                    className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-3 py-2.5 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#f15b29] cursor-pointer"
-                  >
-                    <option value="pays">Pays</option>
-                    <option value="institution">Institution</option>
-                    <option value="ong">ONG</option>
-                    <option value="ambassade">Ambassade</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-extrabold text-gray-800 mb-1">
-                    Palier / Catégorie
-                  </label>
-                  <select
-                    value={formCategorie}
-                    onChange={(e) => setFormCategorie(e.target.value as PartenaireCategorie)}
-                    className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-3 py-2.5 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#f15b29] cursor-pointer"
-                  >
-                    <option value="platine">Platine</option>
-                    <option value="or">Or</option>
-                    <option value="argent">Argent</option>
-                    <option value="bronze">Bronze</option>
-                  </select>
-                </div>
+              {/* Palier / Catégorie */}
+              <div>
+                <label className="block text-xs font-extrabold text-gray-800 mb-1">
+                  Palier / Catégorie
+                </label>
+                <select
+                  value={formCategorie}
+                  onChange={(e) => setFormCategorie(e.target.value as PartenaireCategorie)}
+                  className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-3 py-2.5 text-xs font-bold text-gray-800 focus:outline-none focus:border-[#f15b29] cursor-pointer"
+                >
+                  <option value="platine">Platine</option>
+                  <option value="or">Or</option>
+                  <option value="argent">Argent</option>
+                  <option value="bronze">Bronze</option>
+                </select>
               </div>
 
               {/* Logo */}
