@@ -141,12 +141,12 @@ export default function Navbar() {
         <div className="flex items-center gap-2 sm:gap-3">
           <LanguageSwitcher />
 
-          <NavLink
-            to="/formulaire"
-            className="hidden lg:inline-flex items-center px-5 py-2 rounded-full text-sm font-semibold text-ope-white bg-ope-orange shrink-0 transition-all duration-200 hover:opacity-90 active:scale-95 shadow-sm"
+          <span
+            className="hidden lg:inline-flex items-center px-5 py-2 rounded-full text-sm font-semibold text-ope-white bg-ope-orange shrink-0 shadow-sm cursor-not-allowed select-none"
+            title="Les inscriptions sont actuellement fermées"
           >
             {t("nav.join")}
-          </NavLink>
+          </span>
 
           {/* Burger mobile */}
           <button
@@ -192,13 +192,12 @@ export default function Navbar() {
               {link.label}
             </NavLink>
           ))}
-          <NavLink
-            to="/formulaire"
-            className="mt-2 mb-2 px-5 py-2.5 rounded-full text-sm font-semibold text-ope-white bg-ope-orange text-center shadow-sm"
-            onClick={() => setMenuOpen(false)}
+          <span
+            className="mt-2 mb-2 px-5 py-2.5 rounded-full text-sm font-semibold text-ope-white bg-ope-orange text-center shadow-sm cursor-not-allowed select-none block"
+            title="Les inscriptions sont actuellement fermées"
           >
             {t("nav.join")}
-          </NavLink>
+          </span>
         </div>
       </div>
     </nav>
