@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import steamImg from "../assets/steam.jpeg";
 import lpImg from "../assets/lp.jpeg";
@@ -25,10 +24,6 @@ interface Category {
     border: string;
   };
   icon: React.ReactNode;
-  details: {
-    objectifs: string[];
-    criteres: string;
-  };
 }
 
 const CATEGORIES: Category[] = [
@@ -64,15 +59,6 @@ const CATEGORIES: Category[] = [
         <path d="M19 19L14 10.5V5H15C15.55 5 16 4.55 16 4C16 3.45 15.55 3 15 3H9C8.45 3 8 3.45 8 4C8 4.55 8.45 5 9 5H10V10.5L5 19C4.19 20.37 5.18 22 6.78 22H17.22C18.82 22 19.81 20.37 19 19ZM7.84 18L11.16 12.35C11.53 11.72 12.19 11.33 12.92 11.33C13.65 11.33 14.31 11.72 14.68 12.35L18 18H7.84Z" />
       </svg>
     ),
-    details: {
-      objectifs: [
-        "Formation avancée en robotique et intelligence artificielle",
-        "Modélisation aéronautique, pilotage de simulateurs et observation spatiale",
-        "Prototypage de solutions en énergies renouvelables et biotechnologie",
-      ],
-      criteres:
-        "Ouvert aux passionnés de tech, étudiants et créateurs ayant un prototype ou une idée innovante.",
-    },
   },
   {
     id: "lp",
@@ -104,15 +90,6 @@ const CATEGORIES: Category[] = [
         <path d="M19 14C17.34 14 16 15.34 16 17C16 18.66 17.34 20 19 20C20.66 20 22 18.66 22 17C22 15.34 20.66 14 19 14ZM19 18.5C18.17 18.5 17.5 17.83 17.5 17C17.5 16.17 18.17 15.5 19 15.5C19.83 15.5 20.5 16.17 20.5 17C20.5 17.83 19.83 18.5 19 18.5ZM7.5 14C5.57 14 4 15.57 4 17.5C4 19.43 5.57 21 7.5 21C9.43 21 11 19.43 11 17.5C11 15.57 9.43 14 7.5 14ZM7.5 19.5C6.4 19.5 5.5 18.6 5.5 17.5C5.5 16.4 6.4 15.5 7.5 15.5C8.6 15.5 9.5 16.4 9.5 17.5C9.5 18.6 8.6 19.5 7.5 19.5ZM16.5 12H15V8H11V10H9V6H17.34L19.58 9.58C19.85 10 20 10.5 20 11V12.33C19.68 12.12 19.35 12 19 12H16.5ZM4.34 12H1.5C1.22 12 1 11.78 1 11.5C1 11.22 1.22 11 1.5 11H3.66L4.76 7.69C4.9 7.27 5.29 7 5.73 7H9V9H6.13L5.13 12H4.34Z" />
       </svg>
     ),
-    details: {
-      objectifs: [
-        "Modernisation des techniques agro-pastorales adaptées au climat aride",
-        "Transformation locale et valorisation des produits du terroir",
-        "Formation conjointe en entrepreneuriat et marketing digital",
-      ],
-      criteres:
-        "Destiné aux porteurs de projets à fort ancrage local, coopératives et artisans innovants.",
-    },
   },
   {
     id: "mc2",
@@ -149,21 +126,11 @@ const CATEGORIES: Category[] = [
         <path d="M16 11C17.66 11 18.99 9.66 18.99 8C18.99 6.34 17.66 5 16 5C14.34 5 13 6.34 13 8C13 9.66 14.34 11 16 11ZM8 11C9.66 11 10.99 9.66 10.99 8C10.99 6.34 9.66 5 8 5C6.34 5 5 6.34 5 8C5 9.66 6.34 11 8 11ZM8 13C5.67 13 1 14.17 1 16.5V19H15V16.5C15 14.17 10.33 13 8 13ZM16 13C15.71 13 15.38 13.02 15.03 13.05C16.19 13.89 17 15.02 17 16.5V19H23V16.5C23 14.17 18.33 13 16 13Z" />
       </svg>
     ),
-    details: {
-      objectifs: [
-        "Actions civiques d'envergure (7 km de la Paix, plantation d'arbres, réfection scolaire)",
-        "Formation au leadership, à la citoyenneté et au développement personnel",
-        "Engagement bénévole et sensibilisation à l'éducation et à la paix",
-      ],
-      criteres:
-        "Pour les jeunes engagés dans la vie citoyenne, leaders associatifs et bénévoles actifs.",
-    },
   },
 ];
 
 export default function Categories() {
   const { t } = useTranslation();
-  const [selectedCat, setSelectedCat] = useState<Category | null>(null);
   const [openDropdowns, setOpenDropdowns] = useState<Record<string, boolean>>({
     steam: false,
     lp: false,
@@ -197,92 +164,83 @@ export default function Categories() {
           {CATEGORIES.map((cat) => (
             <div
               key={cat.id}
-              className="group bg-white rounded-2xl overflow-hidden shadow-xs border border-ope-border flex flex-col justify-start h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+              className="group bg-white rounded-2xl overflow-hidden shadow-xs border border-ope-border flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
             >
-              <div>
-                <div
-                  onClick={() => setSelectedCat(cat)}
-                  className="cursor-pointer group/content"
-                >
-                  {/* Image d'illustration de la catégorie */}
-                  <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100">
-                    <img
-                      src={cat.image}
-                      alt={`Illustration ${cat.title}`}
-                      className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-                      loading="lazy"
-                    />
-                    {/* Badge Catégorie & Icône */}
-                    <div className="absolute top-3 left-3 flex items-center gap-2 px-3 py-1.5 rounded-full bg-white shadow-sm border border-slate-100">
-                      <span className={cat.color.iconColor}>{cat.icon}</span>
-                      <span className="text-xs font-black text-ope-text tracking-wide">
-                        {cat.title}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="p-5 sm:p-6 pb-0 min-h-[160px] sm:min-h-[175px]">
-                    <p
-                      className={`text-[10px] font-extrabold tracking-widest uppercase mb-2 ${cat.color.tagColor}`}
-                    >
-                      {cat.tag}
-                    </p>
-                    <h3 className="text-xl font-black text-ope-text mb-2.5 tracking-tight group-hover:text-ope-primary transition-colors">
-                      {cat.title}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-ope-text-muted leading-relaxed">
-                      {cat.desc}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Dropdown des Classes / Filières / Activités collé en haut sous la description */}
-                <div className="p-5 sm:p-6 pt-4 pb-6">
-                  <button
-                    type="button"
-                    onClick={() => toggleDropdown(cat.id)}
-                    className={`w-full py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-white ${cat.color.btnBg} ${cat.color.btnHover} transition-all duration-200 flex items-center justify-between cursor-pointer active:scale-95 shadow-sm`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-white shrink-0" />
-                      <span>{cat.dropdownLabel}</span>
-                    </div>
-                    <svg
-                      className={`w-4 h-4 text-white transition-transform duration-200 shrink-0 ${
-                        openDropdowns[cat.id] ? "rotate-180" : ""
-                      }`}
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2.5}
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-
-                  {/* Contenu déroulant */}
-                  {openDropdowns[cat.id] && (
-                    <div className={`mt-3 p-3.5 rounded-xl ${cat.color.subBg} border ${cat.color.border}`}>
-                      <ul className="space-y-1.5">
-                        {cat.classes.map((item, itemIdx) => (
-                          <li
-                            key={itemIdx}
-                            className="text-xs text-ope-text flex items-start gap-2 font-medium"
-                          >
-                            <span
-                              className={`w-1.5 h-1.5 rounded-full shrink-0 mt-1.5 ${cat.color.dotColor}`}
-                            />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+              {/* Image d'illustration de la catégorie */}
+              <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100 shrink-0">
+                <img
+                  src={cat.image}
+                  alt={`Illustration ${cat.title}`}
+                  className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                  loading="lazy"
+                />
+                {/* Badge Catégorie & Icône */}
+                <div className="absolute top-3 left-3 flex items-center gap-2 px-3 py-1.5 rounded-full bg-white shadow-sm border border-slate-100">
+                  <span className={cat.color.iconColor}>{cat.icon}</span>
+                  <span className="text-xs font-black text-ope-text tracking-wide">
+                    {cat.title}
+                  </span>
                 </div>
               </div>
 
-              {/* Espace flexible qui absorbe la différence de hauteur au bas de la carte */}
-              <div className="flex-1" />
+              {/* Contenu textuel avec flex-1 pour égaliser et pousser le dropdown au même niveau */}
+              <div className="p-5 sm:p-6 pb-2 flex-1 flex flex-col">
+                <p
+                  className={`text-[10px] font-extrabold tracking-widest uppercase mb-2 ${cat.color.tagColor}`}
+                >
+                  {cat.tag}
+                </p>
+                <h3 className="text-xl font-black text-ope-text mb-2.5 tracking-tight">
+                  {cat.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-ope-text-muted leading-relaxed">
+                  {cat.desc}
+                </p>
+              </div>
+
+              {/* Dropdown des Classes collé en bas de la carte au même niveau */}
+              <div className="p-5 sm:p-6 pt-2 pb-6 mt-auto">
+                <button
+                  type="button"
+                  onClick={() => toggleDropdown(cat.id)}
+                  className={`w-full py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-white ${cat.color.btnBg} ${cat.color.btnHover} transition-all duration-200 flex items-center justify-between cursor-pointer active:scale-95 shadow-sm`}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-white shrink-0" />
+                    <span>{cat.dropdownLabel}</span>
+                  </div>
+                  <svg
+                    className={`w-4 h-4 text-white transition-transform duration-200 shrink-0 ${
+                      openDropdowns[cat.id] ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {/* Contenu déroulant */}
+                {openDropdowns[cat.id] && (
+                  <div className={`mt-3 p-3.5 rounded-xl ${cat.color.subBg} border ${cat.color.border}`}>
+                    <ul className="space-y-1.5">
+                      {cat.classes.map((item, itemIdx) => (
+                        <li
+                          key={itemIdx}
+                          className="text-xs text-ope-text flex items-start gap-2 font-medium"
+                        >
+                          <span
+                            className={`w-1.5 h-1.5 rounded-full shrink-0 mt-1.5 ${cat.color.dotColor}`}
+                          />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>
@@ -299,144 +257,14 @@ export default function Categories() {
               {t("apropos.description")}
             </p>
           </div>
-          <NavLink
-            to="/formulaire"
-            className="inline-flex items-center justify-center px-6 py-3 rounded-xl text-sm font-bold text-white bg-ope-orange hover:bg-[#d44d1f] shadow-md transition-all duration-200 shrink-0 active:scale-95"
+          <span
+            className="inline-flex items-center justify-center px-6 py-3 rounded-xl text-sm font-bold text-white bg-ope-orange shadow-md shrink-0 cursor-not-allowed select-none"
+            title="Les inscriptions sont actuellement fermées"
           >
             {t("categories_page.apply_house")}
-          </NavLink>
+          </span>
         </div>
       </section>
-
-      {/* Modale details */}
-      {selectedCat && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0f172a]"
-          onClick={() => setSelectedCat(null)}
-        >
-          <div
-            className="bg-white rounded-2xl w-full max-w-lg p-6 sm:p-8 shadow-2xl border border-ope-border relative max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setSelectedCat(null)}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-ope-bg flex items-center justify-center text-ope-text-muted hover:bg-ope-border transition-colors cursor-pointer z-10"
-              aria-label="Fermer"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-
-            {/* Illustration dans la modale */}
-            <div className="relative h-48 sm:h-56 w-full overflow-hidden rounded-xl mb-5 bg-slate-100 border border-ope-border">
-              <img
-                src={selectedCat.image}
-                alt={selectedCat.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            <div className="flex items-center gap-3 mb-4 pr-8">
-              <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${selectedCat.color.iconBg} ${selectedCat.color.iconColor}`}
-              >
-                {selectedCat.icon}
-              </div>
-              <div>
-                <h3 className="text-lg font-black text-ope-text leading-tight">
-                  {selectedCat.title}
-                </h3>
-                <p
-                  className={`text-[10px] font-extrabold uppercase tracking-wider ${selectedCat.color.tagColor}`}
-                >
-                  {selectedCat.tag}
-                </p>
-              </div>
-            </div>
-
-            <p className="text-xs sm:text-sm text-ope-text-muted leading-relaxed mb-5">
-              {selectedCat.desc}
-            </p>
-
-            {/* Classes dans la modale */}
-            <div className="mb-5">
-              <h4 className="text-xs font-black text-ope-text uppercase tracking-wider mb-2.5">
-                Classes
-              </h4>
-
-              <div className={`p-3.5 rounded-xl ${selectedCat.color.subBg} border ${selectedCat.color.border}`}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {selectedCat.classes.map((item, iIdx) => (
-                    <div
-                      key={iIdx}
-                      className="p-2 rounded-lg bg-white border border-slate-200 text-xs text-ope-text font-medium flex items-center gap-2 shadow-xs"
-                    >
-                      <span
-                        className={`w-1.5 h-1.5 rounded-full shrink-0 ${selectedCat.color.dotColor}`}
-                      />
-                      <span>{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="mb-4">
-              <h4 className="text-xs font-black text-ope-text uppercase tracking-wider mb-2">
-                Objectifs Cles
-              </h4>
-              <ul className="space-y-1.5">
-                {selectedCat.details.objectifs.map((obj, i) => (
-                  <li
-                    key={i}
-                    className="text-xs text-ope-text-muted flex items-start gap-2"
-                  >
-                    <span
-                      className={`w-1.5 h-1.5 rounded-full shrink-0 mt-1.5 ${selectedCat.color.dotColor}`}
-                    />
-                    {obj}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="mb-6 p-3 rounded-xl bg-ope-bg border border-ope-border">
-              <p className="text-xs text-ope-text">
-                <span className="font-black text-ope-orange">
-                  Eligibilite :{" "}
-                </span>
-                {selectedCat.details.criteres}
-              </p>
-            </div>
-
-            <div className="flex gap-3 justify-end">
-              <button
-                onClick={() => setSelectedCat(null)}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-ope-text-muted hover:bg-ope-bg border border-ope-border transition-colors cursor-pointer"
-              >
-                {t("talents.close")}
-              </button>
-              <NavLink
-                to="/formulaire"
-                className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-ope-orange hover:bg-[#d44d1f] transition-colors"
-              >
-                {t("categories_page.apply_house")} &rarr;
-              </NavLink>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

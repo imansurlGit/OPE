@@ -71,14 +71,23 @@ durablement le Niger et la jeunesse.
             photo: kaderImg,
             couleur: "#0A7B8E",
             couleurLight: "#EBF7F9",
-            exergue: "La jeunesse africaine, lorsqu'elle est soutenue et valorisée, peut rivaliser et briller sur la scène internationale.",
-            mot: `C'est avec une grande fierté et un enthousiasme sincère que l'UNESCO Center for Peace salue et soutient l'Organisation pour la Promotion de l'Excellence du Niger dans cette initiative remarquable qu'est le CNCEIZ Agadez 2026.
+            exergue: `Ils demandent qu'on les écoute, qu'on les guide et qu'on leur donne une chance de montrer ce qu'ils valent.
+Le Camp National Citoyen de l'Excellence et de l'Innovation est notre réponse.`,
+            mot: `Certains engagements se décident dans une salle de réunion. D'autres se décident devant un jeune qui vous montre son projet, les yeux brillants, en s'excusant presque de ne pas avoir plus de moyens. Pour moi, tout a commencé là.
 
-Nous avons eu le privilège de témoigner, lors du Camp Mondial 2024 à Hood College, de l'excellence extraordinaire des délégués nigériens. Leur victoire au Prix STEAM, leur engagement à l'IMUN et les Awards décernés à l'OPE ne sont pas de simples récompenses : ils sont la preuve vivante que la jeunesse africaine, lorsqu'elle est soutenue et valorisée, peut rivaliser et briller sur la scène internationale.
+Depuis la création de l'OPE, j'ai rencontré des jeunes qui réparent, codent, cultivent, inventent et organisent, souvent seuls, avec ce qu'ils ont sous la main. Ils ne demandent pas des miracles. Ils demandent qu'on les écoute, qu'on les guide et qu'on leur donne une chance de montrer ce qu'ils valent.
 
-Le CNCEIZ perpétue et amplifie cet élan. Il crée un écosystème d'excellence ancré dans les réalités culturelles et géographiques du Sahel, tout en connectant la jeunesse nigérienne aux standards mondiaux de l'innovation. Nous croyons fermement que des partenariats comme celui-ci sont le fondement d'une paix durable, construite sur la science, la créativité et la citoyenneté active.
+Le Camp National Citoyen de l'Excellence et de l'Innovation est notre réponse. Il rassemble les jeunes de 12 à 35 ans, juniors et seniors, parce que le talent ne regarde pas l'âge. Chacun y trouve sa place : en STEAM, pour innover par la science, la technologie et les arts ; en Local Project, pour résoudre les problèmes de sa communauté avec les moyens de sa communauté ; en Modèle Communautaire Citoyen, pour faire de l'entraide et du civisme un mode de vie.
 
-Notre institution demeure un partenaire engagé et fier à vos côtés.`,
+Le Niger est engagé dans sa refondation. Et une refondation, ce n'est pas seulement des textes et des institutions. C'est aussi une génération qui se lève, qui apprend, qui ose et qui se sent attendue. Si nous voulons un pays solide demain, c'est aujourd'hui que nous devons miser sur ceux qui le porteront.
+
+Mon engagement personnel est simple : être aux côtés de ces jeunes, du premier jour jusqu'à la remise des projets, et faire en sorte que chaque idée sérieuse trouve une porte ouverte.
+
+À vous, jeunes : inscrivez-vous, venez avec vos idées, même inachevées. Le camp est fait pour les faire grandir.
+
+À vous, partenaires et soutiens : rejoignez-nous comme bâtisseurs de cette première édition. Votre appui permettra à des centaines de jeunes de passer de l'idée à l'action.
+
+Le Niger n'a pas à chercher loin ses talents. Il suffit de leur ouvrir la porte.`,
         },
     ];
 

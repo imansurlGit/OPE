@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
 import heroImg from "../assets/agadez_drone.jpeg";
 import campNationalCitoyen from "../assets/camp_natio.png";
 import useCountdown from "../hooks/useCountdown";
@@ -284,13 +283,13 @@ export default function Accueil() {
                         id="hero-cta"
                         className="animate-fade-up-d3 flex flex-row gap-2 sm:gap-4 justify-center w-full max-w-xs sm:max-w-none"
                     >
-                        <Link
-                            to="/formulaire"
-                            className="flex-1 w-1/4 sm:flex-none inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white transition-all duration-200 active:scale-95 text-center"
+                        <span
+                            className="flex-1 w-1/4 sm:flex-none inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white text-center cursor-not-allowed select-none"
                             style={{ backgroundColor: ORANGE, boxShadow: "0 4px 16px rgba(241,91,41,0.40)" }}
+                            title="Les inscriptions sont actuellement fermées"
                         >
                             {t("hero.cta_register")}
-                        </Link>
+                        </span>
                     </div>
 
                     <div className="w-full flex items-center justify-between mt-1 sm:mt-2 text-white font-extrabold uppercase text-[10px] sm:text-lg tracking-tight">
