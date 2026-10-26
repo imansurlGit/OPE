@@ -51,7 +51,7 @@
         "title": "Modèles MC2",
         "subtitle": "Modèle de Citoyen Communautaire",
         "items": [
-          "Plantation d'arbres sur le site de Kourboubou",
+          "Plantation d'arbres",
           "Sen de tables-bancs",
           "Confection de poubelles"
         ]
@@ -60,7 +60,7 @@
         "title": "Modèles MC2",
         "subtitle": "Modèle de Citoyen Communautaire",
         "items": [
-          "Plantation d'arbres sur le site de Kourboubou",
+          "Plantation d'arbres",
           "Sensibilisation back to school",
           "7km de la paix"
         ]
@@ -84,7 +84,7 @@
   },
   "apropos": {
     "title": "Cultiver l'Excellence au Coeur du Sahel.",
-    "description": "OPE Agadez est une initiative audacieuse visant à révéler et propulser les jeunes talents nigériens. Nous croyons que l'innovation naît de l'alliance entre notre riche héritage culturel et les technologies de demain.",
+    "description": "Camp National Citoyen de l'Excellence et de l'Innovation est une initiative audacieuse visant à révéler et propulser les jeunes talents nigériens. Nous croyons que l'innovation naît de l'alliance entre notre riche héritage culturel et les technologies de demain.",
     "pilier_1_title": "Éducation de Pointe",
     "pilier_1_desc": "Accès à des programmes de formation intensifs, conçus pour répondre aux défis technologiques actuels et futurs.",
     "pilier_2_title": "Innovation Technologique",
@@ -128,7 +128,7 @@
     "mcc_title": "House Modèle de Citoyen Communautaire (MC2)",
     "mcc_desc": "Engagement civique, salubrité publique, paix et solidarité au service direct des communautés.",
     "discover_domain": "Explorer ce domaine",
-    "apply_house": "Postuler dans cette House"
+    "apply_house": "Candidater"
   },
   "membres": {
     "title": "L'Équipe CNCEIZ",
@@ -192,7 +192,7 @@
   },
   "sponsors_page": {
     "title": "Nos Partenaires & Sponsors",
-    "subtitle": "Leur soutien indéfectible est le moteur essentiel à la promotion de l'excellence technologique et éducative à Agadez. Ensemble, nous bâtissons l'avenir du Sahel.",
+    "subtitle": "Leur soutien indéfectible est le moteur essentiel à la promotion de l'excellence technologique et éducative au Sahel. Ensemble, nous bâtissons l'avenir du Sahel.",
     "stat_companies": "Entreprises",
     "stat_institutions": "Institutions",
     "stat_impact": "Impact FCFA",
@@ -452,7 +452,7 @@
   "popup": {
     "mascotte": {
       "title": "Concours de la mascotte CNCEIZ Agadez 2026",
-      "subtitle": "Imagine la mascotte du Camp d'Agadez et donne-lui un nom. Montre ton talent ! Dépose ton dessin et tente de remporter les prix du concours.",
+      "subtitle": "Imagine la mascotte du Camp d'Excellence et donne-lui un nom. Montre ton talent ! Dépose ton dessin et tente de remporter le concours et inscrit ton nom dans l'histoire.",
       "participate": "Je participe !",
       "later": "Plus tard",
       "close": "Fermer la fenêtre"

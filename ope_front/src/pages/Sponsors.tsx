@@ -29,8 +29,8 @@ const CATEGORIES_CONFIG: Record<PartenaireCategorie, CategorieConfig> = {
     accent: "#1E3A52",
     softAccent: "#EEF4F8",
     borderAccent: "#C5D8E8",
-    logoHeight: "h-28 sm:h-32",
-    cardWidth: "w-[280px] sm:w-[320px] md:w-[360px]",
+    logoHeight: "h-24 sm:h-28",
+    cardWidth: "w-[260px] sm:w-[290px]",
   },
   or: {
     id: "or",
@@ -39,7 +39,7 @@ const CATEGORIES_CONFIG: Record<PartenaireCategorie, CategorieConfig> = {
     softAccent: "#FEF7EA",
     borderAccent: "#F2D8A7",
     logoHeight: "h-24 sm:h-28",
-    cardWidth: "w-[240px] sm:w-[280px] md:w-[300px]",
+    cardWidth: "w-[245px] sm:w-[275px]",
   },
   argent: {
     id: "argent",
@@ -47,8 +47,8 @@ const CATEGORIES_CONFIG: Record<PartenaireCategorie, CategorieConfig> = {
     accent: "#475569",
     softAccent: "#F1F5F9",
     borderAccent: "#CBD5E1",
-    logoHeight: "h-20 sm:h-24",
-    cardWidth: "w-[210px] sm:w-[240px] md:w-[260px]",
+    logoHeight: "h-24 sm:h-28",
+    cardWidth: "w-[230px] sm:w-[260px]",
   },
   bronze: {
     id: "bronze",
@@ -56,8 +56,8 @@ const CATEGORIES_CONFIG: Record<PartenaireCategorie, CategorieConfig> = {
     accent: "#A3522C",
     softAccent: "#FDF3EE",
     borderAccent: "#F3D0C1",
-    logoHeight: "h-16 sm:h-20",
-    cardWidth: "w-[180px] sm:w-[210px] md:w-[230px]",
+    logoHeight: "h-24 sm:h-28",
+    cardWidth: "w-[220px] sm:w-[250px]",
   },
 };
 
@@ -162,7 +162,7 @@ function getInitials(nom: string): string {
 }
 
 /* =========================================================================
-   Carte Partenaire Individuelle (Design Moderne, Épuré & Premium)
+   Carte Partenaire Individuelle (Design Harmonisé, Épuré & Premium)
    ========================================================================= */
 
 function PartnerCard({ p }: { p: Partenaire }) {
@@ -173,9 +173,9 @@ function PartnerCard({ p }: { p: Partenaire }) {
 
   return (
     <article
-      className={`group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl bg-white border transition-all duration-300 ease-out hover:-translate-y-1.5 ${
+      className={`group relative flex h-[265px] sm:h-[285px] w-full flex-col justify-between overflow-hidden rounded-2xl bg-white border transition-all duration-300 ease-out hover:-translate-y-1.5 ${
         isPlatine
-          ? "p-5 sm:p-6 shadow-sm hover:shadow-xl"
+          ? "p-4 sm:p-5 shadow-sm hover:shadow-xl"
           : isOr
             ? "p-4 sm:p-5 shadow-xs hover:shadow-lg"
             : "p-3.5 sm:p-4 shadow-xs hover:shadow-md"
@@ -184,7 +184,7 @@ function PartnerCard({ p }: { p: Partenaire }) {
     >
       <div className="flex flex-col h-full justify-between">
         {/* Header de la carte : Badge officiel & Symbole d'accréditation */}
-        <div className="mb-3.5 flex items-center justify-between">
+        <div className="mb-3 flex items-center justify-between">
           <span
             className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider border"
             style={{
@@ -234,7 +234,7 @@ function PartnerCard({ p }: { p: Partenaire }) {
         </div>
 
         {/* Pied de la carte : Nom et sous-titre officiel */}
-        <div className="mt-3.5 text-center">
+        <div className="mt-3 text-center">
           <h3
             className={`font-black leading-snug text-ope-text transition-colors group-hover:text-[#193549] line-clamp-2 ${
               isPlatine
@@ -248,7 +248,7 @@ function PartnerCard({ p }: { p: Partenaire }) {
             {p.nom}
           </h3>
           <p className="mt-1 text-[10px] font-bold tracking-wider text-slate-500 uppercase">
-            Partenaire Officiel
+            {p.statut || "Partenaire Officiel"}
           </p>
         </div>
       </div>
@@ -257,21 +257,12 @@ function PartnerCard({ p }: { p: Partenaire }) {
 }
 
 /* =========================================================================
-   Composant Carousel par Palier
+   Carrousel Unique Regroupant Toutes les Catégories de Partenaires
    ========================================================================= */
 
-const TIER_SPEEDS: Record<PartenaireCategorie, number> = {
-  platine: 28,
-  or: 32,
-  argent: 36,
-  bronze: 40,
-};
-
 function PartnerCarousel({
-  config,
   items,
 }: {
-  config: CategorieConfig;
   items: Partenaire[];
 }) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -280,7 +271,7 @@ function PartnerCarousel({
   // ── Duplication harmonieuse pour une boucle infinie invisible ──
   const repeatedItems = useMemo(() => {
     if (items.length === 0) return [];
-    const minCards = 10;
+    const minCards = 12;
     const baseRepeats = Math.ceil(minCards / items.length);
     const repeats = baseRepeats % 2 === 0 ? baseRepeats : baseRepeats + 1;
 
@@ -303,7 +294,7 @@ function PartnerCarousel({
 
     let animId: number;
     let lastTime: number | null = null;
-    const speed = TIER_SPEEDS[config.id] || 32;
+    const speed = 32;
 
     const step = (time: number) => {
       if (!lastTime) lastTime = time;
@@ -328,7 +319,7 @@ function PartnerCarousel({
     return () => {
       if (animId) cancelAnimationFrame(animId);
     };
-  }, [isPaused, items.length, config.id]);
+  }, [isPaused, items.length]);
 
   // ── Boucle transparente en cas de glissement manuel / tactile ──
   const handleScrollEvent = () => {
@@ -347,7 +338,7 @@ function PartnerCarousel({
   const handleScroll = (direction: "left" | "right") => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    const scrollAmount = Math.max(el.clientWidth * 0.6, 260);
+    const scrollAmount = Math.max(el.clientWidth * 0.6, 280);
 
     setIsPaused(true);
     el.scrollBy({
@@ -357,33 +348,24 @@ function PartnerCarousel({
 
     setTimeout(() => {
       setIsPaused(false);
-    }, 1000);
+    }, 1200);
   };
 
   return (
     <section
-      className="mb-10 sm:mb-14 last:mb-6"
+      className="mb-10 sm:mb-14"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={() => setIsPaused(true)}
       onTouchEnd={() => setIsPaused(false)}
     >
-      {/* En-tête de catégorie avec boutons de contrôle */}
+      {/* En-tête du carrousel unique avec contrôles */}
       <div className="mb-4 flex items-center justify-between border-b border-slate-200/80 pb-3">
         <div className="flex items-center gap-2.5">
-          <span
-            className="flex h-8 w-8 items-center justify-center rounded-lg shadow-2xs"
-            style={{ backgroundColor: config.softAccent, color: config.accent }}
-          >
-            <TierIcon tier={config.id} className="h-4 w-4" />
-          </span>
           <div className="flex items-baseline gap-2">
             <h2 className="text-lg font-black text-ope-text sm:text-xl">
-              Partenaires {config.label}
+              Nos Partenaires
             </h2>
-            <span className="text-xs font-semibold text-ope-text-muted">
-              ({items.length})
-            </span>
           </div>
         </div>
 
@@ -392,7 +374,7 @@ function PartnerCarousel({
           <button
             type="button"
             onClick={() => handleScroll("left")}
-            aria-label={`Précédent (${config.label})`}
+            aria-label="Précédent"
             className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-300 bg-white text-ope-text shadow-2xs hover:bg-slate-50 hover:border-slate-400 active:scale-95 cursor-pointer"
           >
             <svg
@@ -409,7 +391,7 @@ function PartnerCarousel({
           <button
             type="button"
             onClick={() => handleScroll("right")}
-            aria-label={`Suivant (${config.label})`}
+            aria-label="Suivant"
             className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-300 bg-white text-ope-text shadow-2xs hover:bg-slate-50 hover:border-slate-400 active:scale-95 cursor-pointer"
           >
             <svg
@@ -426,7 +408,7 @@ function PartnerCarousel({
         </div>
       </div>
 
-      {/* Rail défilant (Carousel fluide continu) */}
+      {/* Rail défilant (Carrousel unique pour toutes les catégories) */}
       <div
         ref={scrollContainerRef}
         onScroll={handleScrollEvent}
@@ -437,14 +419,18 @@ function PartnerCarousel({
           WebkitOverflowScrolling: "touch",
         }}
       >
-        {repeatedItems.map((partner) => (
-          <div
-            key={partner.uniqueKey}
-            className={`shrink-0 ${config.cardWidth}`}
-          >
-            <PartnerCard p={partner} />
-          </div>
-        ))}
+        {repeatedItems.map((partner) => {
+          const category = (partner.categorie || "bronze") as PartenaireCategorie;
+          const config = CATEGORIES_CONFIG[category] ?? CATEGORIES_CONFIG.bronze;
+          return (
+            <div
+              key={partner.uniqueKey}
+              className={`shrink-0 ${config.cardWidth}`}
+            >
+              <PartnerCard p={partner} />
+            </div>
+          );
+        })}
       </div>
     </section>
   );
@@ -460,6 +446,7 @@ export default function Sponsors() {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<"all" | PartenaireCategorie>("all");
 
   useEffect(() => {
     let isMounted = true;
@@ -483,24 +470,44 @@ export default function Sponsors() {
     };
   }, []);
 
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {
+      all: partenaires.length,
+      platine: 0,
+      or: 0,
+      argent: 0,
+      bronze: 0,
+    };
+    partenaires.forEach((p) => {
+      const cat = p.categorie || "bronze";
+      if (counts[cat] !== undefined) counts[cat]++;
+    });
+    return counts;
+  }, [partenaires]);
+
   const filteredPartenaires = useMemo(() => {
     const query = searchQuery.trim().toLocaleLowerCase();
-    if (!query) return partenaires;
-    return partenaires.filter((partner) =>
-      partner.nom.toLocaleLowerCase().includes(query)
-    );
-  }, [partenaires, searchQuery]);
+    let result = partenaires;
 
-  const groupedByCategorie = useMemo(
-    () =>
-      CATEGORIE_ORDER.map((id) => ({
-        config: CATEGORIES_CONFIG[id],
-        items: filteredPartenaires.filter(
-          (partner) => (partner.categorie || "bronze") === id,
-        ),
-      })).filter(({ items }) => items.length > 0),
-    [filteredPartenaires],
-  );
+    if (query) {
+      result = result.filter((partner) =>
+        partner.nom.toLocaleLowerCase().includes(query)
+      );
+    }
+
+    if (selectedCategory !== "all") {
+      result = result.filter(
+        (partner) => (partner.categorie || "bronze") === selectedCategory
+      );
+    }
+
+    // Trier par hiérarchie de palier officiel (Platine -> Or -> Argent -> Bronze)
+    return [...result].sort((a, b) => {
+      const orderA = CATEGORIE_ORDER.indexOf((a.categorie || "bronze") as PartenaireCategorie);
+      const orderB = CATEGORIE_ORDER.indexOf((b.categorie || "bronze") as PartenaireCategorie);
+      return (orderA === -1 ? 99 : orderA) - (orderB === -1 ? 99 : orderB);
+    });
+  }, [partenaires, searchQuery, selectedCategory]);
 
   return (
     <div className="bg-ope-bg pt-20 sm:pt-24">
@@ -514,56 +521,95 @@ export default function Sponsors() {
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ope-text-muted sm:text-base">
               {t(
                 "sponsors_page.subtitle",
-                "Institutions, gouvernements, ONG et entreprises engagés pour faire émerger l'excellence et l'audace de la jeunesse d'Agadez.",
+                "Leur soutien indéfectible est le moteur essentiel à la promotion de l'excellence technologique et éducative au Sahel. Ensemble, nous bâtissons l'avenir du Sahel.",
               )}
             </p>
           </div>
         </div>
       </section>
 
-      {/* ── Recherche textuelle épurée ── */}
+      {/* ── Barre de Recherche & Filtres par Palier ── */}
       <section className="px-4 pb-4 sm:px-6">
         <div className="mx-auto max-w-7xl">
-          <div className="relative max-w-md">
-            <svg
-              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            <div className="relative max-w-md w-full">
+              <svg
+                className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Rechercher un partenaire..."
+                className="w-full rounded-full border border-slate-200 bg-white py-2 pl-9 pr-8 text-xs text-ope-text placeholder-slate-400 shadow-2xs focus:border-ope-primary focus:bg-white focus:outline-none focus:ring-1 focus:ring-ope-primary"
               />
-            </svg>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Rechercher un partenaire..."
-              className="w-full rounded-full border border-slate-200 bg-white py-2 pl-9 pr-8 text-xs text-ope-text placeholder-slate-400 shadow-2xs focus:border-ope-primary focus:bg-white focus:outline-none focus:ring-1 focus:ring-ope-primary"
-            />
-            {searchQuery && (
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                  aria-label="Effacer la recherche"
+                >
+                  <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              )}
+            </div>
+
+            {/* Badges filtres par palier */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
               <button
                 type="button"
-                onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
-                aria-label="Effacer la recherche"
+                onClick={() => setSelectedCategory("all")}
+                className={`rounded-full px-3 py-1.5 text-xs font-bold transition-all cursor-pointer shrink-0 ${
+                  selectedCategory === "all"
+                    ? "bg-[#1E3A52] text-white shadow-2xs"
+                    : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
+                }`}
               >
-                <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
+                Toutes ({partenaires.length})
               </button>
-            )}
+              {CATEGORIE_ORDER.map((catId) => {
+                const conf = CATEGORIES_CONFIG[catId];
+                const count = categoryCounts[catId] || 0;
+                const isSelected = selectedCategory === catId;
+                return (
+                  <button
+                    key={catId}
+                    type="button"
+                    onClick={() => setSelectedCategory(catId)}
+                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all cursor-pointer shrink-0 ${
+                      isSelected
+                        ? "text-white shadow-2xs"
+                        : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
+                    }`}
+                    style={isSelected ? { backgroundColor: conf.accent } : undefined}
+                  >
+                    <TierIcon tier={catId} className="h-3 w-3" />
+                    <span>{conf.label}</span>
+                    <span className="text-[10px] opacity-80">({count})</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── Contenu Principal : Carousels par Palier ── */}
+      {/* ── Contenu Principal : Carrousel Unique de Partenaires ── */}
       <main className="px-4 py-6 sm:px-6 sm:py-8">
         <div className="mx-auto max-w-7xl">
           {isLoading && (
@@ -583,7 +629,7 @@ export default function Sponsors() {
             />
           )}
 
-          {!isLoading && !hasError && groupedByCategorie.length === 0 && (
+          {!isLoading && !hasError && filteredPartenaires.length === 0 && (
             <div className="mx-auto max-w-md rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-2xs">
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
                 <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -595,30 +641,27 @@ export default function Sponsors() {
                 Aucun partenaire ne correspond à votre recherche
               </h3>
               <p className="mt-1 text-xs text-ope-text-muted">
-                Essayez d'ajuster vos mots-clés de recherche.
+                Essayez d'ajuster vos critères ou mots-clés de recherche.
               </p>
-              {searchQuery && (
+              {(searchQuery || selectedCategory !== "all") && (
                 <button
                   type="button"
-                  onClick={() => setSearchQuery("")}
+                  onClick={() => {
+                    setSearchQuery("");
+                    setSelectedCategory("all");
+                  }}
                   className="mt-4 rounded-full bg-ope-primary px-4 py-2 text-xs font-bold text-white shadow-2xs hover:bg-ope-primary-dark cursor-pointer"
                 >
-                  Réinitialiser la recherche
+                  Réinitialiser les filtres
                 </button>
               )}
             </div>
           )}
 
-          {/* ── Itération par Paliers avec Carousels Dédiés ── */}
-          {!isLoading &&
-            !hasError &&
-            groupedByCategorie.map(({ config, items }) => (
-              <PartnerCarousel
-                key={config.id}
-                config={config}
-                items={items}
-              />
-            ))}
+          {/* ── Carrousel Unique contenant toutes les catégories de partenaires ── */}
+          {!isLoading && !hasError && filteredPartenaires.length > 0 && (
+            <PartnerCarousel items={filteredPartenaires} />
+          )}
         </div>
       </main>
 

@@ -328,6 +328,57 @@ export default function AdminTalents() {
     });
   };
 
+  // Helper lisible pour domaine_steam
+  const getDomaineLabel = (key?: string) => {
+    const MAP: Record<string, string> = {
+      robotique: "Robotique",
+      ia: "Intelligence Artificielle",
+      aerospatial: "Aéronautique",
+      aeronautique: "Aéronautique",
+      solaire: "Énergies renouvelables",
+      energies_renouvelables: "Énergies renouvelables",
+      biotech: "Biotechnologie",
+      biotechnologie: "Biotechnologie",
+      art: "Art",
+      maths_logique: "Maths & Logique",
+      agriculture: "Agriculture",
+      elevage: "Élevage",
+      artisanat: "Artisanat",
+      entrepreneuriat: "Entrepreneuriat",
+      marketing_digital: "Marketing digital",
+      debats_communautaires: "Débats communautaires",
+      formation_citoyennete: "Formation citoyenneté",
+      fabrication_poubelles: "Fabrication de poubelles",
+      "7km_paix": "7 km de la Paix",
+      rehabilitation_tables_bancs: "Réhabilitation tables-bancs",
+      don: "Don",
+      plantation_arbres: "Plantation d'arbres",
+      sensibilisation_paix: "Sensibilisation à la paix",
+      sensibilisation_education: "Sensibilisation à l'éducation",
+      volontariat: "Volontariat",
+      autre: "Autre",
+    };
+    return key ? MAP[key] || key : undefined;
+  };
+
+  // Helper badge Catégorie Junior / Senior
+  const renderCategorieBadge = (categorie?: string) => {
+    if (categorie === "junior") {
+      return (
+        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-violet-50 text-violet-700 border border-violet-200">
+          <span className="w-1.5 h-1.5 rounded-full bg-violet-500" />
+          Junior
+        </span>
+      );
+    }
+    return (
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-sky-50 text-sky-700 border border-sky-200">
+        <span className="w-1.5 h-1.5 rounded-full bg-sky-500" />
+        Sénior
+      </span>
+    );
+  };
+
   // Helper pour les badges de statut (uniquement : Admis au camp ou Dossier soumis)
   const renderStatutBadge = (statut: Candidature["statut"]) => {
     switch (statut) {
@@ -669,6 +720,7 @@ export default function AdminTalents() {
                 <tr className="bg-[#f4f8fb] border-b border-[#d0e4f0] text-[11px] font-black uppercase text-gray-500 tracking-wider">
                   <th className="py-3.5 px-4">Talent / Candidat</th>
                   <th className="py-3.5 px-4">Réf. Dossier</th>
+                  <th className="py-3.5 px-4">Catégorie</th>
                   <th className="py-3.5 px-4">Maison & Projet</th>
                   <th className="py-3.5 px-4">Origine</th>
                   <th className="py-3.5 px-4">Score</th>
@@ -705,18 +757,29 @@ export default function AdminTalents() {
                       </span>
                     </td>
 
-                    {/* Maison & House */}
+                    {/* Catégorie Junior / Sénior + Domaine */}
+                    <td className="py-3 px-4 whitespace-nowrap">
+                      <div className="flex flex-col gap-0.5">
+                        {renderCategorieBadge(cand.categorie)}
+                        {cand.domaine_steam && (
+                          <span className="text-[11px] text-gray-400 font-semibold pl-0.5 max-w-[120px] truncate" title={getDomaineLabel(cand.domaine_steam)}>
+                            {getDomaineLabel(cand.domaine_steam)}
+                          </span>
+                        )}
+                      </div>
+                    </td>
+
+                    {/* Maison & Domaine */}
                     <td className="py-3 px-4 max-w-[220px]">
                       <div className="space-y-0.5">
                         <span className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-black uppercase border ${getDomaineBadge(cand.maison || cand.domaine || "")}`}>
                           {getMaisonLabel(cand.maison) || cand.domaine}
                         </span>
-                        <p
-                          className="text-xs font-semibold text-gray-800 truncate"
-                          title={cand.innovation_nom || getMaisonLabel(cand.maison) || cand.house_visee}
-                        >
-                          {cand.innovation_nom || getMaisonLabel(cand.maison) || cand.house_visee || "—"}
-                        </p>
+                        {cand.domaine_steam && (
+                          <p className="text-[11px] text-gray-400 font-semibold truncate" title={getDomaineLabel(cand.domaine_steam)}>
+                            {getDomaineLabel(cand.domaine_steam)}
+                          </p>
+                        )}
                       </div>
                     </td>
 
@@ -798,8 +861,11 @@ export default function AdminTalents() {
               </div>
 
               <div className="pt-3 border-t border-[#d0e4f0]/80 flex items-center justify-between mt-2">
-                <div className="text-[11px] font-semibold text-gray-400">
-                  <span>{cand.region}</span> · <span>{cand.ville_village}</span>
+                <div className="flex items-center gap-1.5">
+                  {renderCategorieBadge(cand.categorie)}
+                  <span className="text-[11px] font-semibold text-gray-400">
+                    {cand.region} · {cand.ville_village}
+                  </span>
                 </div>
                 {renderStatutBadge(cand.statut)}
               </div>
@@ -840,10 +906,11 @@ export default function AdminTalents() {
                   {selectedCandidate.prenom?.charAt(0) || ""}{selectedCandidate.nom?.charAt(0) || ""}
                 </div>
                 <div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <h2 className="text-lg sm:text-xl font-black text-gray-900">
                       {selectedCandidate.prenom} {selectedCandidate.nom}
                     </h2>
+                    {renderCategorieBadge(selectedCandidate.categorie)}
                     <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase border ${getDomaineBadge(selectedCandidate.maison || selectedCandidate.domaine || "")}`}>
                       {getMaisonLabel(selectedCandidate.maison) || selectedCandidate.domaine}
                     </span>

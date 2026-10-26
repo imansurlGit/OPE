@@ -43,9 +43,9 @@ export default function APropos() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
             ),
-            titre: "Tourisme & culture",
+            titre: "Tourisme, Culture & Sport",
             sousTitre: "Agadez, mémoire vivante du Sahel.",
-            desc: "Cité de l'Aïr inscrite au patrimoine mondial de l'UNESCO, Agadez offre un cadre unique : visites guidées, valorisation des savoir-faire locaux et appui aux femmes et jeunes filles de la région.",
+            desc: "Cité de l’Aïr inscrite au patrimoine mondial de l’UNESCO, Agadez offre un cadre unique : visites guidées, valorisation des savoir-faire locaux, soutien aux femmes et aux jeunes filles et à l'épanouissement de la jeunesse par le sport.",
             span: "md:col-span-1",
         },
         {
@@ -95,7 +95,7 @@ export default function APropos() {
 
                     <div className="prose prose-neutral text-ope-text-muted text-sm sm:text-base leading-relaxed space-y-4 max-w-4xl">
                         <p className="text-base sm:text-lg text-ope-text font-medium leading-relaxed border-l-2 border-ope-orange pl-4 italic">
-                            Centre historique inscrit au patrimoine mondial de l'UNESCO, Agadez veille depuis des siècles sur les routes du savoir. C'est ici que l'Organisation pour la Promotion de l'Excellence (OPE) réunit la jeunesse pour le Camp National Citoyen de l'Excellence et de l'Innovation (CNCEIZ).
+                            Centre historique inscrit au patrimoine mondial de l'UNESCO, Agadez vieille depuis des siècles sur les routes du savoir. C'est ici que l'Organisation pour la Promotion de l'Excellence (OPE) réunit la jeunesse pour le Camp National Citoyen de l'Excellence et de l'Innovation (CNCEIZ).
                         </p>
                         <p>
                             Héritier de la brillante participation du Niger au Camp Mondial de l'UNESCO Center for Peace en 2024 à Hood College, le camp poursuit une ambition claire : former une jeunesse compétente, engagée et fière.
@@ -132,7 +132,7 @@ export default function APropos() {
                             <div className="bg-ope-bg p-4 rounded-2xl border border-ope-border text-center">
                                 <span className="block text-2xl font-black text-ope-primary">1er Prix</span>
                                 <span className="text-xs font-bold text-ope-text mt-0.5 block">STEAM</span>
-                                <span className="text-[10px] text-ope-text-muted">Groupe OMEGA</span>
+                                <span className="text-[10px] text-ope-text-muted">Groupe SIGMA</span>
                             </div>
 
                             <div className="bg-ope-bg p-4 rounded-2xl border border-ope-border text-center">

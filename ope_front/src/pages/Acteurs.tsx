@@ -1,13 +1,13 @@
 import { useState } from "react";
+import presiImg from "../assets/presi.jpeg";
+import kaderImg from "../assets/kader.jpeg";
 
 interface Acteur {
     id: number;
-    badge: string;
     titre: string;
     sousTitre: string;
     nom: string;
     photo: string | null;
-    initiales: string;
     couleur: string;
     couleurLight: string;
     exergue: string;
@@ -20,29 +20,55 @@ export default function Acteurs() {
     const acteurs: Acteur[] = [
         {
             id: 1,
-            badge: "MESSAGE OFFICIEL",
-            titre: "Ministre de la Télécommunication",
-            sousTitre: "Gouvernement du Niger",
-            nom: "Son Excellence, le Ministre de la Télécommunication",
-            photo: null,
-            initiales: "MC",
-            couleur: "#193549",
-            couleurLight: "#EEF3F7",
-            exergue: "Notre jeunesse doit être non seulement consommatrice des technologies, mais surtout actrice et innovatrice.",
-            mot: `Le Camp National Citoyen de l'Excellence et de l'Innovation à Agadez est une initiative qui incarne parfaitement la vision du Niger pour sa jeunesse. Dans un monde où les technologies de l'information et de la communication redéfinissent chaque secteur de notre économie et de notre société, il est impératif que notre jeunesse soit non seulement consommatrice, mais surtout actrice et innovatrice.
-
-Ce camp représente un tournant décisif. Il réunit sous un même ciel saharien les esprits les plus brillants de notre nation, les outille des compétences du XXIe siècle, et leur offre une plateforme unique pour transformer leurs idées en solutions concrètes pour nos communautés.
-
-Le Gouvernement du Niger soutient pleinement cette démarche et s'engage à accompagner tous les efforts visant à faire de notre jeunesse le moteur de notre développement technologique et citoyen. Ensemble, bâtissons le Niger de demain.`,
+            titre: "Présidente",
+            sousTitre: "Organisation pour la Promotion de l'Excellence (OPE)",
+            nom: "Mme la Présidente de l'OPE",
+            photo: presiImg,
+            couleur: "#F15B29",
+            couleurLight: "#FFF3EE",
+            exergue: `Le Niger est le pays le plus jeune du monde. Cette réalité démographique, souvent
+citée comme un défi est en vérité notre ressource la plus précieuse et la plus
+sous-exploitée.`,
+            mot: `Il est des projets qui naissent d'un
+constat, et d'autres qui naissent d'une
+intime conviction. Le Camp National
+Citoyen de l'Excellence et de l'Innovation
+est de ceux-là. Il est né de la conviction,
+profonde et irréductible, que la jeunesse
+nigérienne n'a pas besoin qu'on lui
+invente un avenir. Elle a besoin qu'on lui
+offre un cadre à la hauteur de ce qu'elle
+est déjà capable d'accomplir.
+Le Niger est le pays le plus jeune du monde. Cette réalité démographique, souvent
+citée comme un défi est en vérité notre ressource la plus précieuse et la plus
+sous-exploitée. Dans les ateliers sans électricité, dans les cours de récréation
+poussiéreuses, dans les chambres mal éclairées de Niamey, Zinder, Maradi,
+Tahoua et Agadez, des milliers de jeunes construisent des prototypes, imaginent
+des solutions, portent des projets d'une créativité et d'une pertinence
+remarquables. Ce que ces jeunes n'ont pas encore, c'est une scène nationale.
+C'est un moment où leur pays se retourne vers eux et leur dit:
+nous vous voyons, nous vous reconnaissons, vous êtes l'avenir que nous
+choisissons.
+Le Camp National Citoyen de l'Excellence et de l'Innovation est cette scène. Ce
+moment. Cette déclaration. Cette résolution.
+En fixant son siège moral à Agadez, cité millénaire, carrefour des civilisations
+sahariennes, Site du Patrimoine Mondial de l'UNESCO, le Camp envoie un signal
+fort à la nation entière : l'excellence nigérienne n'est pas une aspiration. Elle est
+une réalité historique à laquelle la génération d'aujourd'hui est appelée à renouer
+avec fierté. Elle est l'actualité.
+Nous vous invitons à rejoindre ce projet. Non pas comme donateurs, mais comme
+bâtisseurs. Les partenaires fondateurs de cette première édition ne figureront pas
+simplement sur une banderole. Ils seront inscrits, pour toujours, à la première
+page de l'histoire d'un rendez-vous national annuel appelé à marquer
+durablement le Niger et la jeunesse.
+`,
         },
         {
             id: 2,
-            badge: "MESSAGE PARTENAIRE",
-            titre: "Directeur Exécutif",
-            sousTitre: "UNESCO Center for Peace",
-            nom: "Dr. Hakim Jamal El-Din",
-            photo: null,
-            initiales: "HJ",
+            titre: "Secrétaire Général",
+            sousTitre: "Organisation pour la Promotion de l'Excellence (OPE)",
+            nom: "Kader Assane Seydou",
+            photo: kaderImg,
             couleur: "#0A7B8E",
             couleurLight: "#EBF7F9",
             exergue: "La jeunesse africaine, lorsqu'elle est soutenue et valorisée, peut rivaliser et briller sur la scène internationale.",
@@ -53,25 +79,6 @@ Nous avons eu le privilège de témoigner, lors du Camp Mondial 2024 à Hood Col
 Le CNCEIZ perpétue et amplifie cet élan. Il crée un écosystème d'excellence ancré dans les réalités culturelles et géographiques du Sahel, tout en connectant la jeunesse nigérienne aux standards mondiaux de l'innovation. Nous croyons fermement que des partenariats comme celui-ci sont le fondement d'une paix durable, construite sur la science, la créativité et la citoyenneté active.
 
 Notre institution demeure un partenaire engagé et fier à vos côtés.`,
-        },
-        {
-            id: 3,
-            badge: "MOT DE LA PRÉSIDENTE",
-            titre: "Présidente Fondatrice",
-            sousTitre: "Organisation pour la Promotion de l'Excellence (OPE)",
-            nom: "Mme la Présidente de l'OPE",
-            photo: null,
-            initiales: "PO",
-            couleur: "#F15B29",
-            couleurLight: "#FFF3EE",
-            exergue: "Chaque jeune Nigérien porte en lui une étincelle d'excellence qui n'attend que les bonnes conditions pour s'embraser.",
-            mot: `Le CNCEIZ Agadez 2026, c'est bien plus qu'un camp. C'est un rêve collectif que nous transformons ensemble en réalité, pierre par pierre, talent par talent, depuis des années.
-
-L'OPE a été fondée sur une conviction profonde : chaque jeune Nigérien porte en lui une étincelle d'excellence qui n'attend que les bonnes conditions pour s'embraser. Notre mission, depuis le premier jour, a été de créer ces conditions — un espace sûr, stimulant, inclusif — où la curiosité est récompensée, où l'erreur est une étape d'apprentissage, et où l'ambition n'a pas de frontières.
-
-Le CNCEIZ est l'expression la plus aboutie de cette vision. Il réunit des Junior passionnés qui imaginent la mascotte de demain, et des Senior innovateurs qui construisent les solutions d'aujourd'hui. Il fait dialoguer Agadez, l'Aïr, Niamey, Diffa et Tillabéri. Il inscrit le Niger sur la carte mondiale de l'excellence jeunesse.
-
-À tous les participants, parents, partenaires et membres de l'équipe : vous êtes le cœur de cette aventure. Ensemble, nous prouvons que l'excellence est nigérienne.`,
         },
     ];
 
@@ -106,50 +113,48 @@ Le CNCEIZ est l'expression la plus aboutie de cette vision. Il réunit des Junio
                                 {/* ── Layout : photo + citation ── */}
                                 <div className={`flex flex-col ${isEven ? "lg:flex-row-reverse" : "lg:flex-row"}`}>
 
-                                    {/* Colonne photo */}
-                                    <div
-                                        className="lg:w-72 shrink-0 flex flex-col items-center justify-center gap-5 p-8 lg:p-10"
-                                        style={{ backgroundColor: acteur.couleurLight }}
-                                    >
-                                        {/* Photo ou avatar */}
-                                        {acteur.photo ? (
+                                    {/* Colonne photo couvrant toute la section avec overlay coloré à opacité */}
+                                    <div className="relative lg:w-80 shrink-0 min-h-[300px] lg:min-h-full overflow-hidden flex flex-col justify-end p-6 sm:p-8 bg-slate-900">
+                                        {/* Photo pleine surface */}
+                                        {acteur.photo && (
                                             <img
                                                 src={acteur.photo}
                                                 alt={acteur.nom}
-                                                className="w-32 h-32 rounded-full object-cover shadow-md ring-4 ring-white"
+                                                className="absolute inset-0 w-full h-full object-cover object-top"
                                             />
-                                        ) : (
-                                            <div
-                                                className="w-32 h-32 rounded-full flex items-center justify-center text-3xl font-black text-white shadow-md ring-4 ring-white"
-                                                style={{ backgroundColor: acteur.couleur }}
-                                            >
-                                                {acteur.initiales}
-                                            </div>
                                         )}
 
-                                        {/* Identité */}
-                                        <div className="text-center">
-                                            <span
-                                                className="inline-block text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full text-white mb-2"
-                                                style={{ backgroundColor: acteur.couleur }}
-                                            >
-                                                {acteur.badge}
-                                            </span>
-                                            <p className="text-sm font-extrabold text-ope-text leading-snug">{acteur.titre}</p>
-                                            <p className="text-xs text-ope-text-muted mt-0.5">{acteur.sousTitre}</p>
+                                        {/* Voile coloré avec opacité */}
+                                        <div
+                                            className="absolute inset-0 pointer-events-none"
+                                            style={{
+                                                backgroundColor: acteur.couleur,
+                                                opacity: 0.28,
+                                            }}
+                                        />
+
+                                        {/* Dégradé pour lisibilité du titre */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
+
+                                        {/* Titre uniquement sur l'image */}
+                                        <div className="relative z-10 text-white">
+                                            <p className="text-lg sm:text-xl font-black text-white leading-snug drop-shadow-md">
+                                                {acteur.titre}
+                                            </p>
                                         </div>
                                     </div>
 
                                     {/* Colonne texte */}
                                     <div className="flex-1 p-8 lg:p-10 flex flex-col justify-between">
-                                        {/* Grand guillemet */}
-                                        <svg
-                                            className="w-12 h-12 mb-3"
-                                            style={{ color: acteur.couleur, opacity: 0.12 }}
-                                            fill="currentColor" viewBox="0 0 32 32"
-                                        >
-                                            <path d="M10 8C5.6 8 2 11.6 2 16v8h8v-8H6c0-2.2 1.8-4 4-4V8zm16 0c-4.4 0-8 3.6-8 8v8h8v-8h-4c0-2.2 1.8-4 4-4V8z" />
-                                        </svg>
+                                        <div>
+                                            {/* Grand guillemet */}
+                                            <svg
+                                                className="w-12 h-12 mb-3"
+                                                style={{ color: acteur.couleur, opacity: 0.12 }}
+                                                fill="currentColor" viewBox="0 0 32 32"
+                                            >
+                                                <path d="M10 8C5.6 8 2 11.6 2 16v8h8v-8H6c0-2.2 1.8-4 4-4V8zm16 0c-4.4 0-8 3.6-8 8v8h8v-8h-4c0-2.2 1.8-4 4-4V8z" />
+                                            </svg>
 
                                         {/* Phrase exergue */}
                                         <blockquote
@@ -159,14 +164,15 @@ Le CNCEIZ est l'expression la plus aboutie de cette vision. Il réunit des Junio
                                             « {acteur.exergue} »
                                         </blockquote>
 
-                                        {/* Texte complet (accordéon) */}
-                                        <div className={`overflow-hidden transition-all duration-500 ${isOpen ? "max-h-[800px]" : "max-h-0"}`}>
-                                            <div className="space-y-3 pb-5">
-                                                {acteur.mot.split("\n\n").map((para, i) => (
-                                                    <p key={i} className="text-sm text-ope-text leading-relaxed">
-                                                        {para}
-                                                    </p>
-                                                ))}
+                                            {/* Texte complet (accordéon) */}
+                                            <div className={`overflow-hidden transition-all duration-500 ${isOpen ? "max-h-[800px]" : "max-h-0"}`}>
+                                                <div className="space-y-3 pb-5">
+                                                    {acteur.mot.split("\n\n").map((para, i) => (
+                                                        <p key={i} className="text-sm text-ope-text leading-relaxed">
+                                                            {para}
+                                                        </p>
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
 

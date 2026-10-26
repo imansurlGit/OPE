@@ -12,17 +12,23 @@ class CandidatureViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = models.Candidature.objects.all().order_by("-created_at")
-        domaine = self.request.query_params.get("domaine")
+        categorie = self.request.query_params.get("categorie")
+        maison = self.request.query_params.get("maison")
+        domaine_steam = self.request.query_params.get("domaine_steam") or self.request.query_params.get("domaine") or self.request.query_params.get("classe")
         statut = self.request.query_params.get("statut")
         region = self.request.query_params.get("region")
         search = self.request.query_params.get("search")
 
-        if domaine and domaine != "all":
-            qs = qs.filter(domaine=domaine)
+        if categorie and categorie != "all":
+            qs = qs.filter(categorie=categorie)
+        if maison and maison != "all":
+            qs = qs.filter(maison=maison)
+        if domaine_steam and domaine_steam != "all":
+            qs = qs.filter(domaine_steam=domaine_steam)
         if statut and statut != "all":
             qs = qs.filter(statut=statut)
         if region and region != "all":
-            qs = qs.filter(region=region)
+            qs = qs.filter(region_ville__icontains=region)
         if search:
             search_clean = search.strip()
             qs = qs.filter(
@@ -30,8 +36,9 @@ class CandidatureViewSet(viewsets.ModelViewSet):
                 Q(prenom__icontains=search_clean) |
                 Q(reference__icontains=search_clean) |
                 Q(email__icontains=search_clean) |
-                Q(ville_village__icontains=search_clean) |
-                Q(house_visee__icontains=search_clean)
+                Q(region_ville__icontains=search_clean) |
+                Q(innovation_nom__icontains=search_clean) |
+                Q(mascotte_nom__icontains=search_clean)
             )
         return qs
 
@@ -43,15 +50,45 @@ class CandidatureViewSet(viewsets.ModelViewSet):
         return [perm() for perm in permission_classes]
 
     def create(self, request, *args, **kwargs):
-        # Supporte FormData et JSON
         data = request.data.copy() if hasattr(request.data, 'copy') else dict(request.data)
 
-        # Statut 'admis' par défaut pour le moment
-        if not data.get("statut"):
-            data["statut"] = "admis"
+        is_admin_action = (
+            (request.user and request.user.is_authenticated) or
+            request.headers.get("X-Admin-Action") == "true"
+        )
+
+        # Interdire au client public ordinaire de forcer statut, score ou note_interne
+        if not is_admin_action:
+            data.pop("statut", None)
+            data.pop("score_evaluation", None)
+            data.pop("note_interne", None)
+        else:
+            # Pour l'administration, valider par défaut les consentements s'ils ne sont pas spécifiés
+            if "disponible_camps" not in data:
+                data["disponible_camps"] = True
+            if "accepte_conditions" not in data:
+                data["accepte_conditions"] = True
+            if "autorisation_parent" not in data:
+                data["autorisation_parent"] = True
+            if "accord_utilisation_dessin" not in data:
+                data["accord_utilisation_dessin"] = True
+
+        # Ignorer age et date_naissance pour rétrocompatibilité
+        data.pop("age", None)
+        data.pop("date_naissance", None)
 
         # Conversion des booleans venant de multipart/form-data
-        for bool_field in ["certification", "confirmation_parent"]:
+        bool_fields = [
+            "autorisation_parent",
+            "accord_utilisation_dessin",
+            "participe_defile",
+            "facilitateur_juniors",
+            "souhaite_stand",
+            "concours_prix_innovation",
+            "disponible_camps",
+            "accepte_conditions",
+        ]
+        for bool_field in bool_fields:
             if bool_field in data:
                 val = data[bool_field]
                 if isinstance(val, str):
@@ -61,7 +98,6 @@ class CandidatureViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         candidature = serializer.save()
 
-        # Retourner la candidature complète créée
         response_serializer = self.get_serializer(candidature)
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
@@ -91,29 +127,25 @@ class CandidatureViewSet(viewsets.ModelViewSet):
         pct_f = round((femmes / total * 100), 1) if total else 0
         pct_m = round((hommes / total * 100), 1) if total else 0
 
-        # ── Répartition par domaine ──
-        domaines_qs = qs.values("domaine").annotate(count=Count("id"))
-        domaines = {d["domaine"]: d["count"] for d in domaines_qs}
-
-        steam = domaines.get("STEAM", 0)
-        lp = domaines.get("LP", 0)
-        mcc = domaines.get("MCC", 0)
+        # ── Répartition par catégorie / domaine ──
+        senior = qs.filter(categorie="senior").count()
+        junior = qs.filter(categorie="junior").count()
 
         # ── Répartition par région ──
         regions_qs = (
-            qs.values("region")
+            qs.values("region_ville")
             .annotate(count=Count("id"))
             .order_by("-count")
         )
-        max_region = regions_qs[0]["count"] if regions_qs else 1
         regions = [
             {
-                "region": r["region"],
+                "region": r["region_ville"] or "Non spécifiée",
                 "count": r["count"],
                 "percentage": round(r["count"] / total * 100) if total else 0,
             }
             for r in regions_qs
         ]
+        max_region = regions[0]["count"] if regions else 1
 
         now = timezone.now()
 
@@ -225,9 +257,15 @@ class CandidatureViewSet(viewsets.ModelViewSet):
                 "pct_m": pct_m,
             },
             "domaines": {
-                "STEAM": steam,
-                "LP": lp,
-                "MCC": mcc,
+                "STEAM": qs.filter(maison="steam").count(),
+                "LP": qs.filter(maison="local_project").count(),
+                "MCC": qs.filter(maison="mouvement_citoyen").count(),
+                "junior": junior,
+                "senior": senior,
+            },
+            "categories": {
+                "junior": junior,
+                "senior": senior,
             },
             "regions": regions,
             "max_region_count": max_region,
@@ -317,12 +355,103 @@ class PartenaireViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        qs = models.Partenaire.objects.all().order_by("type", "nom")
+        qs = models.Partenaire.objects.all().order_by("nom")
         type_param = self.request.query_params.get("type")
+        categorie_param = self.request.query_params.get("categorie")
         search = self.request.query_params.get("search")
 
         if type_param and type_param != "all":
             qs = qs.filter(type=type_param)
+        if categorie_param and categorie_param != "all":
+            qs = qs.filter(categorie=categorie_param)
         if search:
             qs = qs.filter(Q(nom__icontains=search.strip()))
         return qs
+
+
+class DocumentViewSet(viewsets.ModelViewSet):
+    serializer_class = sz.DocumentSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        qs = models.Document.objects.all().order_by("-annee", "-created_at")
+        type_param = self.request.query_params.get("type")
+        annee = self.request.query_params.get("annee")
+        search = self.request.query_params.get("search")
+
+        if type_param and type_param != "all":
+            qs = qs.filter(type=type_param)
+        if annee and annee != "all":
+            qs = qs.filter(annee=annee)
+        if search:
+            qs = qs.filter(Q(titre__icontains=search.strip()))
+        return qs
+
+
+from rest_framework.throttling import AnonRateThrottle
+
+class MascotteSubmissionRateThrottle(AnonRateThrottle):
+    rate = "10/minute"
+
+class CandidatMascotteViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet pour la gestion des candidatures au Concours de la Mascotte :
+    - POST /api/mascotte/candidatures/ : Public, soumission de candidature avec limitation de débit et protection anti-spam.
+    - GET, PUT, PATCH, DELETE : Réservé aux administrateurs authentifiés.
+    """
+    serializer_class = sz.CandidatMascotteSerializer
+
+    def get_permissions(self):
+        if self.action == "create":
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
+
+    def get_throttles(self):
+        if self.action == "create":
+            return [MascotteSubmissionRateThrottle()]
+        return super().get_throttles()
+
+    def get_queryset(self):
+        qs = models.CandidatMascotte.objects.all().order_by("-created_at")
+        classe = self.request.query_params.get("classe")
+        statut = self.request.query_params.get("statut")
+        region = self.request.query_params.get("region") or self.request.query_params.get("region_ville")
+        search = self.request.query_params.get("search")
+
+        if classe and classe != "all":
+            qs = qs.filter(classe=classe)
+        if statut and statut != "all":
+            qs = qs.filter(statut=statut)
+        if region and region != "all":
+            qs = qs.filter(region_ville__icontains=region)
+        if search:
+            s = search.strip()
+            qs = qs.filter(
+                Q(nom__icontains=s) |
+                Q(prenom__icontains=s) |
+                Q(reference__icontains=s) |
+                Q(mascotte_nom__icontains=s) |
+                Q(nom_tuteur__icontains=s) |
+                Q(telephone_tuteur__icontains=s)
+            )
+        return qs
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        candidat = serializer.save()
+
+        # Réponse publique ne révélant aucune donnée personnelle de mineur
+        public_data = sz.CandidatMascottePublicSerializer(candidat).data
+        headers = self.get_success_headers(public_data)
+        
+        return Response(
+            {
+                "success": True,
+                "message": "Félicitations ! Ta candidature au Concours de la Mascotte CNCEIZ Agadez 2026 a été enregistrée avec succès.",
+                **public_data,
+            },
+            status=status.HTTP_201_CREATED,
+            headers=headers,
+        )
+

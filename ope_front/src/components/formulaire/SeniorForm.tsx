@@ -1,8 +1,8 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import type { SeniorData, SeniorErrors } from "../../types/formulaire";
+import type { SeniorData, SeniorErrors, MaisonType } from "../../types/formulaire";
 import {
-  DOMAINES_STEAM_OPTIONS,
+  getClassesOptionsForMaison,
   STADES_DEVELOPPEMENT_OPTIONS,
   REGIONS_NIGER_OPTIONS,
 } from "../../types/formulaire";
@@ -17,6 +17,7 @@ import {
 
 interface SeniorFormProps {
   step: number;
+  maison?: MaisonType;
   data: SeniorData;
   fieldErrors: SeniorErrors;
   onChangeField: <K extends keyof SeniorData>(field: K, value: SeniorData[K]) => void;
@@ -29,6 +30,7 @@ interface SeniorFormProps {
 
 export const SeniorForm: React.FC<SeniorFormProps> = ({
   step,
+  maison,
   data,
   fieldErrors,
   onChangeField,
@@ -36,6 +38,37 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
   onFileRemove,
 }) => {
   const { t } = useTranslation();
+
+  // Dynamique selon la Maison
+  const classesOptions = getClassesOptionsForMaison(maison || "steam");
+
+  const domaineLabel =
+    maison === "local_project"
+      ? "Filière / Classe"
+      : maison === "mouvement_citoyen"
+        ? "Activité / Engagement"
+        : "Domaine / Classe STEAM";
+
+  const domaineplaceholder =
+    maison === "local_project"
+      ? "Sélectionnez une filière"
+      : maison === "mouvement_citoyen"
+        ? "Sélectionnez une activité"
+        : "Sélectionnez un domaine STEAM";
+
+  const domaineAutreLabel =
+    maison === "local_project"
+      ? "Précisez la filière"
+      : maison === "mouvement_citoyen"
+        ? "Précisez l'activité"
+        : "Précisez le domaine STEAM";
+
+  const step2Title =
+    maison === "local_project"
+      ? "Étape 2 : Votre projet local"
+      : maison === "mouvement_citoyen"
+        ? "Étape 2 : Votre engagement citoyen"
+        : "Étape 2 : Votre innovation";
 
   return (
     <div className="space-y-6">
@@ -148,28 +181,28 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
         </div>
       )}
 
-      {/* ── ÉTAPE 2 : VOTRE INNOVATION STEAM ── */}
+      {/* ── ÉTAPE 2 : PROJET / INNOVATION (dynamique selon la Maison) ── */}
       {step === 2 && (
         <div className="space-y-5 animate-fade-up">
           <div className="border-b border-slate-100 pb-3 mb-4">
             <h2 className="text-lg sm:text-xl font-bold text-[#193549]">
-              {t("form.senior.step2_title", "Étape 2 : Votre innovation")}
+              {step2Title}
             </h2>
             <p className="text-xs sm:text-sm text-[#5C6B76]">
               {t(
                 "form.senior.step2_subtitle",
-                "Décrivez votre projet scientifique, son domaine, son état d'avancement et fournissez vos éléments de preuve.",
+                "Décrivez votre projet, son domaine / sa classe, son état d'avancement et fournissez vos éléments de preuve.",
               )}
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <SelectField
-              label={t("form.senior.domaine_steam", "Domaine STEAM")}
+              label={domaineLabel}
               name="domaineSteam"
               required
-              options={DOMAINES_STEAM_OPTIONS}
-              placeholder="Sélectionnez un domaine STEAM"
+              options={classesOptions}
+              placeholder={domaineplaceholder}
               value={data.domaineSteam}
               onChange={(e) =>
                 onChangeField("domaineSteam", e.target.value as SeniorData["domaineSteam"])
@@ -196,10 +229,10 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
 
           {data.domaineSteam === "autre" && (
             <TextField
-              label={t("form.senior.domaine_steam_autre", "Précisez votre domaine STEAM")}
+              label={domaineAutreLabel}
               name="domaineSteamAutre"
               required
-              placeholder="Ex: Énergies marines, Télécoms, Nanotechnologies..."
+              placeholder="Ex: Précisez votre domaine / activité..."
               value={data.domaineSteamAutre}
               onChange={(e) => onChangeField("domaineSteamAutre", e.target.value)}
               error={fieldErrors.domaineSteamAutre}

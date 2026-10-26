@@ -42,6 +42,7 @@ export default function AdminPartenaires() {
 
   // Form state
   const [formNom, setFormNom] = useState("");
+  const [formStatut, setFormStatut] = useState("Partenaire Officiel");
   const [formCategorie, setFormCategorie] = useState<PartenaireCategorie>("bronze");
   const [formLogoFile, setFormLogoFile] = useState<File | null>(null);
   const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(null);
@@ -103,6 +104,7 @@ export default function AdminPartenaires() {
   const openCreateModal = () => {
     setEditingPartenaire(null);
     setFormNom("");
+    setFormStatut("Partenaire Officiel");
     setFormCategorie("bronze");
     setFormLogoFile(null);
     setLogoPreviewUrl(null);
@@ -113,6 +115,7 @@ export default function AdminPartenaires() {
   const openEditModal = (p: Partenaire) => {
     setEditingPartenaire(p);
     setFormNom(p.nom);
+    setFormStatut(p.statut || "Partenaire Officiel");
     setFormCategorie(p.categorie || "bronze");
     setFormLogoFile(null);
     setLogoPreviewUrl(p.logo || null);
@@ -140,6 +143,7 @@ export default function AdminPartenaires() {
     try {
       const formData = new FormData();
       formData.append("nom", formNom.trim());
+      formData.append("statut", formStatut.trim() || "Partenaire Officiel");
       formData.append("categorie", formCategorie);
       if (formLogoFile) formData.append("logo", formLogoFile);
 
@@ -324,9 +328,12 @@ export default function AdminPartenaires() {
                       </span>
                     )}
                   </div>
-                  <h3 className="font-extrabold text-gray-900 text-sm leading-snug flex-1">
+                  <h3 className="font-extrabold text-gray-900 text-sm leading-snug">
                     {p.nom}
                   </h3>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mt-1">
+                    {p.statut || "Partenaire Officiel"}
+                  </p>
                 </div>
 
                 {/* Actions */}
@@ -411,6 +418,23 @@ export default function AdminPartenaires() {
                   placeholder="Nom complet de l'organisation"
                   className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold text-gray-900 focus:outline-none focus:border-[#f15b29]"
                 />
+              </div>
+
+              {/* Statut / Sous-titre */}
+              <div>
+                <label className="block text-xs font-extrabold text-gray-800 mb-1">
+                  Statut / Sous-titre
+                </label>
+                <input
+                  type="text"
+                  value={formStatut}
+                  onChange={(e) => setFormStatut(e.target.value)}
+                  placeholder="Ex: Partenaire Officiel, Sponsor Majeur..."
+                  className="w-full bg-[#f4f8fb] border border-gray-200 rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold text-gray-900 focus:outline-none focus:border-[#f15b29]"
+                />
+                <span className="text-[10px] text-gray-400 mt-1 block">
+                  Texte affiché sous le nom (ex: Partenaire Officiel, Partenaire Technique...)
+                </span>
               </div>
 
               {/* Palier / Catégorie */}

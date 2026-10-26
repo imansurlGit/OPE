@@ -1,7 +1,6 @@
 import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import api from "../services/api";
-import { createCandidatureMascotte } from "../services/mascotteApi";
 import type {
   CategorieType,
   MaisonType,
@@ -165,7 +164,7 @@ export function useCandidatureForm(
     if (currentStep === 1) {
       if (!juniorData.nom.trim()) errs.nom = t("form.err_nom", "Le nom est obligatoire.");
       if (!juniorData.prenom.trim()) errs.prenom = t("form.err_prenom", "Le prénom est obligatoire.");
-      if (!juniorData.classe) errs.classe = t("form.junior.err_classe", "La classe est obligatoire.");
+      if (!juniorData.sexe) errs.sexe = t("form.senior.err_sexe", "Le sexe est obligatoire.");
       if (!juniorData.regionVille || !juniorData.regionVille.trim()) {
         errs.regionVille = t("form.junior.err_region", "La région de résidence est obligatoire.");
       }
@@ -175,30 +174,33 @@ export function useCandidatureForm(
         errs.telephoneTuteur = t("form.err_phone_format", "Numéro de téléphone invalide.");
       }
     } else if (currentStep === 2) {
-      if (!juniorData.mascotteNom.trim()) {
-        errs.mascotteNom = t("form.junior.err_mascotte_nom", "Le nom de la mascotte est obligatoire.");
+      if (!juniorData.houseVisee) {
+        errs.houseVisee = "Veuillez sélectionner la House visée.";
       }
-      if (!juniorData.mascotteDessin) {
-        errs.mascotteDessin = t(
-          "form.junior.err_mascotte_dessin",
-          "Le dessin de la mascotte est obligatoire (photo ou scan).",
-        );
+      if (juniorData.houseVisee === "autre" && !juniorData.houseViseeAutre.trim()) {
+        errs.houseViseeAutre = "Veuillez préciser votre House / spécialité.";
+      }
+      if (!juniorData.situation) {
+        errs.situation = "Veuillez sélectionner votre situation / état d'avancement.";
+      }
+      if (!juniorData.descriptionProjet.trim()) {
+        errs.descriptionProjet = "La description de votre projet / idée est obligatoire.";
       }
     } else if (currentStep === 3) {
+      if (!juniorData.motivation.trim()) {
+        errs.motivation = "Votre lettre / texte de motivation est obligatoire.";
+      }
       if (!juniorData.nomTuteur.trim()) {
         errs.nomTuteur = t("form.junior.err_nom_tuteur", "Le nom du parent ou tuteur est obligatoire.");
       }
-      if (!juniorData.autorisationParent) {
-        errs.autorisationParent = t(
-          "form.junior.err_accord_parent",
-          "L'accord du parent/tuteur est obligatoire pour participer.",
-        );
+      if (!juniorData.disponibleCamps) {
+        errs.disponibleCamps = "Vous devez certifier l'exactitude des informations et votre disponibilité.";
       }
-      if (!juniorData.accordUtilisationDessin) {
-        errs.accordUtilisationDessin = t(
-          "form.junior.err_accord_dessin",
-          "L'accord d'utilisation du dessin est obligatoire.",
-        );
+      if (!juniorData.signatureCandidat) {
+        errs.signatureCandidat = "La signature du candidat est requise.";
+      }
+      if (!juniorData.signatureParent) {
+        errs.signatureParent = "La signature du parent ou tuteur est obligatoire.";
       }
     }
 
@@ -228,10 +230,10 @@ export function useCandidatureForm(
       }
     } else if (currentStep === 2) {
       if (!seniorData.domaineSteam) {
-        errs.domaineSteam = t("form.senior.err_domaine", "Le domaine STEAM est obligatoire.");
+        errs.domaineSteam = t("form.senior.err_domaine", "Le domaine ou la classe est obligatoire.");
       }
       if (seniorData.domaineSteam === "autre" && !seniorData.domaineSteamAutre.trim()) {
-        errs.domaineSteamAutre = t("form.senior.err_domaine_autre", "Veuillez préciser le domaine STEAM.");
+        errs.domaineSteamAutre = t("form.senior.err_domaine_autre", "Veuillez préciser le domaine / la classe.");
       }
       if (!seniorData.innovationNom.trim()) {
         errs.innovationNom = t("form.senior.err_innovation_nom", "Le nom de l'innovation est obligatoire.");
@@ -315,22 +317,52 @@ export function useCandidatureForm(
       if (categorie === "junior") {
         formData.append("nom", juniorData.nom.trim());
         formData.append("prenom", juniorData.prenom.trim());
-        formData.append("classe", juniorData.classe);
-        formData.append("etablissement", juniorData.etablissement.trim());
+        formData.append("sexe", juniorData.sexe);
         formData.append("region_ville", juniorData.regionVille.trim());
+        formData.append("telephone", (juniorData.telephoneCandidat || juniorData.telephoneTuteur).trim());
         formData.append("telephone_tuteur", juniorData.telephoneTuteur.trim());
-        formData.append("telephone", juniorData.telephoneTuteur.trim()); // Contact de référence
-
-        formData.append("mascotte_nom", juniorData.mascotteNom.trim());
-        formData.append("mascotte_pourquoi", juniorData.mascottePourquoi.trim());
-        formData.append("mascotte_signification", juniorData.mascotteSignification.trim());
-
+        formData.append("email", juniorData.email.trim());
+        formData.append("classe", juniorData.classe.trim());
+        formData.append("etablissement", juniorData.etablissement.trim());
         formData.append("nom_tuteur", juniorData.nomTuteur.trim());
-        formData.append("autorisation_parent", String(juniorData.autorisationParent));
-        formData.append("accord_utilisation_dessin", String(juniorData.accordUtilisationDessin));
 
-        if (rawFiles.mascotteDessin) {
-          formData.append("mascotte_dessin", rawFiles.mascotteDessin);
+        formData.append("domaine_steam", juniorData.houseVisee);
+        formData.append("domaine_steam_autre", juniorData.houseViseeAutre.trim());
+        formData.append("innovation_nom", juniorData.houseVisee === "autre" ? juniorData.houseViseeAutre : juniorData.houseVisee);
+        formData.append("innovation_description", juniorData.descriptionProjet.trim());
+
+        // Détails supplémentaires dans note_interne
+        const noteDetails = [
+          juniorData.villeVillage ? `Ville/Village: ${juniorData.villeVillage}` : "",
+          juniorData.nationalite ? `Nationalité: ${juniorData.nationalite}` : "",
+          juniorData.nomPointFocal ? `Point focal: ${juniorData.nomPointFocal}` : "",
+          juniorData.situation ? `Situation projet: ${juniorData.situation}` : "",
+          juniorData.filiereVisee ? `Filière visée: ${juniorData.filiereVisee}` : "",
+          juniorData.moyenneScolaire ? `Moyenne scolaire: ${juniorData.moyenneScolaire}` : "",
+          juniorData.contactRecommandation ? `Contact recommandation: ${juniorData.contactRecommandation}` : "",
+          juniorData.engagementType ? `Engagement type: ${juniorData.engagementType}` : "",
+          juniorData.accesNumerique ? `Accès numérique: ${juniorData.accesNumerique}` : "",
+          juniorData.biographie ? `Biographie: ${juniorData.biographie}` : "",
+          juniorData.motivation ? `Motivation: ${juniorData.motivation}` : "",
+        ]
+          .filter(Boolean)
+          .join("\n");
+        formData.append("note_interne", noteDetails);
+
+        formData.append("disponible_camps", String(juniorData.disponibleCamps));
+        formData.append("accepte_conditions", String(juniorData.signatureCandidat && juniorData.signatureParent));
+        formData.append("autorisation_parent", String(juniorData.signatureParent));
+
+        if (rawFiles.photoIdentite) {
+          formData.append("photo_identite", rawFiles.photoIdentite);
+        }
+        if (rawFiles.pieceIdentite) {
+          formData.append("piece_identite", rawFiles.pieceIdentite);
+        }
+        if (rawFiles.bulletinsScolaires) {
+          formData.append("preuves_realisation", rawFiles.bulletinsScolaires);
+        } else if (rawFiles.preuveProjet) {
+          formData.append("preuves_realisation", rawFiles.preuveProjet);
         }
       } else if (categorie === "senior") {
         formData.append("nom", seniorData.nom.trim());
@@ -366,30 +398,18 @@ export function useCandidatureForm(
         }
       }
 
-      let ref = "";
+      const res = await api.post<{
+        id: number;
+        reference?: string;
+        [key: string]: any;
+      }>("candidatures/", formData, { requiresAuth: false });
 
-      if (categorie === "junior") {
-        const mascotteRes = await createCandidatureMascotte(formData);
-        ref = mascotteRes.reference;
-        try {
-          localStorage.setItem("ope_mascotte_candidature_submitted", "true");
-        } catch {
-          // ignore storage error
-        }
-      } else {
-        const res = await api.post<{
-          id: number;
-          reference?: string;
-          [key: string]: any;
-        }>("candidatures/", formData, { requiresAuth: false });
-
-        if (!res || !res.reference) {
-          throw new Error(
-            "Le serveur n'a pas renvoyé de numéro de dossier officiel. Veuillez contacter l'administration de l'OPE.",
-          );
-        }
-        ref = res.reference;
+      if (!res || !res.reference) {
+        throw new Error(
+          "Le serveur n'a pas renvoyé de numéro de dossier officiel. Veuillez contacter l'administration de l'OPE.",
+        );
       }
+      const ref = res.reference;
 
       setCandidateRef(ref);
       setIsSubmitted(true);
@@ -397,19 +417,10 @@ export function useCandidatureForm(
     } catch (err: any) {
       console.error("Erreur de soumission candidature :", err);
 
-      // Si l'API renvoie des erreurs de champ précises pour le parcours junior
       if (categorie === "junior" && err?.fieldErrors) {
         setJuniorErrors((prev) => ({
           ...prev,
-          nom: err.fieldErrors.nom || prev.nom,
-          prenom: err.fieldErrors.prenom || prev.prenom,
-          classe: err.fieldErrors.classe || prev.classe,
-          telephoneTuteur: err.fieldErrors.telephone_tuteur || prev.telephoneTuteur,
-          nomTuteur: err.fieldErrors.nom_tuteur || prev.nomTuteur,
-          mascotteNom: err.fieldErrors.mascotte_nom || prev.mascotteNom,
-          mascotteDessin: err.fieldErrors.mascotte_dessin || prev.mascotteDessin,
-          autorisationParent: err.fieldErrors.autorisation_parent || prev.autorisationParent,
-          accordUtilisationDessin: err.fieldErrors.accord_utilisation_dessin || prev.accordUtilisationDessin,
+          ...err.fieldErrors,
         }));
       }
 

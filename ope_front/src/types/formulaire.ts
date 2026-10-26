@@ -4,16 +4,7 @@ export type MaisonType = "steam" | "local_project" | "mouvement_citoyen" | "";
 
 export type ClasseJunior = "6e" | "5e" | "4e" | "3e" | "";
 
-export type DomaineSteam =
-  | "robotique"
-  | "ia"
-  | "aerospatial"
-  | "solaire"
-  | "biotech"
-  | "art"
-  | "maths_logique"
-  | "autre"
-  | "";
+export type DomaineSteam = string;
 
 export type StadeDeveloppement =
   | "prototype"
@@ -29,24 +20,47 @@ export interface UploadedFileInfo {
 
 export interface JuniorData {
   categorie: "junior";
-  // Étape 1 : Qui es-tu ?
+  // Étape 1 : Identité du candidat
   nom: string;
   prenom: string;
-  classe: ClasseJunior;
+  sexe: "M" | "F" | "";
+  regionVille: string; // Région / Zone de pré-camp
+  villeVillage: string;
+  nationalite: string;
   etablissement: string;
-  regionVille: string;
+  classe: string;
+  telephoneCandidat: string;
+  email: string;
   telephoneTuteur: string;
+  nomPointFocal: string;
+  biographie: string;
 
-  // Étape 2 : Ta mascotte
-  mascotteNom: string;
-  mascottePourquoi: string;
-  mascotteDessin: UploadedFileInfo | null;
-  mascotteSignification: string;
+  // Étape 2 : House visée & Parcours / Projet
+  houseVisee: string;
+  houseViseeAutre: string;
+  situation: string; // Ex: 'projet_realise' | 'idee_projet' | 'vocation_claire'
+  descriptionProjet: string;
+  filiereVisee: string;
+  moyenneScolaire: string;
+  contactRecommandation: string; // Enseignant, chef de village, etc.
+  engagementType: "ponctuel" | "regulier" | "";
 
-  // Étape 3 : Autorisation & Récap
+  // Étape 3 : Motivation, Aptitude numérique & Pièces à joindre
+  motivation: string;
+  accesNumerique: "personnel" | "aide_tiers" | "sur_place" | "";
+  photoIdentite: UploadedFileInfo | null;
+  pieceIdentite: UploadedFileInfo | null;
+  bulletinsScolaires: UploadedFileInfo | null;
+  autorisationParentale: UploadedFileInfo | null;
+  preuveProjet: UploadedFileInfo | null;
+  lettreRecommandation: UploadedFileInfo | null;
+
+  // Signatures & Engagements
   nomTuteur: string;
-  autorisationParent: boolean;
-  accordUtilisationDessin: boolean;
+  signatureCandidat: boolean;
+  signatureParent: boolean;
+  disponibleCamps: boolean;
+  accepteConditions: boolean;
 }
 
 export interface SeniorData {
@@ -92,14 +106,14 @@ export interface FormStepConfig {
 }
 
 export const JUNIOR_STEPS: FormStepConfig[] = [
-  { key: "qui_es_tu", label: "Qui es-tu ?", shortLabel: "Identité" },
-  { key: "ta_mascotte", label: "Ta mascotte", shortLabel: "Mascotte" },
-  { key: "autorisation", label: "Autorisation & Finalisation", shortLabel: "Autorisation" },
+  { key: "identite", label: "Identité du candidat", shortLabel: "Identité" },
+  { key: "house_projet", label: "House visée & Projet", shortLabel: "Projet" },
+  { key: "motivation_pieces", label: "Motivation & Justificatifs", shortLabel: "Finalisation" },
 ];
 
 export const SENIOR_STEPS: FormStepConfig[] = [
   { key: "identite", label: "Identité du candidat", shortLabel: "Identité" },
-  { key: "innovation", label: "Votre innovation STEAM", shortLabel: "Innovation" },
+  { key: "innovation", label: "Votre projet / innovation", shortLabel: "Projet" },
   { key: "modalites", label: "Modalités de participation", shortLabel: "Modalités" },
 ];
 
@@ -107,17 +121,41 @@ export const INITIAL_JUNIOR_DATA: JuniorData = {
   categorie: "junior",
   nom: "",
   prenom: "",
-  classe: "",
-  etablissement: "",
+  sexe: "",
   regionVille: "",
+  villeVillage: "",
+  nationalite: "Nigérienne",
+  etablissement: "",
+  classe: "",
+  telephoneCandidat: "",
+  email: "",
   telephoneTuteur: "",
-  mascotteNom: "",
-  mascottePourquoi: "",
-  mascotteDessin: null,
-  mascotteSignification: "",
+  nomPointFocal: "",
+  biographie: "",
+
+  houseVisee: "",
+  houseViseeAutre: "",
+  situation: "",
+  descriptionProjet: "",
+  filiereVisee: "",
+  moyenneScolaire: "",
+  contactRecommandation: "",
+  engagementType: "",
+
+  motivation: "",
+  accesNumerique: "personnel",
+  photoIdentite: null,
+  pieceIdentite: null,
+  bulletinsScolaires: null,
+  autorisationParentale: null,
+  preuveProjet: null,
+  lettreRecommandation: null,
+
   nomTuteur: "",
-  autorisationParent: false,
-  accordUtilisationDessin: false,
+  signatureCandidat: false,
+  signatureParent: false,
+  disponibleCamps: false,
+  accepteConditions: false,
 };
 
 export const INITIAL_SENIOR_DATA: SeniorData = {
@@ -191,16 +229,66 @@ export const CLASSES_JUNIOR_OPTIONS: { value: ClasseJunior; label: string }[] = 
   { value: "3e", label: "3ème" },
 ];
 
-export const DOMAINES_STEAM_OPTIONS: { value: DomaineSteam; label: string }[] = [
-  { value: "robotique", label: "Robotique" },
-  { value: "ia", label: "Intelligence Artificielle" },
-  { value: "aerospatial", label: "Aéronautique et sciences spatiales" },
-  { value: "solaire", label: "Technologie solaire" },
-  { value: "biotech", label: "Biotechnologie" },
-  { value: "art", label: "Art" },
-  { value: "maths_logique", label: "Mathématiques et Logique" },
-  { value: "autre", label: "Autre" },
-];
+export const CLASSES_BY_MAISON: Record<string, { value: string; label: string }[]> = {
+  steam: [
+    { value: "robotique", label: "Robotique" },
+    { value: "ia", label: "Intelligence artificielle" },
+    {
+      value: "aeronautique",
+      label: "Aéronautique (simulateur de vol, montage de drones, observation de l'espace)",
+    },
+    { value: "energies_renouvelables", label: "Énergies renouvelables" },
+    { value: "biotechnologie", label: "Biotechnologie" },
+    { value: "art", label: "Art" },
+    { value: "maths_logique", label: "Mathématiques et Logique" },
+    { value: "autre", label: "Autre" },
+  ],
+  local_project: [
+    { value: "agriculture", label: "Agriculture" },
+    { value: "elevage", label: "Élevage" },
+    { value: "artisanat", label: "Artisanat" },
+    { value: "entrepreneuriat", label: "Entrepreneuriat" },
+    { value: "marketing_digital", label: "Marketing digital" },
+    { value: "autre", label: "Autre" },
+  ],
+  mouvement_citoyen: [
+    { value: "debats_communautaires", label: "Débats communautaires" },
+    {
+      value: "formation_citoyennete",
+      label: "Formation sur la citoyenneté, développement personnel et leadership",
+    },
+    { value: "fabrication_poubelles", label: "Fabrication de poubelles" },
+    { value: "7km_paix", label: "7 km de la Paix" },
+    { value: "rehabilitation_tables_bancs", label: "Réhabilitation de tables-bancs" },
+    { value: "don", label: "Don" },
+    { value: "plantation_arbres", label: "Plantation d'arbres" },
+    { value: "sensibilisation_paix", label: "Sensibilisation à la paix" },
+    { value: "sensibilisation_education", label: "Sensibilisation à l'éducation" },
+    { value: "volontariat", label: "Volontariat" },
+    { value: "autre", label: "Autre" },
+  ],
+};
+
+export function getClassesOptionsForMaison(maison?: string): { value: string; label: string }[] {
+  if (maison && CLASSES_BY_MAISON[maison]) {
+    return CLASSES_BY_MAISON[maison];
+  }
+  return CLASSES_BY_MAISON.steam;
+}
+
+export function getDomaineClasseLabel(val?: string, maison?: string): string {
+  if (!val) return "";
+  const options = getClassesOptionsForMaison(maison);
+  const found = options.find((o) => o.value === val);
+  if (found) return found.label;
+  for (const list of Object.values(CLASSES_BY_MAISON)) {
+    const item = list.find((o) => o.value === val);
+    if (item) return item.label;
+  }
+  return val;
+}
+
+export const DOMAINES_STEAM_OPTIONS: { value: string; label: string }[] = CLASSES_BY_MAISON.steam;
 
 export const STADES_DEVELOPPEMENT_OPTIONS: { value: StadeDeveloppement; label: string }[] = [
   { value: "prototype", label: "Prototype" },

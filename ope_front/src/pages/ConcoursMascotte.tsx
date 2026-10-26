@@ -1,35 +1,172 @@
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { useCandidatureForm } from "../hooks/useCandidatureForm";
-import { JuniorForm } from "../components/formulaire/JuniorForm";
+import { createCandidatureMascotte } from "../services/mascotteApi";
+import { MascotteForm, type MascotteFormData, type MascotteFormErrors } from "../components/formulaire/MascotteForm";
 import { MascotteSuccessView } from "../components/formulaire/MascotteSuccessView";
-import { JUNIOR_STEPS } from "../types/formulaire";
+import { MAX_FILE_SIZE, PHONE_REGEX } from "../types/formulaire";
+
+const MASCOTTE_STEPS = [
+  { key: "qui_es_tu", label: "Qui es-tu ?", shortLabel: "Identité" },
+  { key: "ta_mascotte", label: "Ta mascotte", shortLabel: "Mascotte" },
+  { key: "autorisation", label: "Autorisation & Finalisation", shortLabel: "Autorisation" },
+];
+
+const INITIAL_MASCOTTE_DATA: MascotteFormData = {
+  nom: "",
+  prenom: "",
+  classe: "",
+  etablissement: "",
+  regionVille: "",
+  telephoneTuteur: "",
+  mascotteNom: "",
+  mascottePourquoi: "",
+  mascotteDessin: null,
+  mascotteSignification: "",
+  nomTuteur: "",
+  autorisationParent: false,
+  accordUtilisationDessin: false,
+};
 
 export default function ConcoursMascotte() {
-  const {
-    step,
-    juniorData,
-    juniorErrors,
-    isSubmitting,
-    isSubmitted,
-    candidateRef,
-    errorMessage,
-    changeCategory,
-    updateJuniorField,
-    handleFileUpload,
-    handleFileRemove,
-    handleNext,
-    handlePrev,
-    handleSubmit,
-  } = useCandidatureForm("junior", "steam");
+  const [step, setStep] = useState<number>(1);
+  const [data, setData] = useState<MascotteFormData>(INITIAL_MASCOTTE_DATA);
+  const [fieldErrors, setFieldErrors] = useState<MascotteFormErrors>({});
+  const [rawFile, setRawFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [candidateRef, setCandidateRef] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     document.title = "Concours de la mascotte CNCEIZ Agadez 2026 – Je participe !";
   }, []);
 
-  const activeSteps = JUNIOR_STEPS;
+  const activeSteps = MASCOTTE_STEPS;
   const currentStepConfig = activeSteps[step - 1] || activeSteps[0];
   const maxSteps = activeSteps.length;
+
+  const updateField = useCallback(
+    <K extends keyof MascotteFormData>(field: K, value: MascotteFormData[K]) => {
+      setData((prev) => ({ ...prev, [field]: value }));
+      setFieldErrors((prev) => {
+        if (!prev[field]) return prev;
+        const next = { ...prev };
+        delete next[field];
+        return next;
+      });
+    },
+    [],
+  );
+
+  const handleFileUpload = useCallback((_field: "mascotteDessin", file: File) => {
+    if (file.size > MAX_FILE_SIZE) {
+      setErrorMessage("Le fichier dépasse la taille maximale autorisée de 10 Mo.");
+      return;
+    }
+    setRawFile(file);
+    setData((prev) => ({
+      ...prev,
+      mascotteDessin: {
+        name: file.name,
+        size: `${(file.size / (1024 * 1024)).toFixed(1)} Mo`,
+        previewUrl: file.type.startsWith("image/") ? URL.createObjectURL(file) : undefined,
+      },
+    }));
+    setFieldErrors((prev) => {
+      const next = { ...prev };
+      delete next.mascotteDessin;
+      return next;
+    });
+  }, []);
+
+  const handleFileRemove = useCallback((_field: "mascotteDessin") => {
+    setRawFile(null);
+    setData((prev) => ({ ...prev, mascotteDessin: null }));
+  }, []);
+
+  const validateStep = (currentStep: number): boolean => {
+    const errs: MascotteFormErrors = {};
+    if (currentStep === 1) {
+      if (!data.nom.trim()) errs.nom = "Le nom est obligatoire.";
+      if (!data.prenom.trim()) errs.prenom = "Le prénom est obligatoire.";
+      if (!data.classe) errs.classe = "La classe est obligatoire.";
+      if (!data.regionVille) errs.regionVille = "La région de résidence est obligatoire.";
+      if (!data.telephoneTuteur.trim()) {
+        errs.telephoneTuteur = "Le téléphone du parent/tuteur est obligatoire.";
+      } else if (!PHONE_REGEX.test(data.telephoneTuteur.trim())) {
+        errs.telephoneTuteur = "Numéro de téléphone invalide.";
+      }
+    } else if (currentStep === 2) {
+      if (!data.mascotteNom.trim()) errs.mascotteNom = "Le nom de la mascotte est obligatoire.";
+      if (!data.mascotteDessin) errs.mascotteDessin = "Le dessin de la mascotte est obligatoire (photo ou scan).";
+    } else if (currentStep === 3) {
+      if (!data.nomTuteur.trim()) errs.nomTuteur = "Le nom du parent ou tuteur est obligatoire.";
+      if (!data.autorisationParent) errs.autorisationParent = "L'accord du parent/tuteur est obligatoire pour participer.";
+      if (!data.accordUtilisationDessin) errs.accordUtilisationDessin = "L'accord d'utilisation du dessin est obligatoire.";
+    }
+    setFieldErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const handleNext = () => {
+    if (validateStep(step)) {
+      if (step < maxSteps) {
+        setStep((s) => s + 1);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+  };
+
+  const handlePrev = () => {
+    if (step > 1) {
+      setStep((s) => s - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!validateStep(step)) return;
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("nom", data.nom.trim());
+      formData.append("prenom", data.prenom.trim());
+      formData.append("classe", data.classe);
+      formData.append("etablissement", data.etablissement.trim());
+      formData.append("region_ville", data.regionVille.trim());
+      formData.append("telephone_tuteur", data.telephoneTuteur.trim());
+      formData.append("mascotte_nom", data.mascotteNom.trim());
+      formData.append("mascotte_pourquoi", data.mascottePourquoi.trim());
+      formData.append("mascotte_signification", data.mascotteSignification.trim());
+      formData.append("nom_tuteur", data.nomTuteur.trim());
+      formData.append("autorisation_parent", String(data.autorisationParent));
+      formData.append("accord_utilisation_dessin", String(data.accordUtilisationDessin));
+
+      if (rawFile) {
+        formData.append("mascotte_dessin", rawFile);
+      }
+
+      const res = await createCandidatureMascotte(formData);
+      setCandidateRef(res.reference);
+      setIsSubmitted(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err: any) {
+      setErrorMessage(err?.message || "Une erreur est survenue lors de l'enregistrement de votre candidature.");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleReset = () => {
+    setData(INITIAL_MASCOTTE_DATA);
+    setStep(1);
+    setFieldErrors({});
+    setIsSubmitted(false);
+    setCandidateRef("");
+  };
 
   // ── ÉCRAN DE SUCCÈS DÉDIÉ AU CONCOURS DE LA MASCOTTE ──
   if (isSubmitted) {
@@ -38,18 +175,18 @@ export default function ConcoursMascotte() {
         <div className="w-full max-w-3xl mt-6">
           <MascotteSuccessView
             reference={candidateRef}
-            nom={juniorData.nom}
-            prenom={juniorData.prenom}
-            classe={juniorData.classe}
-            etablissement={juniorData.etablissement}
-            regionVille={juniorData.regionVille}
-            mascotteNom={juniorData.mascotteNom}
-            mascottePourquoi={juniorData.mascottePourquoi}
-            mascotteSignification={juniorData.mascotteSignification}
-            dessinUrl={juniorData.mascotteDessin?.previewUrl}
-            telephoneTuteur={juniorData.telephoneTuteur}
-            nomTuteur={juniorData.nomTuteur}
-            onNewApplication={changeCategory}
+            nom={data.nom}
+            prenom={data.prenom}
+            classe={data.classe}
+            etablissement={data.etablissement}
+            regionVille={data.regionVille}
+            mascotteNom={data.mascotteNom}
+            mascottePourquoi={data.mascottePourquoi}
+            mascotteSignification={data.mascotteSignification}
+            dessinUrl={data.mascotteDessin?.previewUrl}
+            telephoneTuteur={data.telephoneTuteur}
+            nomTuteur={data.nomTuteur}
+            onNewApplication={handleReset}
           />
         </div>
       </div>
@@ -61,7 +198,6 @@ export default function ConcoursMascotte() {
       <div className="w-full max-w-4xl lg:max-w-5xl mt-6 mx-auto">
         {/* Form Container */}
         <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-5 sm:p-8 lg:p-10 mb-6">
-          
           {/* Stepper Header */}
           <div className="border-b border-slate-100 pb-6 mb-8">
             <div className="flex items-center justify-between mb-4">
@@ -147,12 +283,12 @@ export default function ConcoursMascotte() {
             </div>
           )}
 
-          {/* Formulaire Junior (3 étapes, pas d'âge ni date de naissance) */}
-          <JuniorForm
+          {/* Formulaire Mascotte */}
+          <MascotteForm
             step={step}
-            data={juniorData}
-            fieldErrors={juniorErrors}
-            onChangeField={updateJuniorField}
+            data={data}
+            fieldErrors={fieldErrors}
+            onChangeField={updateField}
             onFileUpload={handleFileUpload}
             onFileRemove={handleFileRemove}
           />

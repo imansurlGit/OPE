@@ -224,6 +224,7 @@ export interface Partenaire {
   nom: string;
   type: PartenaireType;
   categorie?: PartenaireCategorie;
+  statut?: string;
   logo?: string | null;
 }
 
