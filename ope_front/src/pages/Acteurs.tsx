@@ -24,8 +24,8 @@ export default function Acteurs() {
             sousTitre: "Organisation pour la Promotion de l'Excellence (OPE)",
             nom: "Mme la Présidente de l'OPE",
             photo: presiImg,
-            couleur: "#F15B29",
-            couleurLight: "#FFF3EE",
+            couleur: "#111111",
+            couleurLight: "#F5F5F5",
             exergue: `Le Niger est le pays le plus jeune du monde. Cette réalité démographique, souvent
 citée comme un défi est en vérité notre ressource la plus précieuse et la plus
 sous-exploitée.`,
