@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import logoOpe from "../assets/logo_ope.png";
 import logoEvent from "../assets/logo_event.jpeg";
@@ -141,12 +141,12 @@ export default function Navbar() {
         <div className="flex items-center gap-2 sm:gap-3">
           <LanguageSwitcher />
 
-          <span
-            className="hidden lg:inline-flex items-center px-5 py-2 rounded-full text-sm font-semibold text-ope-white bg-ope-orange shrink-0 shadow-sm cursor-not-allowed select-none"
-            title="Les inscriptions sont actuellement fermées"
+          <Link
+            to="/formulaire"
+            className="hidden lg:inline-flex items-center px-5 py-2 rounded-full text-sm font-semibold text-ope-white bg-ope-orange hover:bg-[#d94d1f] active:scale-95 transition-all shrink-0 shadow-sm cursor-pointer"
           >
             {t("nav.join")}
-          </span>
+          </Link>
 
           {/* Burger mobile */}
           <button
@@ -192,12 +192,13 @@ export default function Navbar() {
               {link.label}
             </NavLink>
           ))}
-          <span
-            className="mt-2 mb-2 px-5 py-2.5 rounded-full text-sm font-semibold text-ope-white bg-ope-orange text-center shadow-sm cursor-not-allowed select-none block"
-            title="Les inscriptions sont actuellement fermées"
+          <Link
+            to="/formulaire"
+            className="mt-2 mb-2 px-5 py-2.5 rounded-full text-sm font-semibold text-ope-white bg-ope-orange hover:bg-[#d94d1f] active:scale-95 transition-all text-center shadow-sm cursor-pointer block"
+            onClick={() => setMenuOpen(false)}
           >
             {t("nav.join")}
-          </span>
+          </Link>
         </div>
       </div>
     </nav>
