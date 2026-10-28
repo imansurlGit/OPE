@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import QRCode from "qrcode";
+import { useTranslation } from "react-i18next";
 import campNationalCitoyen from "../../assets/camp_natio.png";
 
 export interface MascotteSuccessViewProps {
@@ -33,6 +34,7 @@ export const MascotteSuccessView: React.FC<MascotteSuccessViewProps> = ({
   nomTuteur,
   onNewApplication,
 }) => {
+  const { t } = useTranslation();
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
 
   useEffect(() => {
@@ -68,8 +70,11 @@ export const MascotteSuccessView: React.FC<MascotteSuccessViewProps> = ({
       {/* ── TOP HERO HEADER ── */}
       <div className="text-center mb-8 max-w-xl">
         <h1 className="text-2xl sm:text-3xl font-black text-[#193549] tracking-tight">
-          Bravo {prenom} ! Ton dessin est bien enregistré !
+          {t("mascotte_page.success_congrats", { name: prenom, defaultValue: `Bravo ${prenom} ! Ton dessin est bien enregistré !` })}
         </h1>
+        <p className="text-xs sm:text-sm text-[#5C6B76] mt-1">
+          {t("mascotte_page.success_mascotte_sub", "Ton dessin pour la mascotte officielle CNCEIZ Agadez 2026 a été enregistré avec succès.")}
+        </p>
       </div>
 
       {/* ── ATTESTATION / CARTE D'ŒUVRE OFFICIELLE (PRINTABLE) ── */}
@@ -100,7 +105,7 @@ export const MascotteSuccessView: React.FC<MascotteSuccessViewProps> = ({
 
           <div className="text-right">
             <div className="text-[10px] text-white/60 mt-1 font-mono">
-              Réf : {reference}
+              {t("mascotte_page.success_badge_ref", "Réf :")} {reference}
             </div>
           </div>
         </div>
@@ -127,16 +132,13 @@ export const MascotteSuccessView: React.FC<MascotteSuccessViewProps> = ({
                   </div>
                 )}
               </div>
-              <span className="text-[11px] text-[#5C6B76] font-medium mt-2">
-                Aperçu de la création
-              </span>
             </div>
 
             {/* Mascot Details */}
             <div className="md:col-span-7 space-y-3">
               <div>
                 <span className="text-[11px] font-black uppercase tracking-wider text-[#2F6084] block">
-                  Nom de la Mascotte
+                  {t("mascotte_page.success_mascotte_name_label", "Nom de la Mascotte")}
                 </span>
                 <h3 className="text-xl sm:text-2xl font-black text-[#193549]">
                   « {mascotteNom || "Sans titre"} »
@@ -146,7 +148,7 @@ export const MascotteSuccessView: React.FC<MascotteSuccessViewProps> = ({
               {explanation && (
                 <div className="bg-[#f4f8fb] rounded-2xl p-3.5 border border-[#d0e4f0] relative">
                   <span className="text-[10px] font-black uppercase tracking-wider text-[#5C6B76] block mb-1">
-                    Histoire & Symbolisme de l'idée
+                    {t("mascotte_page.success_mascotte_why_label", "Histoire & Symbolisme de l'idée")}
                   </span>
                   <p className="text-xs text-[#193549] italic leading-relaxed">
                     « {explanation} »
@@ -158,7 +160,7 @@ export const MascotteSuccessView: React.FC<MascotteSuccessViewProps> = ({
               <div className="grid grid-cols-2 gap-3 pt-2 border-t border-[#d0e4f0]">
                 <div>
                   <span className="text-[10px] font-bold uppercase text-[#5C6B76] block">
-                    Jeune Créateur(trice)
+                    {t("mascotte_page.step_1_short", "Identité")}
                   </span>
                   <span className="text-xs font-bold text-[#193549]">
                     {prenom} {nom}
@@ -182,7 +184,7 @@ export const MascotteSuccessView: React.FC<MascotteSuccessViewProps> = ({
                 </div>
                 <div>
                   <span className="text-[10px] font-bold uppercase text-[#5C6B76] block">
-                    Tuteur Légal Référent
+                    {t("mascotte_page.tuteur_label", "Tuteur Légal Référent")}
                   </span>
                   <span className="text-xs font-bold text-[#193549]">
                     {nomTuteur || "Parent / Tuteur"}{telephoneTuteur ? ` (${telephoneTuteur})` : ""}
@@ -206,17 +208,17 @@ export const MascotteSuccessView: React.FC<MascotteSuccessViewProps> = ({
               )}
               <div className="text-left">
                 <span className="text-xs font-black text-[#193549] block">
-                  Certificat de Participation Officiel
+                  {t("mascotte_page.success_mascotte_certif_title", "Certificat de Participation Officiel")}
                 </span>
                 <span className="text-[11px] text-[#5C6B76] block leading-tight">
-                  Scannez ce QR Code pour vérifier l'authenticité de l'enregistrement auprès de l'OPE.
+                  {t("mascotte_page.success_mascotte_certif_desc", "Scannez ce QR Code pour vérifier l'authenticité de l'enregistrement auprès de l'OPE.")}
                 </span>
               </div>
             </div>
 
             <div className="text-right shrink-0">
               <span className="text-[10px] font-black uppercase text-[#2F6084] block tracking-wider">
-                Date de soumission
+                {t("mascotte_page.success_mascotte_date_label", "Date de soumission")}
               </span>
               <span className="text-xs font-bold text-[#193549]">
                 {new Date().toLocaleDateString("fr-FR", {
@@ -235,7 +237,7 @@ export const MascotteSuccessView: React.FC<MascotteSuccessViewProps> = ({
         onClick={onNewApplication}
         className="mt-6 text-xs font-semibold text-[#f15b29] hover:underline cursor-pointer"
       >
-        Soumettre un autre dessin de mascotte
+        {t("mascotte_page.success_mascotte_new", "Soumettre un autre dessin de mascotte")}
       </button>
     </div>
   );

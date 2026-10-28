@@ -45,6 +45,7 @@ function TalentAvatar({
   name: string;
   size?: "card" | "modal";
 }) {
+  const { t } = useTranslation();
   const [imgError, setImgError] = useState(false);
 
   if (!photo || imgError) {
@@ -67,7 +68,7 @@ function TalentAvatar({
             </svg>
           </div>
           <span className="text-xs font-semibold text-white/80 tracking-wider">
-            Photo d'identité non renseignée
+            {t("talents.no_photo_id", "Photo d'identité non renseignée")}
           </span>
         </div>
       );
@@ -91,7 +92,7 @@ function TalentAvatar({
           </svg>
         </div>
         <span className="text-[10px] font-bold text-ope-text-muted mt-2 uppercase tracking-wider">
-          Sans photo
+          {t("talents.no_photo_badge", "Sans photo")}
         </span>
       </div>
     );
@@ -461,11 +462,11 @@ export default function Talents() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
                   </svg>
-                  <span>Chargement des livrets...</span>
+                  <span>{t("talents.loading_booklets", "Chargement des livrets...")}</span>
                 </div>
               ) : booklets.length === 0 ? (
                 <div className="py-8 text-center text-xs text-ope-text-muted">
-                  Aucun livret disponible pour le moment.
+                  {t("talents.no_booklets", "Aucun livret disponible pour le moment.")}
                 </div>
               ) : (
                 <>
@@ -473,7 +474,7 @@ export default function Talents() {
                   {currentBooklets.length > 0 && (
                     <>
                       <div className="text-[10px] font-bold text-ope-text-muted uppercase tracking-wider px-1 pt-1 pb-0.5">
-                        Édition en cours
+                        {t("talents.current_edition", "Édition en cours")}
                       </div>
                       {currentBooklets.map((b) => (
                         <div
@@ -494,7 +495,7 @@ export default function Talents() {
                             type="button"
                             disabled={downloadingBookletId === b.id}
                             className="shrink-0 p-1.5 rounded-lg text-slate-400 group-hover:text-ope-orange group-hover:bg-white transition-all shadow-2xs"
-                            title={`Télécharger le livret ${b.annee}`}
+                            title={`${t("talents.download_livret_title", "Télécharger le livret")} ${b.annee}`}
                           >
                             {downloadingBookletId === b.id ? (
                               <svg className="w-4 h-4 animate-spin text-ope-orange" viewBox="0 0 24 24" fill="none">
@@ -516,7 +517,7 @@ export default function Talents() {
                   {pastBooklets.length > 0 && (
                     <>
                       <div className="text-[10px] font-bold text-ope-text-muted uppercase tracking-wider px-1 pt-2 pb-0.5 border-t border-slate-100 mt-1">
-                        Années précédentes
+                        {t("talents.past_editions", "Années précédentes")}
                       </div>
                       {pastBooklets.map((b) => (
                         <div
@@ -537,7 +538,7 @@ export default function Talents() {
                             type="button"
                             disabled={downloadingBookletId === b.id}
                             className="shrink-0 p-1.5 rounded-lg text-slate-400 group-hover:text-ope-orange group-hover:bg-white transition-all shadow-2xs"
-                            title={`Télécharger le livret ${b.annee}`}
+                            title={`${t("talents.download_livret_title", "Télécharger le livret")} ${b.annee}`}
                           >
                             {downloadingBookletId === b.id ? (
                               <svg className="w-4 h-4 animate-spin text-ope-orange" viewBox="0 0 24 24" fill="none">
@@ -579,7 +580,7 @@ export default function Talents() {
                 >
                   {REGIONS.map((r) => (
                     <option key={r} value={r}>
-                      {r}
+                      {r === "Toutes les régions" ? t("talents.all_regions", "Toutes les régions") : r}
                     </option>
                   ))}
                 </select>
@@ -699,10 +700,10 @@ export default function Talents() {
                 </svg>
               </div>
               <span className="inline-block px-3 py-1 rounded-full bg-[#1d3d52] text-white text-xs font-bold uppercase tracking-wider mb-3">
-                BIENTÔT
+                {t("talents.coming_soon", "BIENTÔT")}
               </span>
               <h2 className="text-2xl sm:text-3xl font-black text-[#1d3d52] tracking-tight mb-3">
-                Nos 1 000 talents
+                {t("talents.our_talents", "Nos 1 000 talents")}
               </h2>
             </div>
           )}
@@ -916,8 +917,8 @@ export default function Talents() {
                       </svg>
                       <span>
                         {selectedTalent.ville
-                          ? `${selectedTalent.ville}, Région de ${selectedTalent.region}`
-                          : `Région de ${selectedTalent.region}`}
+                          ? `${selectedTalent.ville}, ${t("talents.region_of", "Région de")} ${selectedTalent.region}`
+                          : `${t("talents.region_of", "Région de")} ${selectedTalent.region}`}
                       </span>
                     </div>
 

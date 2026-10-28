@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import campNationalCitoyen from "../../assets/camp_natio.png";
 
 interface SuccessViewProps {
@@ -23,15 +24,17 @@ export const SuccessView: React.FC<SuccessViewProps> = ({
   photoUrl,
   onNewApplication,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="w-full flex flex-col items-center animate-fade-up">
       {/* Header félicitations */}
       <div className="text-center mb-6">
         <h1 className="text-2xl sm:text-3xl font-extrabold text-[#193549] mt-3">
-          Félicitations, {prenom} !
+          {t("mascotte_page.success_congrats", { name: prenom, defaultValue: `Félicitations, ${prenom} !` })}
         </h1>
         <p className="text-xs sm:text-sm text-[#5C6B76] max-w-md mx-auto mt-1">
-          Votre candidature au CNCEIZ Agadez 2026 a été enregistrée et transmise au comité de sélection.
+          {t("mascotte_page.success_subtitle", "Votre candidature au CNCEIZ Agadez 2026 a été enregistrée et transmise au comité de sélection.")}
         </p>
       </div>
 
@@ -86,24 +89,24 @@ export const SuccessView: React.FC<SuccessViewProps> = ({
           </h2>
 
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200 text-xs font-mono font-bold text-[#193549] mt-1.5">
-            <span>Réf:</span>
+            <span>{t("mascotte_page.success_badge_ref", "Réf :")}</span>
             <span>{reference}</span>
           </div>
 
           <div className="flex items-center justify-center gap-2 mt-2 text-xs text-slate-500 font-medium">
             <span>{regionVille || "Niger"}</span>
             <span>•</span>
-            <span className="capitalize">{categorie === "junior" ? "Catégorie Junior" : "Catégorie Senior"}</span>
+            <span className="capitalize">
+              {categorie === "junior" ? t("mascotte_page.success_cat_junior", "Catégorie Junior") : t("mascotte_page.success_cat_senior", "Catégorie Senior")}
+            </span>
           </div>
 
           <div className="mt-5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
-            <span>Statut :</span>
-            <span>Dossier soumis avec succès</span>
+            <span>{t("mascotte_page.success_status_title", "Statut :")}</span>
+            <span>{t("mascotte_page.success_status_desc", "Dossier soumis avec succès")}</span>
           </div>
         </div>
       </div>
-
-
 
       {/* Boutons d'action */}
       <div className="w-full max-w-sm mt-5 flex justify-center">
@@ -111,7 +114,7 @@ export const SuccessView: React.FC<SuccessViewProps> = ({
           to="/"
           className="w-full py-3 px-4 rounded-xl font-bold text-xs text-slate-700 bg-white hover:bg-slate-50 active:scale-95 border border-slate-200 text-center transition-all shadow-sm"
         >
-          Retour à l'accueil
+          {t("mascotte_page.back_home", "Retour à l'accueil")}
         </Link>
       </div>
 
@@ -120,7 +123,7 @@ export const SuccessView: React.FC<SuccessViewProps> = ({
         onClick={onNewApplication}
         className="mt-4 text-xs font-semibold text-[#F15B29] hover:underline cursor-pointer"
       >
-        Soumettre une nouvelle candidature
+        {t("mascotte_page.success_new_app", "Soumettre une nouvelle candidature")}
       </button>
     </div>
   );

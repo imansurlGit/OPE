@@ -120,7 +120,7 @@ export default function Formulaire() {
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
-              <span>Changer de catégorie</span>
+              <span>{t("form.change_category", "Changer de catégorie")}</span>
             </button>
           </div>
 
@@ -222,7 +222,7 @@ export default function Formulaire() {
             onClick={step === 1 ? changeCategory : handlePrev}
             className="px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm bg-slate-100 text-[#193549] hover:bg-slate-200 active:scale-95 cursor-pointer transition-all"
           >
-            {step === 1 ? "Changer de catégorie" : t("form.prev", "Précédent")}
+            {step === 1 ? t("form.change_category", "Changer de catégorie") : t("form.prev", "Précédent")}
           </button>
 
           <span className="text-xs font-bold text-[#5C6B76] hidden sm:inline">

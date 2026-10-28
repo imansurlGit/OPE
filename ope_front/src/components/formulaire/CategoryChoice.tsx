@@ -118,10 +118,10 @@ export const CategoryChoice: React.FC<CategoryChoiceProps> = ({ onSelectCategory
           <div className="animate-fade-up">
             <div className="mb-8 text-center max-w-3xl mx-auto">
               <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1d3d52] tracking-tight mb-3">
-                Choix de la catégorie
+                {t("form.category_choice_title", "Choix de la catégorie")}
               </h1>
               <p className="text-sm sm:text-base font-semibold text-[#1d3d52] leading-relaxed">
-                « Avant de continuer, choisissez la catégorie qui correspond à votre profil. Rassurer vous de faire le choix correspondant à votre profil. »
+                « {t("form.category_choice_desc", "Avant de continuer, choisissez la catégorie qui correspond à votre profil. Rassurez-vous de faire le choix correspondant à votre profil.")} »
               </p>
             </div>
 
@@ -159,9 +159,11 @@ export const CategoryChoice: React.FC<CategoryChoiceProps> = ({ onSelectCategory
                     </div>
                   </div>
 
-                  <h2 className="text-2xl font-extrabold text-[#1d3d52] mb-3">Junior</h2>
+                  <h2 className="text-2xl font-extrabold text-[#1d3d52] mb-3">
+                    {t("form.category_junior_title", "Junior")}
+                  </h2>
                   <p className="text-sm leading-relaxed text-[#5b6773]">
-                    « Vous avez plus de 12 ans vous êtes élève, étudiant, vous avez une idée ou jeune talent et vous voulez vous former et vous initier (STEAM, LP ou MC2) ? Choisissez Junior. »
+                    « {t("form.category_junior_desc", "Vous avez plus de 12 ans, vous êtes élève, étudiant, vous avez une idée ou jeune talent et vous voulez vous former et vous initier (STEAM, LP ou MC2) ? Choisissez Junior.")} »
                   </p>
                 </div>
               </button>
@@ -198,9 +200,11 @@ export const CategoryChoice: React.FC<CategoryChoiceProps> = ({ onSelectCategory
                     </div>
                   </div>
 
-                  <h2 className="text-2xl font-extrabold text-[#1d3d52] mb-3">Senior</h2>
+                  <h2 className="text-2xl font-extrabold text-[#1d3d52] mb-3">
+                    {t("form.category_senior_title", "Senior")}
+                  </h2>
                   <p className="text-sm leading-relaxed text-[#5b6773]">
-                    « Vous avez plus de 18 ans, vous avez déjà réalisé des projets, vous avez un produit ou un savoir-faire à présenter ? Choisissez Senior. »
+                    « {t("form.category_senior_desc", "Vous avez plus de 18 ans, vous avez déjà réalisé des projets, vous avez un produit ou un savoir-faire à présenter ? Choisissez Senior.")} »
                   </p>
                 </div>
               </button>
@@ -215,7 +219,7 @@ export const CategoryChoice: React.FC<CategoryChoiceProps> = ({ onSelectCategory
                   selectedCategory ? "bg-[#f15b29] hover:bg-[#dd4d1c]" : "bg-slate-300 cursor-not-allowed"
                 }`}
               >
-                <span>Suivant</span>
+                <span>{t("form.category_next", "Suivant")}</span>
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
@@ -230,13 +234,16 @@ export const CategoryChoice: React.FC<CategoryChoiceProps> = ({ onSelectCategory
             <div className="mb-8 text-center">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#1d3d52] text-white text-xs font-bold mb-3">
                 <span className="w-2 h-2 rounded-full bg-[#f15b29]" />
-                <span>Profil sélectionné : {selectedCategory === "junior" ? "Junior" : "Senior"}</span>
+                <span>
+                  {t("form.category_selected_profile", "Profil sélectionné :")}{" "}
+                  {selectedCategory === "junior" ? "Junior" : "Senior"}
+                </span>
               </div>
               <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1d3d52] tracking-tight">
-                Choisissez votre Maison
+                {t("form.category_choose_house", "Choisissez votre Maison")}
               </h1>
               <p className="mt-3 text-base text-[#5b6773]">
-                Sélectionnez le domaine principal de votre candidature (STEAM, Local Project ou MC2).
+                {t("form.category_choose_house_desc", "Sélectionnez le domaine principal de votre candidature (STEAM, Local Project ou MC2).")}
               </p>
             </div>
 
@@ -290,7 +297,7 @@ export const CategoryChoice: React.FC<CategoryChoiceProps> = ({ onSelectCategory
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
-                <span>Retour au profil</span>
+                <span>{t("form.category_back_profile", "Retour au profil")}</span>
               </button>
 
               <button
@@ -301,7 +308,7 @@ export const CategoryChoice: React.FC<CategoryChoiceProps> = ({ onSelectCategory
                   selectedHouse ? "bg-[#f15b29] hover:bg-[#dd4d1c]" : "bg-slate-300 cursor-not-allowed"
                 }`}
               >
-                <span>Accéder au formulaire</span>
+                <span>{t("form.category_access_form", "Accéder au formulaire")}</span>
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>

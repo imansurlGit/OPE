@@ -1,6 +1,9 @@
+import { useTranslation } from "react-i18next";
 import coverImg from "../assets/apropos.png";
 
 export default function APropos() {
+    const { t } = useTranslation();
+
     const SECTIONS_THEMATIQUES = [
         {
             icon: (
@@ -10,9 +13,9 @@ export default function APropos() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 14v7" />
                 </svg>
             ),
-            titre: "Éducation de pointe",
-            sousTitre: "Apprendre autrement, pour mieux bâtir.",
-            desc: "Ici, on apprend par l'action. Formations techniques, scientifiques et citoyennes, conférences, mentorat par des experts : accès à des programmes de formation intensifs, conçus pour répondre aux défis technologiques actuels et futurs.",
+            titre: t("apropos.p_education_title", "Éducation de pointe"),
+            sousTitre: t("apropos.p_education_sub", "Apprendre autrement, pour mieux bâtir."),
+            desc: t("apropos.p_education_desc"),
             span: "md:col-span-1",
         },
         {
@@ -21,9 +24,9 @@ export default function APropos() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                 </svg>
             ),
-            titre: "Hub de technologie & d'innovation",
-            sousTitre: "Quand la jeunesse invente l'avenir du Niger.",
-            desc: "Intelligence artificielle, robotique, biotechnologie, art et mathématiques : les ateliers STEAM placent les jeunes au cœur de la création. Pitch, expositions, défilé scientifique et technologique, de projets locaux et solutions pensées pour les réalités du pays font d'Agadez un laboratoire d'idées à ciel ouvert.\n\nNous catalysons la création de startups et d'initiatives à fort impact social et économique.",
+            titre: t("apropos.p_tech_title", "Hub de technologie & d'innovation"),
+            sousTitre: t("apropos.p_tech_sub", "Quand la jeunesse invente l'avenir du Niger."),
+            desc: t("apropos.p_tech_desc"),
             span: "md:col-span-2",
         },
         {
@@ -32,9 +35,9 @@ export default function APropos() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             ),
-            titre: "Impact social & environnemental",
-            sousTitre: "Un camp qui laisse des traces durables.",
-            desc: "Plantation d'arbres, réhabilitation de salles de classe, consultations foraines, campagne « Back to School », « 7 Km de la paix », dons de kits solaires : les délégués passent de la parole aux actes.",
+            titre: t("apropos.p_impact_title", "Impact social & environnemental"),
+            sousTitre: t("apropos.p_impact_sub", "Un camp qui laisse des traces durables."),
+            desc: t("apropos.p_impact_desc"),
             span: "md:col-span-1",
         },
         {
@@ -43,9 +46,9 @@ export default function APropos() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
             ),
-            titre: "Tourisme, Culture & Sport",
-            sousTitre: "Agadez, mémoire vivante du Sahel.",
-            desc: "Cité de l’Aïr inscrite au patrimoine mondial de l’UNESCO, Agadez offre un cadre unique : visites guidées, valorisation des savoir-faire locaux, soutien aux femmes et aux jeunes filles et à l'épanouissement de la jeunesse par le sport.",
+            titre: t("apropos.p_tourism_title", "Tourisme, Culture & Sport"),
+            sousTitre: t("apropos.p_tourism_sub", "Agadez, mémoire vivante du Sahel."),
+            desc: t("apropos.p_tourism_desc"),
             span: "md:col-span-1",
         },
         {
@@ -54,13 +57,12 @@ export default function APropos() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
             ),
-            titre: "Réseautage & Leadership",
-            sousTitre: "Des rencontres qui ouvrent des horizons.",
-            desc: "Connecter les jeunes talents avec des mentors expérimentés pour forger des collaborations durables. Le camp réunit délégués régionaux, experts, entrepreneurs et partenaires.",
+            titre: t("apropos.p_network_title", "Réseautage & Leadership"),
+            sousTitre: t("apropos.p_network_sub", "Des rencontres qui ouvrent des horizons."),
+            desc: t("apropos.p_network_desc"),
             span: "md:col-span-1",
         },
     ];
-
 
     return (
         <div className="pt-16 bg-ope-bg text-ope-text min-h-screen font-sans selection:bg-ope-orange selection:text-white">
@@ -77,10 +79,10 @@ export default function APropos() {
                 <div className="absolute bottom-4 sm:bottom-6 left-0 right-0">
                     <div className="max-w-6xl mx-auto px-4 sm:px-6">
                         <p className="text-ope-orange text-[11px] sm:text-xs font-semibold uppercase tracking-wider mb-1">
-                            Camp National Citoyen
+                            {t("apropos.banner_tag", "Camp National Citoyen")}
                         </p>
                         <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight leading-tight">
-                            L'Excellence & L'Innovation.
+                            {t("apropos.banner_title", "L'Excellence & L'Innovation.")}
                         </h1>
                     </div>
                 </div>
@@ -90,18 +92,18 @@ export default function APropos() {
             <section id="vision" className="max-w-6xl mx-auto px-4 sm:px-6 py-6 md:py-8">
                 <div className="space-y-6">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-ope-text leading-snug max-w-4xl">
-                        Au cœur du massif de l'Aïr, Agadez réinvente le pôle d'excellence du Niger.
+                        {t("apropos.editorial_title")}
                     </h2>
 
                     <div className="prose prose-neutral text-ope-text-muted text-sm sm:text-base leading-relaxed space-y-4 max-w-4xl">
                         <p className="text-base sm:text-lg text-ope-text font-medium leading-relaxed border-l-2 border-ope-orange pl-4 italic">
-                            Centre historique inscrit au patrimoine mondial de l'UNESCO, Agadez vieille depuis des siècles sur les routes du savoir. C'est ici que l'Organisation pour la Promotion de l'Excellence (OPE) réunit la jeunesse pour le Camp National Citoyen de l'Excellence et de l'Innovation (CNCEIZ).
+                            {t("apropos.editorial_quote")}
                         </p>
                         <p>
-                            Héritier de la brillante participation du Niger au Camp Mondial de l'UNESCO Center for Peace en 2024 à Hood College, le camp poursuit une ambition claire : former une jeunesse compétente, engagée et fière.
+                            {t("apropos.editorial_p1")}
                         </p>
                         <p>
-                            Le parcours débute en novembre 2026 avec des Pré-Camps dans les huit régions et à Timia pour former 1 500 jeunes. En décembre, 1 000 délégués se retrouveront à Agadez pour sept jours de création intensive.
+                            {t("apropos.editorial_p2")}
                         </p>
                     </div>
                 </div>
@@ -115,42 +117,42 @@ export default function APropos() {
                         {/* Texte & Titre */}
                         <div className="lg:col-span-7 space-y-4">
                             <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-ope-text tracking-tight leading-snug">
-                                L'étincelle de Hood College <span className="text-ope-orange">(USA, 2024)</span>
+                                {t("apropos.hood_title")} <span className="text-ope-orange">(USA, 2024)</span>
                             </h2>
 
                             <p className="text-sm sm:text-base text-ope-text-muted leading-relaxed">
-                                Été 2024. Huit jeunes ambassadeurs nigériens portent haut les couleurs de la nation au Camp Mondial de l'UNESCO Center for Peace à Hood College. 
+                                {t("apropos.hood_p1")}
                             </p>
 
                             <p className="text-xs sm:text-sm text-ope-text-muted leading-relaxed">
-                                Victoires éclatantes à l'IMUN (International Model of United Nation) (Union Africaine), 1er Prix STEAM emmené par l'equipe Sigma de la Miss Mathématique Mariam Harouna Koché, et 2 Awards prestigieux saluant l'engagement de l'OPE : cette flamme d'excellence revient aujourd'hui irriguer le territoire national, au pied de l'Aïr.
+                                {t("apropos.hood_p2")}
                             </p>
                         </div>
 
                         {/* Grille de Chiffres / Palmarès */}
                         <div className="lg:col-span-5 grid grid-cols-2 gap-3">
                             <div className="bg-ope-bg p-4 rounded-2xl border border-ope-border text-center">
-                                <span className="block text-2xl font-black text-ope-primary">1er Prix</span>
-                                <span className="text-xs font-bold text-ope-text mt-0.5 block">STEAM</span>
-                                <span className="text-[10px] text-ope-text-muted">Groupe SIGMA</span>
+                                <span className="block text-2xl font-black text-ope-primary">{t("apropos.stat_1er_prix", "1er Prix")}</span>
+                                <span className="text-xs font-bold text-ope-text mt-0.5 block">{t("apropos.stat_steam", "STEAM")}</span>
+                                <span className="text-[10px] text-ope-text-muted">{t("apropos.stat_sigma", "Groupe SIGMA")}</span>
                             </div>
 
                             <div className="bg-ope-bg p-4 rounded-2xl border border-ope-border text-center">
-                                <span className="block text-2xl font-black text-[#3b7c35]">2 Awards</span>
-                                <span className="text-xs font-bold text-ope-text mt-0.5 block">UNESCO</span>
-                                <span className="text-[10px] text-ope-text-muted">Center for Peace</span>
+                                <span className="block text-2xl font-black text-[#3b7c35]">{t("apropos.stat_awards", "2 Awards")}</span>
+                                <span className="text-xs font-bold text-ope-text mt-0.5 block">{t("apropos.stat_unesco", "UNESCO")}</span>
+                                <span className="text-[10px] text-ope-text-muted">{t("apropos.stat_center_peace", "Center for Peace")}</span>
                             </div>
 
                             <div className="bg-ope-bg p-4 rounded-2xl border border-ope-border text-center">
-                                <span className="block text-2xl font-black text-ope-orange">Top 3</span>
-                                <span className="text-xs font-bold text-ope-text mt-0.5 block">IMUN UA</span>
-                                <span className="text-[10px] text-ope-text-muted">Modèle ONU</span>
+                                <span className="block text-2xl font-black text-ope-orange">{t("apropos.stat_top3", "Top 3")}</span>
+                                <span className="text-xs font-bold text-ope-text mt-0.5 block">{t("apropos.stat_imun", "IMUN UA")}</span>
+                                <span className="text-[10px] text-ope-text-muted">{t("apropos.stat_onu_model", "Modèle ONU")}</span>
                             </div>
 
                             <div className="bg-ope-bg p-4 rounded-2xl border border-ope-border text-center">
-                                <span className="block text-2xl font-black text-ope-text">8</span>
-                                <span className="text-xs font-bold text-ope-text mt-0.5 block">Délégués</span>
-                                <span className="text-[10px] text-ope-text-muted">USA 2024</span>
+                                <span className="block text-2xl font-black text-ope-text">{t("apropos.stat_8", "8")}</span>
+                                <span className="text-xs font-bold text-ope-text mt-0.5 block">{t("apropos.stat_delegates", "Délégués")}</span>
+                                <span className="text-[10px] text-ope-text-muted">{t("apropos.stat_usa_2024", "USA 2024")}</span>
                             </div>
                         </div>
 
@@ -165,11 +167,11 @@ export default function APropos() {
                     <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 gap-3">
                         <div>
                             <h2 className="text-2xl sm:text-4xl font-extrabold text-ope-text tracking-tight mt-1">
-                                Les piliers du programme
+                                {t("apropos.pillars_title", "Les piliers du programme")}
                             </h2>
                         </div>
                         <p className="text-xs sm:text-sm text-ope-text-muted max-w-md">
-                            Un cadre pensée pour déclencher des vocations et apporter des solutions concrètes au Sahel.
+                            {t("apropos.pillars_subtitle")}
                         </p>
                     </div>
 

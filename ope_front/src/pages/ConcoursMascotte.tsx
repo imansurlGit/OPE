@@ -1,15 +1,14 @@
 import { useEffect, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { createCandidatureMascotte } from "../services/mascotteApi";
-import { MascotteForm, type MascotteFormData, type MascotteFormErrors } from "../components/formulaire/MascotteForm";
+import {
+  MascotteForm,
+  type MascotteFormData,
+  type MascotteFormErrors,
+} from "../components/formulaire/MascotteForm";
 import { MascotteSuccessView } from "../components/formulaire/MascotteSuccessView";
 import { MAX_FILE_SIZE, PHONE_REGEX } from "../types/formulaire";
-
-const MASCOTTE_STEPS = [
-  { key: "qui_es_tu", label: "Qui es-tu ?", shortLabel: "Identité" },
-  { key: "ta_mascotte", label: "Ta mascotte", shortLabel: "Mascotte" },
-  { key: "autorisation", label: "Autorisation & Finalisation", shortLabel: "Autorisation" },
-];
 
 const INITIAL_MASCOTTE_DATA: MascotteFormData = {
   nom: "",
@@ -28,6 +27,7 @@ const INITIAL_MASCOTTE_DATA: MascotteFormData = {
 };
 
 export default function ConcoursMascotte() {
+  const { t } = useTranslation();
   const [step, setStep] = useState<number>(1);
   const [data, setData] = useState<MascotteFormData>(INITIAL_MASCOTTE_DATA);
   const [fieldErrors, setFieldErrors] = useState<MascotteFormErrors>({});
@@ -38,15 +38,36 @@ export default function ConcoursMascotte() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    document.title = "Concours de la mascotte CNCEIZ Agadez 2026 – Je participe !";
+    document.title =
+      "Concours de la mascotte CNCEIZ Agadez 2026 - Je participe !";
   }, []);
 
-  const activeSteps = MASCOTTE_STEPS;
+  const activeSteps = [
+    {
+      key: "qui_es_tu",
+      label: t("mascotte_page.step_1_label", "Qui es-tu ?"),
+      shortLabel: t("mascotte_page.step_1_short", "Identité"),
+    },
+    {
+      key: "ta_mascotte",
+      label: t("mascotte_page.step_2_label", "Ta mascotte"),
+      shortLabel: t("mascotte_page.step_2_short", "Mascotte"),
+    },
+    {
+      key: "autorisation",
+      label: t("mascotte_page.step_3_label", "Autorisation & Finalisation"),
+      shortLabel: t("mascotte_page.step_3_short", "Autorisation"),
+    },
+  ];
+
   const currentStepConfig = activeSteps[step - 1] || activeSteps[0];
   const maxSteps = activeSteps.length;
 
   const updateField = useCallback(
-    <K extends keyof MascotteFormData>(field: K, value: MascotteFormData[K]) => {
+    <K extends keyof MascotteFormData>(
+      field: K,
+      value: MascotteFormData[K],
+    ) => {
       setData((prev) => ({ ...prev, [field]: value }));
       setFieldErrors((prev) => {
         if (!prev[field]) return prev;
@@ -58,26 +79,33 @@ export default function ConcoursMascotte() {
     [],
   );
 
-  const handleFileUpload = useCallback((_field: "mascotteDessin", file: File) => {
-    if (file.size > MAX_FILE_SIZE) {
-      setErrorMessage("Le fichier dépasse la taille maximale autorisée de 10 Mo.");
-      return;
-    }
-    setRawFile(file);
-    setData((prev) => ({
-      ...prev,
-      mascotteDessin: {
-        name: file.name,
-        size: `${(file.size / (1024 * 1024)).toFixed(1)} Mo`,
-        previewUrl: file.type.startsWith("image/") ? URL.createObjectURL(file) : undefined,
-      },
-    }));
-    setFieldErrors((prev) => {
-      const next = { ...prev };
-      delete next.mascotteDessin;
-      return next;
-    });
-  }, []);
+  const handleFileUpload = useCallback(
+    (_field: "mascotteDessin", file: File) => {
+      if (file.size > MAX_FILE_SIZE) {
+        setErrorMessage(
+          t("mascotte_page.err_file_size", "Le fichier dépasse la taille maximale autorisée de 10 Mo."),
+        );
+        return;
+      }
+      setRawFile(file);
+      setData((prev) => ({
+        ...prev,
+        mascotteDessin: {
+          name: file.name,
+          size: `${(file.size / (1024 * 1024)).toFixed(1)} Mo`,
+          previewUrl: file.type.startsWith("image/")
+            ? URL.createObjectURL(file)
+            : undefined,
+        },
+      }));
+      setFieldErrors((prev) => {
+        const next = { ...prev };
+        delete next.mascotteDessin;
+        return next;
+      });
+    },
+    [t],
+  );
 
   const handleFileRemove = useCallback((_field: "mascotteDessin") => {
     setRawFile(null);
@@ -87,22 +115,28 @@ export default function ConcoursMascotte() {
   const validateStep = (currentStep: number): boolean => {
     const errs: MascotteFormErrors = {};
     if (currentStep === 1) {
-      if (!data.nom.trim()) errs.nom = "Le nom est obligatoire.";
-      if (!data.prenom.trim()) errs.prenom = "Le prénom est obligatoire.";
-      if (!data.classe) errs.classe = "La classe est obligatoire.";
-      if (!data.regionVille) errs.regionVille = "La région de résidence est obligatoire.";
+      if (!data.nom.trim()) errs.nom = t("mascotte_page.err_nom", "Le nom est obligatoire.");
+      if (!data.prenom.trim()) errs.prenom = t("mascotte_page.err_prenom", "Le prénom est obligatoire.");
+      if (!data.classe) errs.classe = t("mascotte_page.err_classe", "La classe est obligatoire.");
+      if (!data.regionVille)
+        errs.regionVille = t("mascotte_page.err_region", "La région de résidence est obligatoire.");
       if (!data.telephoneTuteur.trim()) {
-        errs.telephoneTuteur = "Le téléphone du parent/tuteur est obligatoire.";
+        errs.telephoneTuteur = t("mascotte_page.err_phone_req", "Le téléphone du parent/tuteur est obligatoire.");
       } else if (!PHONE_REGEX.test(data.telephoneTuteur.trim())) {
-        errs.telephoneTuteur = "Numéro de téléphone invalide.";
+        errs.telephoneTuteur = t("mascotte_page.err_phone_inv", "Numéro de téléphone invalide.");
       }
     } else if (currentStep === 2) {
-      if (!data.mascotteNom.trim()) errs.mascotteNom = "Le nom de la mascotte est obligatoire.";
-      if (!data.mascotteDessin) errs.mascotteDessin = "Le dessin de la mascotte est obligatoire (photo ou scan).";
+      if (!data.mascotteNom.trim())
+        errs.mascotteNom = t("mascotte_page.err_mascotte_nom", "Le nom de la mascotte est obligatoire.");
+      if (!data.mascotteDessin)
+        errs.mascotteDessin = t("mascotte_page.err_mascotte_dessin", "Le dessin de la mascotte est obligatoire (photo ou scan).");
     } else if (currentStep === 3) {
-      if (!data.nomTuteur.trim()) errs.nomTuteur = "Le nom du parent ou tuteur est obligatoire.";
-      if (!data.autorisationParent) errs.autorisationParent = "L'accord du parent/tuteur est obligatoire pour participer.";
-      if (!data.accordUtilisationDessin) errs.accordUtilisationDessin = "L'accord d'utilisation du dessin est obligatoire.";
+      if (!data.nomTuteur.trim())
+        errs.nomTuteur = t("mascotte_page.err_nom_tuteur", "Le nom du parent ou tuteur est obligatoire.");
+      if (!data.autorisationParent)
+        errs.autorisationParent = t("mascotte_page.err_auto_parent", "L'accord du parent/tuteur est obligatoire pour participer.");
+      if (!data.accordUtilisationDessin)
+        errs.accordUtilisationDessin = t("mascotte_page.err_accord_dessin", "L'accord d'utilisation du dessin est obligatoire.");
     }
     setFieldErrors(errs);
     return Object.keys(errs).length === 0;
@@ -139,10 +173,16 @@ export default function ConcoursMascotte() {
       formData.append("telephone_tuteur", data.telephoneTuteur.trim());
       formData.append("mascotte_nom", data.mascotteNom.trim());
       formData.append("mascotte_pourquoi", data.mascottePourquoi.trim());
-      formData.append("mascotte_signification", data.mascotteSignification.trim());
+      formData.append(
+        "mascotte_signification",
+        data.mascotteSignification.trim(),
+      );
       formData.append("nom_tuteur", data.nomTuteur.trim());
       formData.append("autorisation_parent", String(data.autorisationParent));
-      formData.append("accord_utilisation_dessin", String(data.accordUtilisationDessin));
+      formData.append(
+        "accord_utilisation_dessin",
+        String(data.accordUtilisationDessin),
+      );
 
       if (rawFile) {
         formData.append("mascotte_dessin", rawFile);
@@ -153,7 +193,10 @@ export default function ConcoursMascotte() {
       setIsSubmitted(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err: any) {
-      setErrorMessage(err?.message || "Une erreur est survenue lors de l'enregistrement de votre candidature.");
+      setErrorMessage(
+        err?.message ||
+          "Une erreur est survenue lors de l'enregistrement de votre candidature.",
+      );
       window.scrollTo({ top: 0, behavior: "smooth" });
     } finally {
       setIsSubmitting(false);
@@ -203,59 +246,72 @@ export default function ConcoursMascotte() {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <span className="text-xs font-bold text-[#F15B29] uppercase tracking-wider">
-                  Étape {step} sur {maxSteps}
+                  {t("mascotte_page.step", "Étape")} {step} {t("mascotte_page.of", "sur")} {maxSteps}
                 </span>
                 <h2 className="text-lg sm:text-xl font-bold text-[#193549]">
                   {currentStepConfig.label}
                 </h2>
               </div>
               <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-[#193549]">
-                {Math.round((step / maxSteps) * 100)}% complété
+                {Math.round((step / maxSteps) * 100)}% {t("mascotte_page.completed", "complété")}
               </span>
             </div>
 
-            {/* Progress Bar & Steps Badges */}
+            {/* Stepper Dots/Bar */}
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
-              {activeSteps.map((s, index) => {
-                const stepNum = index + 1;
-                const isCurrent = step === stepNum;
-                const isPassed = step > stepNum;
+              {activeSteps.map((s, idx) => {
+                const sNum = idx + 1;
+                const isCurrent = sNum === step;
+                const isPassed = sNum < step;
 
                 return (
                   <div
                     key={s.key}
-                    className={`flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl border-2 transition-all ${
+                    className={`relative p-2.5 sm:p-3 rounded-2xl border transition-all flex items-center gap-2.5 ${
                       isCurrent
-                        ? "bg-[#F15B29] border-[#F15B29] text-white shadow-sm"
+                        ? "bg-[#193549] text-white border-[#193549] shadow-sm"
                         : isPassed
-                          ? "bg-[#18794E] border-[#18794E] text-white shadow-xs"
-                          : "bg-slate-100 border-slate-200 text-slate-700"
+                          ? "bg-[#193549]/10 text-[#193549] border-[#193549]/20"
+                          : "bg-slate-50 text-slate-400 border-slate-200"
                     }`}
                   >
                     <div
-                      className={`w-6 h-6 sm:w-7 sm:h-7 rounded-xl flex items-center justify-center text-xs font-bold shrink-0 transition-colors ${
+                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
                         isCurrent
-                          ? "bg-white text-[#F15B29]"
+                          ? "bg-[#F15B29] text-white"
                           : isPassed
-                            ? "bg-white text-[#18794E]"
-                            : "bg-white text-slate-700 border border-slate-300"
+                            ? "bg-[#193549] text-white"
+                            : "bg-slate-200 text-slate-500"
                       }`}
                     >
                       {isPassed ? (
-                        <svg className="w-3.5 h-3.5 text-[#18794E]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                        <svg
+                          className="w-3.5 h-3.5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={3}
+                            d="M5 13l4 4L19 7"
+                          />
                         </svg>
                       ) : (
-                        stepNum
+                        sNum
                       )}
                     </div>
-                    <div className="hidden sm:block min-w-0">
+
+                    <div className="min-w-0 hidden sm:block">
                       <p className="text-xs font-bold truncate leading-tight">
                         {s.label}
                       </p>
                       <p
                         className={`text-[10px] font-medium truncate ${
-                          isCurrent || isPassed ? "text-white" : "text-slate-500"
+                          isCurrent || isPassed
+                            ? "text-white"
+                            : "text-slate-500"
                         }`}
                       >
                         {s.shortLabel}
@@ -273,12 +329,24 @@ export default function ConcoursMascotte() {
               role="alert"
               className="p-4 mb-6 rounded-2xl bg-red-50 border border-red-200 text-red-800 text-sm flex items-start gap-3 animate-fade-in"
             >
-              <svg className="w-5 h-5 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              <svg
+                className="w-5 h-5 text-red-500 shrink-0 mt-0.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
               </svg>
               <div>
                 <p className="font-semibold">Vérification requise</p>
-                <p className="mt-0.5 text-xs sm:text-sm text-red-700">{errorMessage}</p>
+                <p className="mt-0.5 text-xs sm:text-sm text-red-700">
+                  {errorMessage}
+                </p>
               </div>
             </div>
           )}
@@ -303,17 +371,27 @@ export default function ConcoursMascotte() {
                   disabled={isSubmitting}
                   className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-sm transition-colors cursor-pointer disabled:bg-slate-100 disabled:text-slate-400 disabled:border-slate-200 flex items-center justify-center gap-2"
                 >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 19l-7-7 7-7"
+                    />
                   </svg>
-                  Étape précédente
+                  {t("mascotte_page.prev_step", "Étape précédente")}
                 </button>
               ) : (
                 <Link
                   to="/"
                   className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-slate-500 hover:text-slate-800 text-sm font-medium transition-colors text-center inline-block"
                 >
-                  Retour à l'accueil
+                  {t("mascotte_page.back_home", "Retour à l'accueil")}
                 </Link>
               )}
             </div>
@@ -325,9 +403,19 @@ export default function ConcoursMascotte() {
                   onClick={handleNext}
                   className="w-full sm:w-auto px-7 py-3 rounded-xl bg-[#F15B29] hover:bg-[#d94d1f] text-white font-bold text-sm shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
                 >
-                  Continuer vers l'étape suivante
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  {t("mascotte_page.next_step", "Continuer vers l'étape suivante")}
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 </button>
               ) : (
@@ -339,18 +427,43 @@ export default function ConcoursMascotte() {
                 >
                   {isSubmitting ? (
                     <>
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                        <circle className="text-[#fca583]" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="text-white" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      <svg
+                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="text-[#fca583]"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="text-white"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
                       </svg>
-                      Envoi de ton dessin en cours...
+                      {t("mascotte_page.submitting_btn", "Envoi de ton dessin en cours...")}
                     </>
                   ) : (
                     <>
-                      <svg className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                      <svg
+                        className="w-5 h-5 shrink-0"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                        />
                       </svg>
-                      Valider ma candidature au concours
+                      {t("mascotte_page.submit_btn", "Valider ma candidature au concours")}
                     </>
                   )}
                 </button>

@@ -22,6 +22,7 @@ const getSectionBadgeClass = (section: string) => {
 };
 
 const MemberAvatar = ({ photo, name }: { photo?: string | null; name: string }) => {
+  const { t } = useTranslation();
   const [imgError, setImgError] = useState(false);
 
   if (photo && !imgError) {
@@ -52,7 +53,9 @@ const MemberAvatar = ({ photo, name }: { photo?: string | null; name: string }) 
           />
         </svg>
       </div>
-      <span className="text-[11px] font-semibold text-ope-text-muted">Photo non renseignée</span>
+      <span className="text-[11px] font-semibold text-ope-text-muted">
+        {t("membres.no_photo", "Photo non renseignée")}
+      </span>
     </div>
   );
 };
@@ -73,7 +76,7 @@ export default function Membres() {
       setMembres(data);
     } catch (err: any) {
       console.error("Erreur lors de la récupération des membres :", err);
-      setError("Impossible de charger la liste des membres pour le moment.");
+      setError(t("membres.error_load", "Impossible de charger la liste des membres pour le moment."));
     } finally {
       setIsLoading(false);
     }
@@ -137,7 +140,7 @@ export default function Membres() {
                     : "bg-white text-ope-text border border-ope-border hover:bg-ope-bg"
                 }`}
               >
-                Tous ({membres.length})
+                {t("membres.all", "Tous")} ({membres.length})
               </button>
               {availableSections.map((sec) => {
                 const count = membres.filter(
@@ -166,7 +169,7 @@ export default function Membres() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Rechercher un membre..."
+                placeholder={t("membres.search_placeholder", "Rechercher un membre...")}
                 className="w-full bg-white border border-ope-border text-ope-text text-xs rounded-xl pl-9 pr-4 py-2.5 focus:outline-none focus:border-ope-primary placeholder-[#A89A88] transition-colors"
               />
               <svg
@@ -184,7 +187,7 @@ export default function Membres() {
           {error && (
             <div className="mb-8">
               <ApiErrorState
-                title="Impossible de charger les membres de l'équipe"
+                title={t("membres.error_title", "Impossible de charger les membres de l'équipe")}
                 message={error}
                 onRetry={fetchMembres}
               />
@@ -221,9 +224,11 @@ export default function Membres() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
               </div>
-              <h3 className="text-sm font-bold text-ope-text mb-1">Aucun membre répertorié</h3>
+              <h3 className="text-sm font-bold text-ope-text mb-1">
+                {t("membres.no_members_title", "Aucun membre répertorié")}
+              </h3>
               <p className="text-xs text-ope-text-muted max-w-sm mx-auto">
-                Les membres de l'organisation apparaîtront ici dès leur publication officielle.
+                {t("membres.no_members_desc", "Les membres de l'organisation apparaîtront ici dès leur publication officielle.")}
               </p>
             </div>
           )}
@@ -295,7 +300,7 @@ export default function Membres() {
 
                         {!member.linkedin && !member.email && (
                           <span className="text-[10px] text-ope-text-muted italic">
-                            Contact via le formulaire
+                            {t("membres.contact_form", "Contact via le formulaire")}
                           </span>
                         )}
                       </div>
