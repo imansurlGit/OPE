@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import steamImg from "../assets/steam.jpeg";
 import lpImg from "../assets/lp.jpeg";
@@ -37,7 +37,7 @@ const CATEGORIES: Category[] = [
     classes: [
       "Robotique",
       "Intelligence artificielle",
-      "Aéronautique (simulateur de vol, montage de drones, observation de l'espace)",
+      "Aéronautique",
       "Énergies renouvelables",
       "Biotechnologie",
       "Art",
@@ -71,8 +71,6 @@ const CATEGORIES: Category[] = [
       "Agriculture",
       "Élevage",
       "Artisanat",
-      "Entrepreneuriat",
-      "Marketing digital",
     ],
     color: {
       topBorder: "border-t-[4px] border-t-[#F15B29]",
