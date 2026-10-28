@@ -72,7 +72,7 @@ export default function APropos() {
                 <img
                     src={coverImg}
                     alt="Camp CNCEIZ Agadez"
-                    className="w-full h-full object-cover object-[center_55%]"
+                    className="w-full h-full object-cover object-[center_-25px]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
                 {/* Titre en incrustation */}

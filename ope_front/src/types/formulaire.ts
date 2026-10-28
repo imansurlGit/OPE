@@ -235,7 +235,7 @@ export const CLASSES_BY_MAISON: Record<string, { value: string; label: string }[
     { value: "ia", label: "Intelligence artificielle" },
     {
       value: "aeronautique",
-      label: "Aéronautique (simulateur de vol, montage de drones, observation de l'espace)",
+      label: "Aéronautique",
     },
     { value: "energies_renouvelables", label: "Énergies renouvelables" },
     { value: "biotechnologie", label: "Biotechnologie" },
@@ -247,8 +247,6 @@ export const CLASSES_BY_MAISON: Record<string, { value: string; label: string }[
     { value: "agriculture", label: "Agriculture" },
     { value: "elevage", label: "Élevage" },
     { value: "artisanat", label: "Artisanat" },
-    { value: "entrepreneuriat", label: "Entrepreneuriat" },
-    { value: "marketing_digital", label: "Marketing digital" },
     { value: "autre", label: "Autre" },
   ],
   mouvement_citoyen: [
