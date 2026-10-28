@@ -78,12 +78,12 @@ export default function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <Link
-                                    to="/formulaire"
-                                    className="text-white/80 hover:text-ope-orange transition-colors"
+                                <span
+                                    className="text-white/60 font-medium cursor-not-allowed select-none inline-block"
+                                    title="Les inscriptions sont actuellement fermées"
                                 >
                                     {t("footer.apply_camp")}
-                                </Link>
+                                </span>
                             </li>
                             <li>
                                 <Link to="/apropos" className="text-white/80 hover:text-ope-orange transition-colors">
