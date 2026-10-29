@@ -225,6 +225,15 @@ class PartenaireSerializer(serializers.ModelSerializer):
             "logo": {"required": False, "allow_null": True},
         }
 
+class ActeurSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Acteur
+        fields = "__all__"
+        extra_kwargs = {
+            "photo": {"required": False, "allow_null": True},
+        }
+
+
 class DocumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Document

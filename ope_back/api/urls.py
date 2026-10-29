@@ -10,6 +10,7 @@ router.register(r'membres', views.MembreEquipeViewSet, basename='membre')
 router.register(r'contacts', views.MessageContactViewSet, basename='contact')
 router.register(r'galerie', views.MediaGalerieViewSet, basename='galerie')
 router.register(r'partenaires', views.PartenaireViewSet, basename='partenaire')
+router.register(r'acteurs-page', views.ActeurViewSet, basename='acteur-page')
 router.register(r'documents', views.DocumentViewSet, basename='document')
 
 

@@ -369,6 +369,28 @@ class PartenaireViewSet(viewsets.ModelViewSet):
         return qs
 
 
+class ActeurViewSet(viewsets.ModelViewSet):
+    serializer_class = sz.ActeurSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        qs = models.Acteur.objects.all().order_by("ordre", "nom")
+        actif = self.request.query_params.get("actif")
+        search = self.request.query_params.get("search")
+
+        if actif is not None and actif != "all":
+            is_actif = actif.lower() in ["true", "1", "yes"]
+            qs = qs.filter(actif=is_actif)
+        if search:
+            s = search.strip()
+            qs = qs.filter(
+                Q(nom__icontains=s) |
+                Q(titre__icontains=s) |
+                Q(exergue__icontains=s)
+            )
+        return qs
+
+
 class DocumentViewSet(viewsets.ModelViewSet):
     serializer_class = sz.DocumentSerializer
     permission_classes = [permissions.AllowAny]

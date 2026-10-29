@@ -49,13 +49,13 @@ class Candidature(models.Model):
         ("biotechnologie", "Biotechnologie"),
         ("art", "Art"),
         ("maths_logique", "Mathématiques et Logique"),
-        # LP – Local Project
+        # LP - Local Project
         ("agriculture", "Agriculture"),
         ("elevage", "Élevage"),
         ("artisanat", "Artisanat"),
         ("entrepreneuriat", "Entrepreneuriat"),
         ("marketing_digital", "Marketing digital"),
-        # MC2 – Modèle de Citoyen Communautaire
+        # MC2 - Modèle de Citoyen Communautaire
         ("debats_communautaires", "Débats communautaires"),
         ("formation_citoyennete", "Formation sur la citoyenneté, développement personnel et leadership"),
         ("fabrication_poubelles", "Fabrication de poubelles"),
@@ -489,6 +489,51 @@ class MessageContact(models.Model):
 
     def __str__(self):
         return f"{self.nom} : {self.sujet}"
+
+class Acteur(models.Model):
+    """
+    Acteur institutionnel affiché sur la page publique /acteurs.
+    Remplace le contenu statique codé en dur dans Acteurs.tsx.
+    """
+    titre = models.CharField(max_length=150, verbose_name="Titre / Fonction")
+    sous_titre = models.CharField(
+        max_length=200,
+        default="Organisation pour la Promotion de l'Excellence (OPE)",
+        verbose_name="Sous-titre / Organisation"
+    )
+    nom = models.CharField(max_length=150, verbose_name="Nom complet")
+    photo = models.ImageField(
+        upload_to="acteurs/",
+        blank=True,
+        null=True,
+        verbose_name="Photo"
+    )
+    couleur = models.CharField(
+        max_length=20,
+        default="#111111",
+        verbose_name="Couleur principale (hex)"
+    )
+    couleur_light = models.CharField(
+        max_length=20,
+        default="#F5F5F5",
+        verbose_name="Couleur de fond claire (hex)"
+    )
+    exergue = models.CharField(
+        max_length=300,
+        verbose_name="Citation / Phrase exergue"
+    )
+    mot = models.TextField(verbose_name="Message / Biographie (paragraphes séparés par une ligne vide)")
+    ordre = models.PositiveIntegerField(default=0, verbose_name="Ordre d'affichage")
+    actif = models.BooleanField(default=True, verbose_name="Afficher sur le site")
+
+    class Meta:
+        verbose_name = "Acteur"
+        verbose_name_plural = "Acteurs"
+        ordering = ["ordre", "nom"]
+
+    def __str__(self):
+        return f"{self.nom} — {self.titre}"
+
 
 class Document(models.Model):
     TYPE_CHOICES = [

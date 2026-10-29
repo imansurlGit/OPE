@@ -7,6 +7,7 @@ from .models import (
     CandidatMascotte,
     Actualite,
     MembreEquipe,
+    Acteur,
     Partenaire,
     MediaGalerie,
     MessageContact,
@@ -107,6 +108,7 @@ class CandidatMascotteAdmin(admin.ModelAdmin):
 admin.site.register(Candidature)
 admin.site.register(Actualite)
 admin.site.register(MembreEquipe)
+admin.site.register(Acteur)
 admin.site.register(Partenaire)
 admin.site.register(MediaGalerie)
 admin.site.register(MessageContact)
