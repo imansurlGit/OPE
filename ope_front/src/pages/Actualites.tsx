@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { actualiteService, type Actualite, type ActualitePhase } from "../services";
 import ApiErrorState from "../components/ApiErrorState";
@@ -33,8 +33,17 @@ export default function Actualites() {
       setError(null);
       try {
         const data = await actualiteService.getArticles({ publie: true });
-        const items = Array.isArray(data) ? data : (data as any)?.results || [];
-        setArticles(items);
+        const items: Actualite[] = Array.isArray(data) ? data : (data as any)?.results || [];
+        // Tri du plus ancien au plus récent
+        const sorted = [...items].sort((a, b) => {
+          const dateA = new Date(a.date_publication || a.created_at || "").getTime();
+          const dateB = new Date(b.date_publication || b.created_at || "").getTime();
+          if (!isNaN(dateA) && !isNaN(dateB) && dateA !== dateB) {
+            return dateA - dateB;
+          }
+          return a.id - b.id;
+        });
+        setArticles(sorted);
       } catch (err: any) {
         console.error("Erreur chargement actualités :", err);
         setError("Impossible de charger les actualités. Veuillez réessayer plus tard.");
@@ -68,7 +77,19 @@ export default function Actualites() {
     }
   };
 
-  const currentArticles = articles.filter((a) => a.phase === activePhase);
+  // Filtrer par phase et garantir le tri du plus ancien au plus récent
+  const currentArticles = useMemo(() => {
+    return articles
+      .filter((a) => a.phase === activePhase)
+      .sort((a, b) => {
+        const dateA = new Date(a.date_publication || a.created_at || "").getTime();
+        const dateB = new Date(b.date_publication || b.created_at || "").getTime();
+        if (!isNaN(dateA) && !isNaN(dateB) && dateA !== dateB) {
+          return dateA - dateB;
+        }
+        return a.id - b.id;
+      });
+  }, [articles, activePhase]);
 
   return (
     <div className="pt-16 bg-ope-bg min-h-screen">
