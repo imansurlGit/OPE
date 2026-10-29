@@ -73,7 +73,8 @@
           "Kusu nda batama hanseyaŋ jinayey teeyaŋ"
         ]
       }
-    }
+    },
+    "cta_mascotte": "Maskot dumi gaasaa →"
   },
   "countdown": {
     "title": "Zaarey kaŋ cindi hala Agadez Kubayoo…",
@@ -174,7 +175,12 @@
     "download_livret_title": "Tira zumandi",
     "no_photo_id": "Biyo si no",
     "no_photo_badge": "Biyo si no",
-    "region_of": "Konga do"
+    "region_of": "Konga do",
+    "specialization_label": "Fondo Beero / Goy Alhaali",
+    "projects_achievements": "Teerey & Goy Hansey",
+    "format_pdf": "PDF Dumi",
+    "error_title": "Mana hin ka zanka gwarzey daŋ",
+    "error_desc": "Kompita jine-doo si ka di. Wa internat goyoo korooshi."
   },
   "categories_page": {
     "title": "Ir Fondi 3 Beerey (Houses)",
@@ -214,7 +220,8 @@
       "Caw waazu",
       "Faaba goy"
     ],
-    "reg_closed_title": "Hantumyan waato ga kay sohõ"
+    "reg_closed_title": "Hantumyan waato ga kay sohõ",
+    "mcc_nb": "Fura woo hinne se no war ga hin ka huru ajiya booboyaŋ ra."
   },
   "membres": {
     "title": "CNCEIZ Goy-teey Margoo",
@@ -242,7 +249,15 @@
     "read_time": "miti cawyaŋ",
     "newsletter_title": "Duu Alhabarey Zaari Kulu",
     "newsletter_desc": "Duu CNCEIZ alhabarey war imeyiloo kuna.",
-    "newsletter_btn": "Huru Alhabarey ra"
+    "newsletter_btn": "Huru Alhabarey ra",
+    "phase_avant": "Goro-doo jine",
+    "phase_pendant": "Goro-doo alwaatoo",
+    "phase_apres": "Goro-doo banda",
+    "error_title": "Mana hin ka alhabarey daŋ",
+    "error_desc": "Mana hin ka alhabarey daŋ. Wa ceeci saanga koyaŋ ra.",
+    "empty_title": "Alhabar kulu si no sohõ",
+    "empty_desc": "Hantumey dumi woo se ga kaa sohõ.",
+    "no_image": "Bii si no"
   },
   "galerie": {
     "title": "Biyey & Widiyowey",
@@ -252,7 +267,13 @@
     "workshops": "Goy Dondonandiyaŋ",
     "local": "Kwaara Goyey",
     "community": "Laabi Baakoytaray",
-    "view_fullscreen": "Bii Beeri"
+    "view_fullscreen": "Bii Beeri",
+    "error_title": "Mana hin ka biyo kande",
+    "error_desc": "Ciyaroo firka no te. Wa internat goyoo korooshi.",
+    "empty_title": "Biyey doona koonu no sohõ",
+    "empty_desc": "Gorodogoo biyey nda widiyowey ga daŋ ne maasa.",
+    "prev": "Bii koraa",
+    "next": "Bii jine"
   },
   "contact": {
     "title": "Cee Ir",
@@ -282,7 +303,9 @@
     "email": "Goy Imeyil",
     "subject": "Sanno",
     "message": "Iragaw",
-    "submit": "Sanba Iragawo"
+    "submit": "Sanba Iragawo",
+    "send_another": "Sake alhabar tonton",
+    "error_default": "Firka no te alhabar sanbaa ra. Wa ceeci koyne."
   },
   "sponsors_page": {
     "title": "Ir Gaakasinaykey",
@@ -297,7 +320,20 @@
     "cta_desc": "War kompaniyo maa daŋ goy beeri ra kaŋ ga zankey gina Nijer ra. Care banda ir ga Agadez zankey gina.",
     "cta_btn": "Cee Ir",
     "become_sponsor": "Ciya Gaakasina-koy",
-    "sponsor_cta_desc": "Daŋ war kompaniyo maa goy beeri ra kaŋ ga albarka daŋ Nijer ra. Care banda, ir ga Agadez zankey gina hala tekinoloji beeray."
+    "sponsor_cta_desc": "Daŋ war kompaniyo maa goy beeri ra kaŋ ga albarka daŋ Nijer ra. Care banda, ir ga Agadez zankey gina hala tekinoloji beeray.",
+    "our_partners": "Ir Gaakasinaykey",
+    "search_placeholder": "Ceeci gaakasina...",
+    "all_filter": "Kulu",
+    "loading": "Gaakasinaykey kandeeyan goono ga te...",
+    "no_results_title": "Gaakasina kulu si no kaŋ saba nda war ceeciyaa",
+    "no_results_desc": "Ceeci kalmey barmay.",
+    "error_title": "Mana hin ka gaakasinaykey daŋ",
+    "error_desc": "Ciyaroo firka no te. Wa internat goyoo korooshi ka sake ceeci.",
+    "tier_platine": "Platine Gaakasinaykey",
+    "tier_platine_short": "Platine",
+    "tier_or_short": "Wura",
+    "tier_argent_short": "Nzarfu",
+    "tier_bronze_short": "Kulaala"
   },
   "form": {
     "badge": "Agadez 2026 • Zanka Gwarzo 1000",
@@ -552,7 +588,27 @@
       "err_oeuvre_defile": "Wa afo ci kaŋ ga cebe cawyan ra.",
       "err_dispo_camps": "War ma tabatandi war goy camp ra.",
       "err_conditions": "War ma yadda huruyan alhaaley ga."
-    }
+    },
+    "verification_required": "Korooshiyaŋ ga waažibi",
+    "summary_title": "War huruyaŋ fondo alhabar kankani",
+    "summary_mascotte_title": "Ni huruyaŋ takarda alhabar",
+    "summary_candidate": "Huru-koy:",
+    "summary_house": "Fuwo:",
+    "summary_school_class": "Lekol / Aji:",
+    "summary_residence": "Kwaara / Goro-doo:",
+    "summary_target_house": "Fuwo kaŋ i ga ceeci:",
+    "summary_guardian": "Haykey / Kambe-koy:",
+    "summary_contact_phone": "Telifon namba:",
+    "summary_email_phone": "Imeyil & Telifon:",
+    "summary_domain": "Goy fando:",
+    "summary_innovation": "Teerey taaga:",
+    "summary_stage": "Goyoo gaabu:",
+    "step1_profile": "Fondo 1 i binde 2 ra: Dumi suubayaŋ",
+    "step2_house": "Fondo 2 i binde 2 ra: Fuwo suubayaŋ",
+    "junior_check_house": "Fuwo wala aji kaŋ war ga baa suuba fando woo ra:",
+    "junior_situation_question": "Suuba goyoo fondaa kaŋ ga saba nda war alhaalo:",
+    "junior_specify_specialty": "War fuwoo wala goy dumi fahamandi",
+    "file_transmitted": "Takarda goyoo sanbandi"
   },
   "languages": {
     "title": "Šenni",
@@ -603,7 +659,19 @@
     "sg_p5": "Ay alhabara ti ay ma cindi i gaa hala i barmayey ma gina.",
     "sg_p6": "War samayey: wa hantum war boŋ konga woo se.",
     "sg_p7": "Goykaasayey: wa kaa ka gina iri bande.",
-    "sg_p8": "Nižer si faaba mooru; fondo feeran hinne no."
+    "sg_p8": "Nižer si faaba mooru; fondo feeran hinne no.",
+    "orga_title": "Goro-doo Hansekoy",
+    "orga_subtitle": "Goy-karey Gaakasinay Margay (OPE)",
+    "orga_name": "Ousmane Koutata Abdouramane",
+    "orga_quote": "Care bande ir ma Nijer cin\nIr ma goro nda anniya hanna",
+    "orga_p1": "Jamano Gorodogoo kaŋ ga zanka gwarzitaray nda hiisabu teeyan ceeci: basira si korooshi jiiri.",
+    "orga_p2": "Agadez, Nijer. Goy-karey Gaakasinay Margay (OPE) ga Jamano Gorodogoo šintin, kaŋ ti alhabar tonton cimi kaŋ ga cabe kaŋ: basira si korooshi jiiri.",
+    "orga_p3": "Za kaŋ i g'a te, OPE go ga goy daaba si kaŋ ga zankey carmey gina Nijer ra. A ga gwarzey bay, a g'i gaakasin ka jine kande, a ga goy nda sahã beerandi. Gorodogoo woo ga goyoo tonton ka ciya beeri, laabu baakoytaray nda teerey taagayaŋ se.",
+    "orga_p4": "Gorodogoo ga margu zankey kaŋ gonda jiiri 12 hala 35, zankey nda kokoroyey kulu. Boro kulu ga goro-doo du fonda hinkaa nda afoo ra:",
+    "orga_p5": "• STEAM: teerey teeyaŋ bayray, tekinoloji, injiniyari, al'aada nda hiisabu ra.",
+    "orga_p6": "• Local Project: kwaara alhabarey hanseyaŋ nda kwaara jinawey.",
+    "orga_p7": "• Modèle Communautaire Citoyen: care gaba nda laabi baakoytaray ciya goro-doo cimi.",
+    "orga_p8": "Goyoo woo fatta Agadez no ka doji a taariiko ra. Koyey nda jine-borey, al'aada arkoyey nda borey kulu kande i kambe goyoo woo ra. Jine-borey ga fondaa feeri. Borey marganta, care faabayaŋ nda cimi baa, kulu margu ka goyoo woo samba jine. Koytaray nda jamaa margeyaŋ woo no ga OPE canse Agadez ra: ne no i ga gwarzitaray cin care bande, nda laabo jinawey nda a cimi alhaalo."
   },
   "mascotte_page": {
     "step": "Fondo",
@@ -650,5 +718,19 @@
     "success_mascotte_date_label": "Sanba zaaro",
     "success_mascotte_new": "Sanba biyo fo koyne",
     "tuteur_label": "Hayko / Waliyyi"
+  },
+  "api_error": {
+    "title": "Mana hin ka bayrayey daŋ",
+    "message": "Ciyaroo firka no te. A korooshi sanda war internat go ga goy ka tonton goyoo.",
+    "retry": "Sake ceeci"
+  },
+  "pagination": {
+    "showing": "Cebandiyaŋ {{start}} hala {{end}} i binde ga {{total}} {{label}}",
+    "items": "haye-izey",
+    "per_page": "moo kulu ra",
+    "prev": "Banda",
+    "next": "Jine",
+    "prev_title": "Moo koraa",
+    "next_title": "Moo kaŋ ga furo"
   }
 }

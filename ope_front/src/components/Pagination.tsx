@@ -1,4 +1,6 @@
 
+import { useTranslation } from "react-i18next";
+
 export interface PaginationProps {
   currentPage: number;
   totalItems: number;
@@ -14,10 +16,12 @@ export default function Pagination({
   totalItems,
   itemsPerPage,
   onPageChange,
-  itemLabel = "éléments",
+  itemLabel,
   pageSizeOptions,
   onPageSizeChange,
 }: PaginationProps) {
+  const { t } = useTranslation();
+  const label = itemLabel || t("pagination.items", "éléments");
   const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
 
   // Si aucun élément, ne pas afficher la barre de pagination
@@ -66,14 +70,14 @@ export default function Pagination({
       {/* ── Gauche : Compteur & Sélecteur de taille ── */}
       <div className="flex items-center gap-3 text-xs text-gray-500 font-medium w-full sm:w-auto justify-between sm:justify-start">
         <span>
-          Affichage de <strong className="text-gray-900 font-extrabold">{startItem}</strong> à{" "}
-          <strong className="text-gray-900 font-extrabold">{endItem}</strong> sur{" "}
-          <strong className="text-gray-900 font-extrabold">{totalItems}</strong> {itemLabel}
+          <strong className="text-gray-900 font-extrabold">{startItem}</strong> -{" "}
+          <strong className="text-gray-900 font-extrabold">{endItem}</strong> /{" "}
+          <strong className="text-gray-900 font-extrabold">{totalItems}</strong> {label}
         </span>
 
         {pageSizeOptions && onPageSizeChange && (
           <div className="flex items-center gap-1.5 pl-2 sm:border-l border-gray-200">
-            <label htmlFor="pageSizeSelect" className="sr-only">Éléments par page</label>
+            <label htmlFor="pageSizeSelect" className="sr-only">{t("pagination.per_page", "par page")}</label>
             <select
               id="pageSizeSelect"
               value={itemsPerPage}
@@ -85,7 +89,7 @@ export default function Pagination({
             >
               {pageSizeOptions.map((opt) => (
                 <option key={opt} value={opt}>
-                  {opt} / page
+                  {opt} / {t("pagination.per_page", "page")}
                 </option>
               ))}
             </select>
@@ -101,12 +105,12 @@ export default function Pagination({
           onClick={() => onPageChange(Math.max(1, currentPage - 1))}
           disabled={currentPage === 1}
           className="inline-flex items-center justify-center p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold text-gray-700 bg-[#f4f8fb] hover:bg-slate-100 disabled:opacity-40 disabled:hover:bg-[#f4f8fb] disabled:cursor-not-allowed transition-colors cursor-pointer"
-          title="Page précédente"
+          title={t("pagination.prev_title", "Page précédente")}
         >
           <svg className="w-4 h-4 sm:mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
-          <span className="hidden sm:inline">Précédent</span>
+          <span className="hidden sm:inline">{t("pagination.prev", "Précédent")}</span>
         </button>
 
         {/* Numéros de page sur desktop */}
@@ -154,9 +158,9 @@ export default function Pagination({
           onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
           disabled={currentPage === totalPages}
           className="inline-flex items-center justify-center p-2 sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold text-gray-700 bg-[#f4f8fb] hover:bg-slate-100 disabled:opacity-40 disabled:hover:bg-[#f4f8fb] disabled:cursor-not-allowed transition-colors cursor-pointer"
-          title="Page suivante"
+          title={t("pagination.next_title", "Page suivante")}
         >
-          <span className="hidden sm:inline">Suivant</span>
+          <span className="hidden sm:inline">{t("pagination.next", "Suivant")}</span>
           <svg className="w-4 h-4 sm:ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
           </svg>

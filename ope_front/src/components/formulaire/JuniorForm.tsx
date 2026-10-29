@@ -245,7 +245,7 @@ export const JuniorForm: React.FC<JuniorFormProps> = ({
             <h3 className="text-sm font-bold text-[#193549]">
               2. {houseFieldLabel} <span className="text-[#F15B29]">*</span>
             </h3>
-            <p className="text-xs text-[#5C6B76]">Cocher la House ou classe visée dans ce domaine :</p>
+            <p className="text-xs text-[#5C6B76]">{t("form.junior_check_house", "Cocher la House ou classe visée dans ce domaine :")}</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
               {classesOptions.map((opt) => {
                 const isChecked = data.houseVisee === opt.value;
@@ -279,7 +279,7 @@ export const JuniorForm: React.FC<JuniorFormProps> = ({
             {data.houseVisee === "autre" && (
               <div className="pt-2">
                 <TextField
-                  label="Préciser votre House / spécialité"
+                  label={t("form.junior_specify_specialty", "Préciser votre House / spécialité")}
                   name="houseViseeAutre"
                   required
                   placeholder="Précisez votre domaine..."
@@ -297,7 +297,7 @@ export const JuniorForm: React.FC<JuniorFormProps> = ({
               3. {maison === "mouvement_citoyen" ? "Votre engagement citoyen" : "Votre situation"}{" "}
               <span className="text-[#F15B29]">*</span>
             </h3>
-            <p className="text-xs text-[#5C6B76]">Sélectionnez la situation qui correspond à votre état d'avancement :</p>
+            <p className="text-xs text-[#5C6B76]">{t("form.junior_situation_question", "Sélectionnez la situation qui correspond à votre état d'avancement :")}</p>
 
             <div className="space-y-2 pt-1">
               {[
@@ -473,22 +473,20 @@ export const JuniorForm: React.FC<JuniorFormProps> = ({
           <div className="bg-slate-50 p-4 sm:p-5 rounded-2xl border border-slate-200 space-y-3">
             <div className="space-y-1">
               <h3 className="text-sm font-bold text-[#193549]">
-                Aptitude numérique (obligatoire dans toutes les Houses)
+                {t("form.step5_title", "Aptitude numérique")}
               </h3>
               <p className="text-xs text-[#5C6B76] leading-relaxed">
-                Le partage d'applications mobiles dédiées au domaine fait partie intégrante des activités pratiques de la formation, quelle que soit la House.
-                <br />
-                <strong>Avez-vous accès à un smartphone ou une tablette pendant le camp pour cette activité ?</strong>
+                <strong>{t("form.step5_numerique_label", "Avez-vous accès à un smartphone ou une tablette pendant le camp pour cette activité ?")}</strong>
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
               {[
-                { value: "personnel", label: "Oui, personnellement" },
-                { value: "aide_tiers", label: "Oui, avec l'aide d'un tiers (famille, encadreur)" },
+                { value: "personnel", label: t("form.step5_num_own", "Oui personnellement") },
+                { value: "aide_tiers", label: t("form.step5_num_shared", "Oui avec l'aide d'un tiers") },
                 {
                   value: "sur_place",
-                  label: "Non, mais je suis disposé(e) à m'organiser sur place avec l'équipe encadrante",
+                  label: t("form.step5_num_place", "Non mais je m'organiserai sur place"),
                 },
               ].map((opt) => {
                 const isSelected = data.accesNumerique === opt.value;
@@ -637,37 +635,37 @@ export const JuniorForm: React.FC<JuniorFormProps> = ({
           {/* Récapitulatif Junior */}
           <div className="rounded-2xl bg-slate-50 border border-slate-200 p-5 mt-6">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
-              Récapitulatif de votre candidature Junior
+              {t("form.summary_title", "Récapitulatif de votre candidature Junior")}
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div>
-                <span className="text-slate-400">Candidat :</span>{" "}
+                <span className="text-slate-400">{t("form.summary_candidate", "Candidat :")}</span>{" "}
                 <strong className="text-[#193549]">{data.prenom} {data.nom}</strong>
               </div>
               <div>
-                <span className="text-slate-400">Maison :</span>{" "}
+                <span className="text-slate-400">{t("form.summary_house", "Maison :")}</span>{" "}
                 <strong className="text-[#F15B29]">{maisonLabel}</strong>
               </div>
               <div>
-                <span className="text-slate-400">Établissement / Classe :</span>{" "}
+                <span className="text-slate-400">{t("form.summary_school_class", "Établissement / Classe :")}</span>{" "}
                 <strong className="text-[#193549]">
                   {data.etablissement || "Non renseigné"} ({data.classe || "Non renseignée"})
                 </strong>
               </div>
               <div>
-                <span className="text-slate-400">Zone / Résidence :</span>{" "}
+                <span className="text-slate-400">{t("form.summary_residence", "Zone / Résidence :")}</span>{" "}
                 <strong className="text-[#193549]">
                   {data.regionVille} {data.villeVillage ? `• ${data.villeVillage}` : ""}
                 </strong>
               </div>
               <div>
-                <span className="text-slate-400">House visée :</span>{" "}
+                <span className="text-slate-400">{t("form.summary_target_house", "House visée :")}</span>{" "}
                 <strong className="text-[#F15B29]">
                   {data.houseVisee === "autre" ? data.houseViseeAutre : data.houseVisee || "Non choisie"}
                 </strong>
               </div>
               <div>
-                <span className="text-slate-400">Parent / Tuteur :</span>{" "}
+                <span className="text-slate-400">{t("form.summary_guardian", "Parent / Tuteur :")}</span>{" "}
                 <strong className="text-[#193549]">
                   {data.nomTuteur || "Non renseigné"} ({data.telephoneTuteur || "Non renseigné"})
                 </strong>

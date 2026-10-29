@@ -3,28 +3,6 @@ import { useTranslation } from "react-i18next";
 import { actualiteService, type Actualite, type ActualitePhase } from "../services";
 import ApiErrorState from "../components/ApiErrorState";
 
-// ── Config des phases (charte OPE) ─────────────────────────────────────────
-const PHASES_CONFIG: Record<
-  ActualitePhase,
-  { label: string; badgeClass: string; textColor: string }
-> = {
-  avant: {
-    label: "Avant le camp",
-    badgeClass: "bg-[#EBF2F7] text-[#193549] border-[#C5D8E8]",
-    textColor: "text-[#193549]",
-  },
-  pendant: {
-    label: "Pendant le camp",
-    badgeClass: "bg-[#FDF3EE] text-[#f15b29] border-[#F0C5AE]",
-    textColor: "text-[#f15b29]",
-  },
-  apres: {
-    label: "Après le camp",
-    badgeClass: "bg-[#F0ECE8] text-[#1b3a4f] border-[#D9C4B8]",
-    textColor: "text-[#1b3a4f]",
-  },
-};
-
 // ── Formate date "YYYY-MM-DD" → "DD Mois YYYY" ─────────────────────────────
 const MOIS = [
   "Janvier","Février","Mars","Avril","Mai","Juin",
@@ -67,6 +45,29 @@ export default function Actualites() {
     fetchArticles();
   }, []);
 
+  const getPhaseConfig = (phase: ActualitePhase) => {
+    switch (phase) {
+      case "avant":
+        return {
+          label: t("actualites.phase_avant", "Avant le camp"),
+          badgeClass: "bg-[#EBF2F7] text-[#193549] border-[#C5D8E8]",
+          textColor: "text-[#193549]",
+        };
+      case "pendant":
+        return {
+          label: t("actualites.phase_pendant", "Pendant le camp"),
+          badgeClass: "bg-[#FDF3EE] text-[#f15b29] border-[#F0C5AE]",
+          textColor: "text-[#f15b29]",
+        };
+      case "apres":
+        return {
+          label: t("actualites.phase_apres", "Après le camp"),
+          badgeClass: "bg-[#F0ECE8] text-[#1b3a4f] border-[#D9C4B8]",
+          textColor: "text-[#1b3a4f]",
+        };
+    }
+  };
+
   const currentArticles = articles.filter((a) => a.phase === activePhase);
 
   return (
@@ -89,7 +90,7 @@ export default function Actualites() {
           <div className="border-b border-ope-border mb-8">
             <div className="flex items-center gap-6 sm:gap-10 overflow-x-auto no-scrollbar">
               {(["avant", "pendant", "apres"] as ActualitePhase[]).map((phase) => {
-                const cfg = PHASES_CONFIG[phase];
+                const cfg = getPhaseConfig(phase);
                 const isActive = activePhase === phase;
                 return (
                   <button
@@ -145,7 +146,7 @@ export default function Actualites() {
           ) : error ? (
             /* État d'erreur */
             <ApiErrorState
-              title="Impossible de charger les actualités"
+              title={t("actualites.error_title", "Impossible de charger les actualités")}
               message={error}
               onRetry={() => window.location.reload()}
             />
@@ -158,17 +159,17 @@ export default function Actualites() {
                 </svg>
               </div>
               <p className="text-base font-bold text-ope-text mb-1">
-                Aucune actualité pour le moment
+                {t("actualites.empty_title", "Aucune actualité pour le moment")}
               </p>
               <p className="text-xs text-ope-text-muted">
-                Les publications pour cette phase seront bientôt disponibles.
+                {t("actualites.empty_desc", "Les publications pour cette phase seront bientôt disponibles.")}
               </p>
             </div>
           ) : (
             /* Grille des articles */
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7 items-stretch">
               {currentArticles.map((article) => {
-                const phaseInfo = PHASES_CONFIG[article.phase] || PHASES_CONFIG.avant;
+                const phaseInfo = getPhaseConfig(article.phase);
                 return (
                   <article
                     key={article.id}
@@ -189,7 +190,7 @@ export default function Actualites() {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                           </div>
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-ope-text-muted">Sans image</span>
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-ope-text-muted">{t("actualites.no_image", "Sans image")}</span>
                         </div>
                       )}
 
@@ -214,7 +215,7 @@ export default function Actualites() {
                           {article.temps_lecture && (
                             <>
                               <span>•</span>
-                              <span>{article.temps_lecture} min de lecture</span>
+                              <span>{article.temps_lecture} {t("actualites.read_time", "min de lecture")}</span>
                             </>
                           )}
                         </div>
@@ -279,7 +280,7 @@ export default function Actualites() {
               <button
                 onClick={() => setSelectedArticle(null)}
                 className="absolute top-4 right-4 w-9 h-9 rounded-full bg-[#193549]/70 text-white flex items-center justify-center hover:bg-[#193549] cursor-pointer transition-colors"
-                aria-label="Fermer"
+                aria-label={t("talents.close", "Fermer")}
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -294,7 +295,7 @@ export default function Actualites() {
                 {selectedArticle.temps_lecture && (
                   <>
                     <span>•</span>
-                    <span>{selectedArticle.temps_lecture} min de lecture</span>
+                    <span>{selectedArticle.temps_lecture} {t("actualites.read_time", "min de lecture")}</span>
                   </>
                 )}
               </div>

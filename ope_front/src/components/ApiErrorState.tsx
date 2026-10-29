@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 interface ApiErrorStateProps {
   title?: string;
   message?: string;
@@ -6,11 +8,15 @@ interface ApiErrorStateProps {
 }
 
 export default function ApiErrorState({
-  title = "Impossible de charger les données",
-  message = "Une erreur de connexion s'est produite. Vérifiez votre connexion Internet et réessayez.",
+  title,
+  message,
   onRetry,
   className = "",
 }: ApiErrorStateProps) {
+  const { t } = useTranslation();
+  const displayTitle = title || t("api_error.title", "Impossible de charger les données");
+  const displayMessage = message || t("api_error.message", "Une erreur de connexion s'est produite. Vérifiez votre connexion Internet et réessayez.");
+
   return (
     <div
       className={`py-14 sm:py-16 flex flex-col items-center justify-center text-center gap-3.5 sm:gap-4 ${className}`}
@@ -34,11 +40,11 @@ export default function ApiErrorState({
       </div>
 
       <h3 className="font-extrabold text-gray-800 text-base sm:text-lg">
-        {title}
+        {displayTitle}
       </h3>
 
       <p className="text-xs sm:text-sm text-gray-500 max-w-sm leading-relaxed">
-        {message}
+        {displayMessage}
       </p>
 
       {onRetry && (
@@ -47,7 +53,7 @@ export default function ApiErrorState({
           onClick={onRetry}
           className="mt-1 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-[#C25E38] hover:bg-[#a04a2a] active:scale-95 transition-all shadow-xs cursor-pointer"
         >
-          Réessayer
+          {t("api_error.retry", "Réessayer")}
         </button>
       )}
     </div>

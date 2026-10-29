@@ -26,7 +26,7 @@ export default function Contact() {
     } catch (err: any) {
       setErreur(
         err?.message ||
-          "Une erreur est survenue lors de l'envoi de votre message. Veuillez réessayer.",
+          t("contact.error_default", "Une erreur est survenue lors de l'envoi de votre message. Veuillez réessayer."),
       );
     } finally {
       setChargement(false);
@@ -106,7 +106,7 @@ export default function Contact() {
                   onClick={() => setEnvoye(false)}
                   className="text-xs font-bold text-[#15803D] underline cursor-pointer"
                 >
-                  Envoyer un autre message
+                  {t("contact.send_another", "Envoyer un autre message")}
                 </button>
               </div>
             ) : (
@@ -115,7 +115,7 @@ export default function Contact() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-[11px] font-bold text-ope-text mb-1.5">
-                      {t("full_name", "Nom complet")}
+                      {t("contact.full_name", "Nom complet")}
                     </label>
                     <input
                       type="text"
@@ -130,7 +130,7 @@ export default function Contact() {
 
                   <div>
                     <label className="block text-[11px] font-bold text-ope-text mb-1.5">
-                      {t("email", "Adresse e-mail")}
+                      {t("contact.email", "Adresse e-mail")}
                     </label>
                     <input
                       type="email"
@@ -147,7 +147,7 @@ export default function Contact() {
                 {/* Ligne 2 : Sujet */}
                 <div>
                   <label className="block text-[11px] font-bold text-ope-text mb-1.5">
-                    {t("subject", "Sujet")}
+                    {t("contact.subject", "Sujet")}
                   </label>
                   <input
                     type="text"
@@ -163,7 +163,7 @@ export default function Contact() {
                 {/* Ligne 3 : Message */}
                 <div>
                   <label className="block text-[11px] font-bold text-ope-text mb-1.5">
-                    {t("message", "Message")}
+                    {t("contact.message", "Message")}
                   </label>
                   <textarea
                     required

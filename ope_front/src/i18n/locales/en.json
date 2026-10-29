@@ -32,7 +32,8 @@
   },
   "hero": {
     "tagline": "1,000 young talents gathered in Agadez to shape the technological and cultural future of the Sahel.",
-    "cta_register": "Register →",
+    "cta_register": "Join the camp (Coming soon) →",
+    "cta_mascotte": "Mascot's contest →",
     "edition": "1st Edition",
     "location": "Agadez 2026",
     "cards_activities_title": "Activities & Projects",
@@ -174,7 +175,12 @@
     "download_livret_title": "Download booklet",
     "no_photo_id": "ID photo not provided",
     "no_photo_badge": "No photo",
-    "region_of": "Region of"
+    "region_of": "Region of",
+    "specialization_label": "Excellence Track / Specialization",
+    "projects_achievements": "Project & Achievements",
+    "format_pdf": "PDF Format",
+    "error_title": "Unable to load talents",
+    "error_desc": "Unable to contact the server. Please check your connection."
   },
   "categories_page": {
     "title": "The 3 Categories (Houses)",
@@ -214,7 +220,8 @@
       "Education Awareness",
       "Volunteering"
     ],
-    "reg_closed_title": "Registrations are currently closed"
+    "reg_closed_title": "Registrations are currently closed",
+    "mcc_nb": "For this category only, you may participate in multiple classes."
   },
   "membres": {
     "title": "The CNCEIZ Team",
@@ -242,7 +249,15 @@
     "read_time": "min read",
     "newsletter_title": "Stay Informed",
     "newsletter_desc": "Receive the latest news and announcements from CNCEIZ directly in your inbox.",
-    "newsletter_btn": "Subscribe"
+    "newsletter_btn": "Subscribe",
+    "phase_avant": "Before the camp",
+    "phase_pendant": "During the camp",
+    "phase_apres": "After the camp",
+    "error_title": "Unable to load news",
+    "error_desc": "Unable to load news. Please try again later.",
+    "empty_title": "No news at the moment",
+    "empty_desc": "Publications for this phase will be available soon.",
+    "no_image": "No image"
   },
   "galerie": {
     "title": "Multimedia Gallery",
@@ -252,7 +267,13 @@
     "workshops": "Workshops & Prototyping",
     "local": "Local Projects",
     "community": "Citizen Actions",
-    "view_fullscreen": "Full Screen"
+    "view_fullscreen": "Full Screen",
+    "error_title": "Unable to load gallery",
+    "error_desc": "A network error occurred. Please check your connection.",
+    "empty_title": "The gallery is currently empty",
+    "empty_desc": "Camp photos and videos will be posted here soon.",
+    "prev": "Previous image",
+    "next": "Next image"
   },
   "contact": {
     "title": "Contact Us",
@@ -282,7 +303,9 @@
     "phone_val": "Available during opening hours",
     "email_val": "ope.organization@gmail.com",
     "hours_label": "Opening Hours",
-    "hours_val": "Mon - Fri: 8:00 AM - 5:30 PM"
+    "hours_val": "Mon - Fri: 8:00 AM - 5:30 PM",
+    "send_another": "Send another message",
+    "error_default": "An error occurred while sending your message. Please try again."
   },
   "sponsors_page": {
     "title": "Our Partners & Sponsors",
@@ -297,7 +320,20 @@
     "cta_desc": "Associate your company's brand with a major social and technological impact initiative in Niger. Together, let's propel Agadez youth toward digital and entrepreneurial excellence.",
     "cta_btn": "Contact Us",
     "become_sponsor": "Become a driver of change",
-    "sponsor_cta_desc": "Associate your company's brand with a major social and technological impact initiative in Niger. Together, let's propel Agadez youth toward digital and entrepreneurial excellence."
+    "sponsor_cta_desc": "Associate your company's brand with a major social and technological impact initiative in Niger. Together, let's propel Agadez youth toward digital and entrepreneurial excellence.",
+    "our_partners": "Our Partners",
+    "search_placeholder": "Search for a partner...",
+    "all_filter": "All",
+    "loading": "Loading engaged partners...",
+    "no_results_title": "No partners match your search",
+    "no_results_desc": "Try adjusting your search criteria or keywords.",
+    "error_title": "Unable to load partners",
+    "error_desc": "A connection error occurred. Check your internet connection and try again.",
+    "tier_platine": "Platinum Partners",
+    "tier_platine_short": "Platinum",
+    "tier_or_short": "Gold",
+    "tier_argent_short": "Silver",
+    "tier_bronze_short": "Bronze"
   },
   "form": {
     "badge": "Agadez 2026 • 1000 Young Talents",
@@ -552,7 +588,27 @@
       "err_oeuvre_defile": "Please specify the work to present at the parade.",
       "err_dispo_camps": "You must confirm your availability during the camp.",
       "err_conditions": "You must accept the terms of participation."
-    }
+    },
+    "verification_required": "Verification required",
+    "summary_title": "Summary of your application",
+    "summary_mascotte_title": "Summary of your entry",
+    "summary_candidate": "Applicant:",
+    "summary_house": "House:",
+    "summary_school_class": "School / Class:",
+    "summary_residence": "Area / Residence:",
+    "summary_target_house": "Target House:",
+    "summary_guardian": "Parent / Guardian:",
+    "summary_contact_phone": "Contact phone:",
+    "summary_email_phone": "Email & Phone:",
+    "summary_domain": "Field / Domain:",
+    "summary_innovation": "Innovation:",
+    "summary_stage": "Stage:",
+    "step1_profile": "Step 1 of 2: Profile Selection",
+    "step2_house": "Step 2 of 2: House Selection",
+    "junior_check_house": "Select the targeted House or class in this domain:",
+    "junior_situation_question": "Select the option that best matches your current progress:",
+    "junior_specify_specialty": "Specify your House / specialty",
+    "file_transmitted": "File uploaded"
   },
   "popup": {
     "mascotte": {
@@ -585,7 +641,7 @@
     "read_less": "Collapse",
     "presi_title": "President",
     "presi_subtitle": "Organization for the Promotion of Excellence (OPE)",
-    "presi_name": "Madam President of OPE",
+    "presi_name": "Moussa Charifatou",
     "presi_quote": "Niger is the youngest country in the world. This demographic reality, often cited as a challenge, is in truth our most precious and underutilized resource.",
     "presi_p1": "Some projects are born from observation, and others from deep conviction. The National Citizen Camp for Excellence and Innovation is one of them. It was born from the profound conviction that Niger's youth does not need someone to invent a future for them; they need a platform worthy of what they are already capable of achieving.",
     "presi_p2": "Niger is the youngest country in the world. In workshops without electricity, in dusty schoolyards, in dimly lit rooms in Niamey, Zinder, Maradi, Tahoua, and Agadez, thousands of young people build prototypes and design creative solutions. What they need is a national stage where their country turns to them and says: we see you, we acknowledge you, you are our future.",
@@ -603,7 +659,19 @@
     "sg_p5": "My personal commitment is simple: stand beside these young people and ensure every serious idea finds an open door.",
     "sg_p6": "To the youth: apply and bring your ideas. The camp is made to make them flourish.",
     "sg_p7": "To partners and supporters: join us as builders of this first edition.",
-    "sg_p8": "Niger doesn't have to look far for its talents. We simply need to open the door for them."
+    "sg_p8": "Niger doesn't have to look far for its talents. We simply need to open the door for them.",
+    "orga_title": "Head of Organization",
+    "orga_subtitle": "Organization for the Promotion of Excellence (OPE)",
+    "orga_name": "Ousmane Koutata Abdouramane",
+    "orga_quote": "Together let's build Niger\nLet's stay positive",
+    "orga_p1": "National Citizen Camp of Excellence and Innovation: talent knows no age.",
+    "orga_p2": "Agadez, Niger. The Organization for the Promotion of Excellence (OPE) launches the National Citizen Camp of Excellence and Innovation, a concrete response to a simple conviction: talent knows no age.",
+    "orga_p3": "Since its inception, OPE has worked tirelessly to promote excellence among Nigerian youth. It identifies, encourages, and mentors talents while championing merit, diligence, and entrepreneurial spirit. This camp expands this mission by making it more inclusive, civic-minded, and focused on innovation.",
+    "orga_p4": "The camp gathers youth aged 12 to 35, both juniors and seniors. Everyone finds their place through three core tracks:",
+    "orga_p5": "• STEAM: innovate through science, technology, engineering, arts, and mathematics.",
+    "orga_p6": "• Local Project: solving community problems with local resources.",
+    "orga_p7": "• Community Citizen Model: turning mutual aid and civic duty into a way of life.",
+    "orga_p8": "This initiative originated in Agadez and is rooted in its rich heritage. Regional and local authorities, traditional leaders, and the local community have each championed these values. Authorities paved the way and fostered an enabling environment. The community, renowned for its diversity, solidarity, and hospitality, has wholeheartedly embraced the project. This partnership between institutions and the community makes OPE unique in Agadez: here, excellence is built together, grounded in real-world local contexts."
   },
   "mascotte_page": {
     "step": "Step",
@@ -650,5 +718,19 @@
     "success_mascotte_date_label": "Submission Date",
     "success_mascotte_new": "Submit another mascot drawing",
     "tuteur_label": "Legal Guardian Reference"
+  },
+  "api_error": {
+    "title": "Unable to load data",
+    "message": "A connection error occurred. Check your internet connection and try again.",
+    "retry": "Retry"
+  },
+  "pagination": {
+    "showing": "Showing {{start}} to {{end}} of {{total}} {{label}}",
+    "items": "items",
+    "per_page": "per page",
+    "prev": "Previous",
+    "next": "Next",
+    "prev_title": "Previous page",
+    "next_title": "Next page"
   }
 }

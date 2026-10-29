@@ -441,12 +441,12 @@ export default function Talents() {
                 {t("talents.booklets_dropdown_title", "Livrets des Talents OPE")}
               </span>
               <div className="flex items-center gap-3">
-                <span className="text-[10px] text-ope-text-muted font-medium">Format PDF</span>
+                <span className="text-[10px] text-ope-text-muted font-medium">{t("talents.format_pdf", "Format PDF")}</span>
                 <button
                   type="button"
                   onClick={() => setIsBookletsOpen(false)}
                   className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
-                  aria-label="Fermer"
+                  aria-label={t("talents.close", "Fermer")}
                 >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -662,7 +662,7 @@ export default function Talents() {
       {error && (
         <section className="px-4 sm:px-6 pb-8">
           <ApiErrorState
-            title="Impossible de charger les talents"
+            title={t("talents.error_title", "Impossible de charger les talents")}
             message={error}
             onRetry={() => setRetryTrigger((r) => r + 1)}
           />
@@ -935,7 +935,7 @@ export default function Talents() {
                 {selectedTalent.house && (
                   <div className="bg-ope-bg rounded-xl p-3.5 border border-ope-border">
                     <span className="text-[10px] uppercase font-extrabold tracking-wider text-gray-500 block mb-0.5">
-                      Filière d'Excellence / Spécialisation
+                      {t("talents.specialization_label", "Filière d'Excellence / Spécialisation")}
                     </span>
                     <p className="text-xs sm:text-sm font-bold text-gray-900">
                       {selectedTalent.house}
@@ -946,7 +946,7 @@ export default function Talents() {
                 {/* Description complète du projet */}
                 <div>
                   <h4 className="text-xs font-black uppercase tracking-wider text-gray-400 mb-1.5">
-                    Projet & Réalisations
+                    {t("talents.projects_achievements", "Projet & Réalisations")}
                   </h4>
                   <p className="text-xs sm:text-sm text-ope-text leading-relaxed whitespace-pre-line bg-white rounded-xl p-3.5 border border-gray-100 shadow-2xs">
                     {selectedTalent.descriptionComplete}

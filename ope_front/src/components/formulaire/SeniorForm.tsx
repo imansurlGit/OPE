@@ -393,33 +393,33 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
           {/* Récapitulatif Senior */}
           <div className="rounded-2xl bg-slate-50 border border-slate-200 p-5 mt-6">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
-              Récapitulatif de votre dossier
+              {t("form.summary_title", "Récapitulatif de votre dossier")}
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div>
-                <span className="text-slate-400">Candidat :</span>{" "}
+                <span className="text-slate-400">{t("form.summary_candidate", "Candidat :")}</span>{" "}
                 <strong className="text-[#193549]">{data.prenom} {data.nom}</strong>
               </div>
               <div>
-                <span className="text-slate-400">Email & Tél :</span>{" "}
+                <span className="text-slate-400">{t("form.summary_email_phone", "Email & Tél :")}</span>{" "}
                 <strong className="text-[#193549]">{data.email} • {data.telephone}</strong>
               </div>
               <div>
-                <span className="text-slate-400">Résidence :</span>{" "}
+                <span className="text-slate-400">{t("form.summary_residence", "Résidence :")}</span>{" "}
                 <strong className="text-[#193549]">{data.regionVille}</strong>
               </div>
               <div>
-                <span className="text-slate-400">Domaine :</span>{" "}
+                <span className="text-slate-400">{t("form.summary_domain", "Domaine :")}</span>{" "}
                 <strong className="text-[#193549]">
                   {data.domaineSteam === "autre" ? data.domaineSteamAutre : data.domaineSteam}
                 </strong>
               </div>
               <div>
-                <span className="text-slate-400">Innovation :</span>{" "}
+                <span className="text-slate-400">{t("form.summary_innovation", "Innovation :")}</span>{" "}
                 <strong className="text-[#F15B29]">{data.innovationNom}</strong>
               </div>
               <div>
-                <span className="text-slate-400">Stade :</span>{" "}
+                <span className="text-slate-400">{t("form.summary_stage", "Stade :")}</span>{" "}
                 <strong className="text-[#193549]">{data.stadeDeveloppement}</strong>
               </div>
             </div>

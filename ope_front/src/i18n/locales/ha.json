@@ -73,7 +73,8 @@
           "Kera kwandunan shara na zamani"
         ]
       }
-    }
+    },
+    "cta_mascotte": "Gasa ta Mascotte →"
   },
   "countdown": {
     "title": "Haɗuwarmu a Agadez a ranar…",
@@ -174,7 +175,12 @@
     "download_livret_title": "Sauke littafi",
     "no_photo_id": "Babu hoton shaida",
     "no_photo_badge": "Babu hoto",
-    "region_of": "Yankin"
+    "region_of": "Yankin",
+    "specialization_label": "Fannin Ƙwarewa / Kwarewa ta Musamman",
+    "projects_achievements": "Aiki & Ayyukan Ƙirƙira",
+    "format_pdf": "Tsarin PDF",
+    "error_title": "Ba a iya loda gwaraza ba",
+    "error_desc": "Ba a iya samun uwar garken ba. Da fatan za a duba haɗin yanar gizo."
   },
   "categories_page": {
     "title": "Rukunoninmu na Ƙwarewa (Houses)",
@@ -214,7 +220,8 @@
       "Wayar da Kai Kan Ilimi",
       "Aikin Sa-kai"
     ],
-    "reg_closed_title": "A halin yanzu an rufe rajista"
+    "reg_closed_title": "A halin yanzu an rufe rajista",
+    "mcc_nb": "Don wannan rukuni kaɗai, zaka iya shiga azuzuwa da yawa."
   },
   "membres": {
     "title": "Ƙungiyar CNCEIZ",
@@ -242,7 +249,15 @@
     "read_time": "minti na karatu",
     "newsletter_title": "Kasance a Cikin Masu Samun Labarai",
     "newsletter_desc": "Sami sababbin labarai da sanarwar CNCEIZ kai tsaye a cikin akwatin imel ɗinku.",
-    "newsletter_btn": "Yi Rajistar Samun Labarai"
+    "newsletter_btn": "Yi Rajistar Samun Labarai",
+    "phase_avant": "Kafin sansanin",
+    "phase_pendant": "Yayin sansanin",
+    "phase_apres": "Bayan sansanin",
+    "error_title": "Ba a iya loda labarai ba",
+    "error_desc": "Ba a iya loda labarai ba. Da fatan za a sake gwadawa anjima.",
+    "empty_title": "Babu labarai a halin yanzu",
+    "empty_desc": "Za a wallafa labaran wannan lokaci nan ba da jimawa ba.",
+    "no_image": "Babu hoto"
   },
   "galerie": {
     "title": "Dakin Hotuna da Bidiyo",
@@ -252,7 +267,13 @@
     "workshops": "Tarukan Bita & Ƙirƙira",
     "local": "Ayyukan Gida",
     "community": "Ayyukan Al'umma",
-    "view_fullscreen": "Babban Hoto"
+    "view_fullscreen": "Babban Hoto",
+    "error_title": "Ba a iya loda hotuna ba",
+    "error_desc": "An sami matsalar hanyar sadarwa. Da fatan za a duba haɗin intanet.",
+    "empty_title": "Gidan hotunan babu komai a ciki a yanzu",
+    "empty_desc": "Za a saka hotuna da bidiyon sansanin anan nan ba da jimawa ba.",
+    "prev": "Hoton baya",
+    "next": "Hoto na gaba"
   },
   "contact": {
     "title": "Tuntube Mu",
@@ -282,7 +303,9 @@
     "email": "Imel na Aiki",
     "subject": "Maudu'i",
     "message": "Saƙo",
-    "submit": "Aika Saƙo"
+    "submit": "Aika Saƙo",
+    "send_another": "Aika wani saƙon",
+    "error_default": "An sami matsala wajen aika saƙonku. Da fatan za a sake gwadawa."
   },
   "sponsors_page": {
     "title": "Abokan Hulɗa & Masu Tallafi",
@@ -297,7 +320,20 @@
     "cta_desc": "Haɗa sunan kamfaninku da babban shirin kawo sauyi a fannin zamantakewa da fasaha a Nijar. Tare, za mu ciyar da matasan Agadez gaba.",
     "cta_btn": "Tuntube Mu",
     "become_sponsor": "Zama Dan Canji a Cikin Al'umma",
-    "sponsor_cta_desc": "Haɗa sunan kamfaninku da babban aiki mai tasiri ga al'umma da fasaha a Nijar. Tare, za mu ciyar da matasan Agadez zuwa ga ƙwarewar zamani."
+    "sponsor_cta_desc": "Haɗa sunan kamfaninku da babban aiki mai tasiri ga al'umma da fasaha a Nijar. Tare, za mu ciyar da matasan Agadez zuwa ga ƙwarewar zamani.",
+    "our_partners": "Abokan Hulɗarmu",
+    "search_placeholder": "Nemi abokin hulɗa...",
+    "all_filter": "Duka",
+    "loading": "Ana loda abokan hulɗa...",
+    "no_results_title": "Babu abokin hulɗa da ya dace da bincikenku",
+    "no_results_desc": "Gwada canza kalmomin bincikenka.",
+    "error_title": "Ba a iya loda abokan hulɗa ba",
+    "error_desc": "An sami matsalar haɗin yanar gizo. Duba intanet ɗinka sannan ka sake gwadawa.",
+    "tier_platine": "Abokan Hulɗa na Platine",
+    "tier_platine_short": "Platine",
+    "tier_or_short": "Zinariya",
+    "tier_argent_short": "Azinariya",
+    "tier_bronze_short": "Tagulla"
   },
   "form": {
     "badge": "Agadez 2026 • Matasa Gwaraza 1000",
@@ -552,7 +588,27 @@
       "err_oeuvre_defile": "Da fatan za a bayyana aikin da za a nuna a faretin.",
       "err_dispo_camps": "Dole ne ku tabbatar da samuwarku a lokacin sansanin.",
       "err_conditions": "Dole ne ku amince da sharudɗan shiga."
-    }
+    },
+    "verification_required": "Ana buƙatar tabbatarwa",
+    "summary_title": "Taƙaitaccen bayanin takardarku",
+    "summary_mascotte_title": "Taƙaitaccen bayanin shigar ka",
+    "summary_candidate": "Mai nema:",
+    "summary_house": "Gida / House:",
+    "summary_school_class": "Makaranta / Aji:",
+    "summary_residence": "Wuri / Matsuguni:",
+    "summary_target_house": "Gidan da ake buƙata:",
+    "summary_guardian": "Iyayen / Mai riƙo:",
+    "summary_contact_phone": "Lambar wayar tuntuba:",
+    "summary_email_phone": "Imel & Waya:",
+    "summary_domain": "Fanni:",
+    "summary_innovation": "Ƙirƙira:",
+    "summary_stage": "Mataki:",
+    "step1_profile": "Mataki na 1 cikin 2: Zaɓin Matsayi",
+    "step2_house": "Mataki na 2 cikin 2: Zaɓin Gida (House)",
+    "junior_check_house": "Zaɓi Gida ko ajin da kake buƙata a wannan fanni:",
+    "junior_situation_question": "Zaɓi yanayin da ya dace da matakin ci gaban ku:",
+    "junior_specify_specialty": "Bayyana Gidanku / kwarewarku",
+    "file_transmitted": "An tura fayil"
   },
   "languages": {
     "title": "Harshe",
@@ -603,7 +659,19 @@
     "sg_p5": "Ƙuduri na shi ne in kasance tare da waɗannan matasa don buɗe musu kofofi.",
     "sg_p6": "Ga ku matasa: ku shiga kuma ku kawo ra'ayoyinku don bunkasa su.",
     "sg_p7": "Ga abokan hulɗa: ku haɗa hannu da mu wajen gina wannan babban taron.",
-    "sg_p8": "Nijar ba sai ta nemi hazaka da nisa ba; kawai buɗe musu kofa muke buƙatar yi."
+    "sg_p8": "Nijar ba sai ta nemi hazaka da nisa ba; kawai buɗe musu kofa muke buƙatar yi.",
+    "orga_title": "Mai Kula da Tsare-tsare",
+    "orga_subtitle": "Ƙungiyar Haɓaka Ƙwarewa da Ƙirƙire-ƙirƙire (OPE)",
+    "orga_name": "Ousmane Koutata Abdouramane",
+    "orga_quote": "Tare mu gina ƙasar Nijar\nMu kasance masu kyakkyawan zato",
+    "orga_p1": "Sansanin 'Yan Ƙasa na Ƙwarewa da Ƙirƙire-ƙirƙire: basira ba ta duba shekaru.",
+    "orga_p2": "Agadez, Nijar. Ƙungiyar Haɓaka Ƙwarewa da Ƙirƙire-ƙirƙire (OPE) tana ƙaddamar da Sansanin 'Yan Ƙasa na Ƙwarewa da Ƙirƙire-ƙirƙire, wanda ke nuna a bayyane cewa: basira ba ta duba shekaru.",
+    "orga_p3": "Tun kafuwarta, OPE tana aiki ba dare ba rana don haɓaka ƙwarewa a tsakanin matasan Nijar. Tana gano basira, tana ƙarfafa su da ba su jagoranci, tana kuma mutunta ƙwazo, aiki da kishin kai. Wannan sansani zai faɗaɗa wannan aiki ta hanyar buɗe ƙofofi ga kowa, ƙarfafa kishin ƙasa da ƙirƙire-ƙirƙire.",
+    "orga_p4": "Sansanin yana tara matasa masu shekaru 12 zuwa 35, manya da ƙanana. Kowa yana da matsayinsa ta hanyoyi guda uku:",
+    "orga_p5": "• STEAM: ƙirƙire-ƙirƙire ta hanyar kimiyya, fasaha, injiniyanci, zane da lissafi.",
+    "orga_p6": "• Local Project: magance matsalolin al'umma ta hanyar amfani da albarkatun al'umma.",
+    "orga_p7": "• Modèle Communautaire Citoyen: mai da taimakon juna da kishin ƙasa a matsayin tsarin rayuwa.",
+    "orga_p8": "Wannan shiri ya samo asali ne a Agadez kuma yana da tushe a tarihinta. Hukunomin yanki da na gida, masarautun gargajiya da kuma al'umma, kowannensu a matakinsa, sun rungumi wannan aiki. Hukuma ta buɗe hanya ta kuma samar da yanayi mai kyau. Al'ummar gari mai cike da haɗin kai da karramawa ta ɗauki shirin da muhimmanci. Wannan haɗin gwiwa tsakanin hukumomi da al'umma shi ne ke sa OPE ta zama ta musamman a Agadez: a nan, ana gina ƙwarewa tare, da albarkatun da ke ƙasa."
   },
   "mascotte_page": {
     "step": "Mataki",
@@ -650,5 +718,19 @@
     "success_mascotte_date_label": "Ranar aikawa",
     "success_mascotte_new": "Aika wani zanen tambari",
     "tuteur_label": "Waliyyi / Mai Kula"
+  },
+  "api_error": {
+    "title": "Ba a iya loda bayanai ba",
+    "message": "An sami matsalar haɗin yanar gizo. Duba intanet ɗinka sannan ka sake gwadawa.",
+    "retry": "Sake gwadawa"
+  },
+  "pagination": {
+    "showing": "Ana nuna daga {{start}} zuwa {{end}} cikin {{total}} {{label}}",
+    "items": "abubuwa",
+    "per_page": "a kowace shafi",
+    "prev": "Na baya",
+    "next": "Na gaba",
+    "prev_title": "Shafin baya",
+    "next_title": "Shafi na gaba"
   }
 }

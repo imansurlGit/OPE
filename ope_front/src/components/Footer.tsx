@@ -80,7 +80,7 @@ export default function Footer() {
                             <li>
                                 <span
                                     className="text-white/60 font-medium cursor-not-allowed select-none inline-block"
-                                    title="Les inscriptions sont actuellement fermées"
+                                    title={t("categories_page.reg_closed_title", "Les inscriptions sont actuellement fermées")}
                                 >
                                     {t("footer.apply_camp")}
                                 </span>

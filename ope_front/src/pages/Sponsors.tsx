@@ -265,6 +265,7 @@ function PartnerCarousel({
 }: {
   items: Partenaire[];
 }) {
+  const { t } = useTranslation();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -364,7 +365,7 @@ function PartnerCarousel({
         <div className="flex items-center gap-2.5">
           <div className="flex items-baseline gap-2">
             <h2 className="text-lg font-black text-ope-text sm:text-xl">
-              Nos Partenaires
+              {t("sponsors_page.our_partners", "Nos Partenaires")}
             </h2>
           </div>
         </div>
@@ -374,7 +375,7 @@ function PartnerCarousel({
           <button
             type="button"
             onClick={() => handleScroll("left")}
-            aria-label="Précédent"
+            aria-label={t("pagination.prev", "Précédent")}
             className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-300 bg-white text-ope-text shadow-2xs hover:bg-slate-50 hover:border-slate-400 active:scale-95 cursor-pointer"
           >
             <svg
@@ -391,7 +392,7 @@ function PartnerCarousel({
           <button
             type="button"
             onClick={() => handleScroll("right")}
-            aria-label="Suivant"
+            aria-label={t("pagination.next", "Suivant")}
             className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-300 bg-white text-ope-text shadow-2xs hover:bg-slate-50 hover:border-slate-400 active:scale-95 cursor-pointer"
           >
             <svg
@@ -551,7 +552,7 @@ export default function Sponsors() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Rechercher un partenaire..."
+                placeholder={t("sponsors_page.search_placeholder", "Rechercher un partenaire...")}
                 className="w-full rounded-full border border-slate-200 bg-white py-2 pl-9 pr-8 text-xs text-ope-text placeholder-slate-400 shadow-2xs focus:border-ope-primary focus:bg-white focus:outline-none focus:ring-1 focus:ring-ope-primary"
               />
               {searchQuery && (
@@ -559,7 +560,7 @@ export default function Sponsors() {
                   type="button"
                   onClick={() => setSearchQuery("")}
                   className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
-                  aria-label="Effacer la recherche"
+                  aria-label={t("talents.close", "Effacer la recherche")}
                 >
                   <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <line x1="18" y1="6" x2="6" y2="18" />
@@ -580,12 +581,20 @@ export default function Sponsors() {
                     : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
                 }`}
               >
-                Toutes ({partenaires.length})
+                {t("sponsors_page.all_filter", "Toutes")} ({partenaires.length})
               </button>
               {CATEGORIE_ORDER.map((catId) => {
                 const conf = CATEGORIES_CONFIG[catId];
                 const count = categoryCounts[catId] || 0;
                 const isSelected = selectedCategory === catId;
+                const tierName =
+                  catId === "platine"
+                    ? t("sponsors_page.tier_platine_short", "Platine")
+                    : catId === "or"
+                      ? t("sponsors_page.tier_or_short", "Or")
+                      : catId === "argent"
+                        ? t("sponsors_page.tier_argent_short", "Argent")
+                        : t("sponsors_page.tier_bronze_short", "Bronze");
                 return (
                   <button
                     key={catId}
@@ -599,7 +608,7 @@ export default function Sponsors() {
                     style={isSelected ? { backgroundColor: conf.accent } : undefined}
                   >
                     <TierIcon tier={catId} className="h-3 w-3" />
-                    <span>{conf.label}</span>
+                    <span>{tierName}</span>
                     <span className="text-[10px] opacity-80">({count})</span>
                   </button>
                 );
@@ -616,15 +625,15 @@ export default function Sponsors() {
             <div className="flex flex-col items-center justify-center py-24 text-center">
               <div className="h-10 w-10 animate-spin rounded-full border-3 border-ope-border border-t-ope-primary" />
               <p className="mt-4 text-sm font-semibold text-ope-text-muted">
-                Chargement des partenaires engagés...
+                {t("sponsors_page.loading", "Chargement des partenaires engagés...")}
               </p>
             </div>
           )}
 
           {hasError && (
             <ApiErrorState
-              title="Impossible de charger les partenaires"
-              message="Une erreur de connexion s'est produite. Vérifiez votre connexion Internet et réessayez."
+              title={t("sponsors_page.error_title", "Impossible de charger les partenaires")}
+              message={t("sponsors_page.error_desc", "Une erreur de connexion s'est produite. Vérifiez votre connexion Internet et réessayez.")}
               onRetry={() => window.location.reload()}
             />
           )}
@@ -638,10 +647,10 @@ export default function Sponsors() {
                 </svg>
               </div>
               <h3 className="mt-3 text-base font-extrabold text-ope-text">
-                Aucun partenaire ne correspond à votre recherche
+                {t("sponsors_page.no_results_title", "Aucun partenaire ne correspond à votre recherche")}
               </h3>
               <p className="mt-1 text-xs text-ope-text-muted">
-                Essayez d'ajuster vos critères ou mots-clés de recherche.
+                {t("sponsors_page.no_results_desc", "Essayez d'ajuster vos critères ou mots-clés de recherche.")}
               </p>
               {(searchQuery || selectedCategory !== "all") && (
                 <button

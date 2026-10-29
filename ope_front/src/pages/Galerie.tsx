@@ -105,8 +105,8 @@ export default function Galerie() {
                     {!isLoading && hasError && (
                         <div className="relative z-10 py-12">
                             <ApiErrorState
-                                title="Impossible de charger la galerie"
-                                message="Une erreur réseau est survenue. Veuillez vérifier votre connexion."
+                                title={t("galerie.error_title", "Impossible de charger la galerie")}
+                                message={t("galerie.error_desc", "Une erreur réseau est survenue. Veuillez vérifier votre connexion.")}
                                 onRetry={() => window.location.reload()}
                             />
                         </div>
@@ -120,9 +120,9 @@ export default function Galerie() {
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                             </div>
-                            <h3 className="font-extrabold text-gray-800 text-base">La galerie est encore vide</h3>
+                            <h3 className="font-extrabold text-gray-800 text-base">{t("galerie.empty_title", "La galerie est encore vide")}</h3>
                             <p className="text-xs text-gray-500 max-w-xs">
-                                Les photos et vidéos du camp seront ajoutées ici prochainement.
+                                {t("galerie.empty_desc", "Les photos et vidéos du camp seront ajoutées ici prochainement.")}
                             </p>
                         </div>
                     )}
@@ -160,7 +160,7 @@ export default function Galerie() {
                     <button
                         onClick={() => setSelectedMedia(null)}
                         className="absolute top-5 right-5 z-50 w-11 h-11 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-colors cursor-pointer"
-                        aria-label="Fermer"
+                        aria-label={t("talents.close", "Fermer")}
                     >
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -171,7 +171,7 @@ export default function Galerie() {
                     <button
                         onClick={(e) => { e.stopPropagation(); handlePrev(); }}
                         className="absolute left-3 sm:left-6 z-50 w-12 h-12 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-colors cursor-pointer"
-                        aria-label="Image précédente"
+                        aria-label={t("galerie.prev", "Image précédente")}
                     >
                         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -201,7 +201,7 @@ export default function Galerie() {
                     <button
                         onClick={(e) => { e.stopPropagation(); handleNext(); }}
                         className="absolute right-3 sm:right-6 z-50 w-12 h-12 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-colors cursor-pointer"
-                        aria-label="Image suivante"
+                        aria-label={t("galerie.next", "Image suivante")}
                     >
                         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

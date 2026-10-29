@@ -254,7 +254,7 @@ export default function Formulaire() {
                     <circle className="text-orange-200" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="text-white" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                   </svg>
-                  <span>Envoi en cours...</span>
+                  <span>{t("contact.sending", "Envoi en cours...")}</span>
                 </>
               ) : (
                 t("form.submit", "Valider et soumettre ma candidature")

@@ -283,13 +283,25 @@ export default function Accueil() {
                         id="hero-cta"
                         className="animate-fade-up-d3 flex flex-row gap-2 sm:gap-4 justify-center w-full max-w-xs sm:max-w-none"
                     >
+
+                        <a
+                            href="/OPE/#/concours-mascotte"
+                            className="flex-1 w-1/4 sm:flex-none inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white text-center select-none transition-transform hover:scale-105"
+                            style={{ backgroundColor: ORANGE, boxShadow: "0 4px 16px rgba(241,91,41,0.40)" }}
+                            title={t("popup.mascotte.participate", "Participer au concours de la mascotte")}
+                        >
+                            {t("hero.cta_mascotte")}
+                        </a>    
+
+
                         <span
                             className="flex-1 w-1/4 sm:flex-none inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white text-center cursor-not-allowed select-none"
                             style={{ backgroundColor: ORANGE, boxShadow: "0 4px 16px rgba(241,91,41,0.40)" }}
-                            title="Les inscriptions sont actuellement fermées"
+                            title={t("categories_page.reg_closed_title", "Les inscriptions sont actuellement fermées")}
                         >
                             {t("hero.cta_register")}
                         </span>
+
                     </div>
 
                     <div className="w-full flex items-center justify-between mt-1 sm:mt-2 text-white font-extrabold uppercase text-[10px] sm:text-lg tracking-tight">

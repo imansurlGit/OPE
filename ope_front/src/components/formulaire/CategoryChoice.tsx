@@ -96,8 +96,8 @@ export const CategoryChoice: React.FC<CategoryChoiceProps> = ({ onSelectCategory
           <div className="flex items-center justify-between mb-2 text-xs font-bold text-[#1d3d52]">
             <span>
               {slide === 1
-                ? t("form.step_prefix", "Étape 1 sur 2 : Choix du profil")
-                : t("form.step_prefix", "Étape 2 sur 2 : Choix de la Maison")}
+                ? t("form.step1_profile", "Étape 1 sur 2 : Choix du profil")
+                : t("form.step2_house", "Étape 2 sur 2 : Choix de la Maison")}
             </span>
             <span>
               {slide === 1

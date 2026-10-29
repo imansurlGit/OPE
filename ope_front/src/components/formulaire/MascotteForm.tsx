@@ -246,31 +246,31 @@ export const MascotteForm: React.FC<MascotteFormProps> = ({
           {/* Récapitulatif Mascotte */}
           <div className="rounded-2xl bg-slate-50 border border-slate-200 p-5 mt-6">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">
-              Récapitulatif de ta participation
+              {t("form.summary_mascotte_title", "Récapitulatif de ta participation")}
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div>
-                <span className="text-slate-400">Candidat :</span>{" "}
+                <span className="text-slate-400">{t("form.summary_candidate", "Candidat :")}</span>{" "}
                 <strong className="text-[#193549]">{data.prenom} {data.nom}</strong>
               </div>
               <div>
-                <span className="text-slate-400">Classe :</span>{" "}
+                <span className="text-slate-400">{t("form.junior.classe", "Classe")} :</span>{" "}
                 <strong className="text-[#193549]">{data.classe}</strong>
               </div>
               <div>
-                <span className="text-slate-400">Collège :</span>{" "}
+                <span className="text-slate-400">{t("form.junior.etablissement", "Collège")} :</span>{" "}
                 <strong className="text-[#193549]">{data.etablissement || "Non renseigné"}</strong>
               </div>
               <div>
-                <span className="text-slate-400">Mascotte :</span>{" "}
+                <span className="text-slate-400">{t("form.summary_innovation", "Mascotte :")}</span>{" "}
                 <strong className="text-[#F15B29]">{data.mascotteNom}</strong>
               </div>
               <div>
-                <span className="text-slate-400">Parent / Tuteur :</span>{" "}
+                <span className="text-slate-400">{t("form.summary_guardian", "Parent / Tuteur :")}</span>{" "}
                 <strong className="text-[#193549]">{data.nomTuteur}</strong>
               </div>
               <div>
-                <span className="text-slate-400">Téléphone contact :</span>{" "}
+                <span className="text-slate-400">{t("form.summary_contact_phone", "Téléphone contact :")}</span>{" "}
                 <strong className="text-[#193549]">{data.telephoneTuteur}</strong>
               </div>
             </div>

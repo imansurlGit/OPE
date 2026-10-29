@@ -32,7 +32,8 @@
   },
   "hero": {
     "tagline": "1000 jeunes talents rassemblés à Agadez pour forger l'avenir technologique et culturel du Sahel.",
-    "cta_register": "S'inscrire →",
+    "cta_register": "S'inscrire au camp (A venir)→",
+    "cta_mascotte": "Concours de la mascotte →",
     "edition": "1ère Édition",
     "location": "Agadez 2026",
     "cards_activities_title": "Activités & Projets",
@@ -174,7 +175,12 @@
     "download_livret_title": "Télécharger le livret",
     "no_photo_id": "Photo d'identité non renseignée",
     "no_photo_badge": "Sans photo",
-    "region_of": "Région de"
+    "region_of": "Région de",
+    "specialization_label": "Filière d'Excellence / Spécialisation",
+    "projects_achievements": "Projet & Réalisations",
+    "format_pdf": "Format PDF",
+    "error_title": "Impossible de charger les talents",
+    "error_desc": "Impossible de contacter le serveur. Veuillez vérifier votre connexion."
   },
   "categories_page": {
     "title": "Les 3 Catégories",
@@ -185,6 +191,7 @@
     "lp_desc": "Entrepreneuriat appliqué aux ressources locales : agro-business, élevage résilient et artisanat d'excellence.",
     "mcc_title": "House Modèle de Citoyen Communautaire (MC2)",
     "mcc_desc": "Engagement civique, salubrité publique, paix et solidarité au service direct des communautés.",
+    "mcc_nb": "Pour cette catégorie uniquement, vous pouvez participer à plusieurs classes.",
     "discover_domain": "Explorer ce domaine",
     "apply_house": "Candidater",
     "classes_label": "Classes",
@@ -242,7 +249,15 @@
     "read_time": "min de lecture",
     "newsletter_title": "Restez informé(e)",
     "newsletter_desc": "Recevez les dernières nouvelles et annonces du CNCEIZ directement dans votre boîte mail.",
-    "newsletter_btn": "S'abonner"
+    "newsletter_btn": "S'abonner",
+    "phase_avant": "Avant le camp",
+    "phase_pendant": "Pendant le camp",
+    "phase_apres": "Après le camp",
+    "error_title": "Impossible de charger les actualités",
+    "error_desc": "Impossible de charger les actualités. Veuillez réessayer plus tard.",
+    "empty_title": "Aucune actualité pour le moment",
+    "empty_desc": "Les publications pour cette phase seront bientôt disponibles.",
+    "no_image": "Sans image"
   },
   "galerie": {
     "title": "Galerie Multimédia",
@@ -252,7 +267,13 @@
     "workshops": "Ateliers & Prototypage",
     "local": "Projets Locaux",
     "community": "Actions Citoyennes",
-    "view_fullscreen": "Plein écran"
+    "view_fullscreen": "Plein écran",
+    "error_title": "Impossible de charger la galerie",
+    "error_desc": "Une erreur réseau est survenue. Veuillez vérifier votre connexion.",
+    "empty_title": "La galerie est encore vide",
+    "empty_desc": "Les photos et vidéos du camp seront ajoutées ici prochainement.",
+    "prev": "Image précédente",
+    "next": "Image suivante"
   },
   "contact": {
     "title": "Contactez-nous",
@@ -282,7 +303,9 @@
     "phone_val": "Disponible aux horaires de permanence",
     "email_val": "ope.organization@gmail.com",
     "hours_label": "Heures d'ouverture",
-    "hours_val": "Lun - Ven : 08h00 - 17h30"
+    "hours_val": "Lun - Ven : 08h00 - 17h30",
+    "send_another": "Envoyer un autre message",
+    "error_default": "Une erreur est survenue lors de l'envoi de votre message. Veuillez réessayer."
   },
   "sponsors_page": {
     "title": "Nos Partenaires & Sponsors",
@@ -297,7 +320,20 @@
     "cta_desc": "Associez l'image de votre entreprise à un projet d'impact social et technologique majeur au Niger. Ensemble, propulsons la jeunesse d'Agadez vers l'excellence numérique et entrepreneuriale.",
     "cta_btn": "Nous contacter",
     "become_sponsor": "Devenez acteur du changement",
-    "sponsor_cta_desc": "Associez l'image de votre entreprise à un projet d'impact social et technologique majeur au Niger. Ensemble, propulsons la jeunesse d'Agadez vers l'excellence numérique et entrepreneuriale."
+    "sponsor_cta_desc": "Associez l'image de votre entreprise à un projet d'impact social et technologique majeur au Niger. Ensemble, propulsons la jeunesse d'Agadez vers l'excellence numérique et entrepreneuriale.",
+    "our_partners": "Nos Partenaires",
+    "search_placeholder": "Rechercher un partenaire...",
+    "all_filter": "Toutes",
+    "loading": "Chargement des partenaires engagés...",
+    "no_results_title": "Aucun partenaire ne correspond à votre recherche",
+    "no_results_desc": "Essayez d'ajuster vos critères ou mots-clés de recherche.",
+    "error_title": "Impossible de charger les partenaires",
+    "error_desc": "Une erreur de connexion s'est produite. Vérifiez votre connexion Internet et réessayez.",
+    "tier_platine": "Partenaires Platine",
+    "tier_platine_short": "Platine",
+    "tier_or_short": "Or",
+    "tier_argent_short": "Argent",
+    "tier_bronze_short": "Bronze"
   },
   "form": {
     "category_step_badge": "Inscription CNCEIZ 2026",
@@ -552,7 +588,27 @@
     "category_choose_house_desc": "Sélectionnez le domaine principal de votre candidature (STEAM, Local Project ou MC2).",
     "category_back_profile": "Retour au profil",
     "category_access_form": "Accéder au formulaire",
-    "change_category": "Changer de catégorie"
+    "change_category": "Changer de catégorie",
+    "verification_required": "Vérification requise",
+    "summary_title": "Récapitulatif de votre candidature",
+    "summary_mascotte_title": "Récapitulatif de ta participation",
+    "summary_candidate": "Candidat :",
+    "summary_house": "Maison :",
+    "summary_school_class": "Établissement / Classe :",
+    "summary_residence": "Zone / Résidence :",
+    "summary_target_house": "House visée :",
+    "summary_guardian": "Parent / Tuteur :",
+    "summary_contact_phone": "Téléphone contact :",
+    "summary_email_phone": "Email & Tél :",
+    "summary_domain": "Domaine :",
+    "summary_innovation": "Innovation :",
+    "summary_stage": "Stade :",
+    "step1_profile": "Étape 1 sur 2 : Choix du profil",
+    "step2_house": "Étape 2 sur 2 : Choix de la Maison",
+    "junior_check_house": "Cocher la House ou classe visée dans ce domaine :",
+    "junior_situation_question": "Sélectionnez la situation qui correspond à votre état d'avancement :",
+    "junior_specify_specialty": "Préciser votre House / spécialité",
+    "file_transmitted": "Fichier transmis"
   },
   "popup": {
     "mascotte": {
@@ -585,7 +641,7 @@
     "read_less": "Réduire",
     "presi_title": "Présidente",
     "presi_subtitle": "Organisation pour la Promotion de l'Excellence (OPE)",
-    "presi_name": "Mme la Présidente de l'OPE",
+    "presi_name": "Moussa Charifatou",
     "presi_quote": "Le Niger est le pays le plus jeune du monde. Cette réalité démographique, souvent citée comme un défi est en vérité notre ressource la plus précieuse et la plus sous-exploitée.",
     "presi_p1": "Il est des projets qui naissent d'un constat, et d'autres qui naissent d'une intime conviction. Le Camp National Citoyen de l'Excellence et de l'Innovation est de ceux-là. Il est né de la conviction, profonde et irréductible, que la jeunesse nigérienne n'a pas besoin qu'on lui invente un avenir. Elle a besoin qu'on lui offre un cadre à la hauteur de ce qu'elle est déjà capable d'accomplir.",
     "presi_p2": "Le Niger est le pays le plus jeune du monde. Cette réalité démographique, souvent citée comme un défi est en vérité notre ressource la plus précieuse et la plus sous-exploitée. Dans les ateliers sans électricité, dans les cours de récréation poussiéreuses, dans les chambres mal éclairées de Niamey, Zinder, Maradi, Tahoua et Agadez, des milliers de jeunes construisent des prototypes, imaginent des solutions, portent des projets d'une créativité et d'une pertinence remarquables. Ce que ces jeunes n'ont pas encore, c'est une scène nationale. C'est un moment où leur pays se retourne vers eux et leur dit : nous vous voyons, nous vous reconnaissons, vous êtes l'avenir que nous choisissons.",
@@ -603,7 +659,19 @@
     "sg_p5": "Mon engagement personnel est simple : être aux côtés de ces jeunes, du premier jour jusqu'à la remise des projets, et faire en sorte que chaque idée sérieuse trouve une porte ouverte.",
     "sg_p6": "À vous, jeunes : inscrivez-vous, venez avec vos idées, même inachevées. Le camp est fait pour les faire grandir.",
     "sg_p7": "À vous, partenaires et soutiens : rejoignez-nous comme bâtisseurs de cette première édition. Votre appui permettra à des centaines de jeunes de passer de l'idée à l'action.",
-    "sg_p8": "Le Niger n'a pas à chercher loin ses talents. Il suffit de leur ouvrir la porte."
+    "sg_p8": "Le Niger n'a pas à chercher loin ses talents. Il suffit de leur ouvrir la porte.",
+    "orga_title": "Chargé de l'organisation",
+    "orga_subtitle": "Organisation pour la Promotion de l'Excellence (OPE)",
+    "orga_name": "Ousmane Koutata Abdouramane",
+    "orga_quote": "Ensemble construisons le Niger\nSoyons positifs",
+    "orga_p1": "Camp National Citoyen de l'Excellence et de l'Innovation : le talent ne regarde pas l'âge.",
+    "orga_p2": "Agadez, Niger. L'Organisation pour la Promotion de l'Excellence (OPE) lance le Camp National Citoyen de l'Excellence et de l'Innovation, une réponse concrète à une conviction simple : le talent ne regarde pas l'âge.",
+    "orga_p3": "Depuis sa création, l'OPE œuvre sans relâche pour la promotion de l'excellence auprès des jeunes nigériens. Elle identifie, encourage et accompagne les talents, et valorise le mérite, le travail et l'esprit d'initiative. Ce camp prolonge cette mission en la rendant plus ouverte, plus citoyenne et plus tournée vers l'innovation.",
+    "orga_p4": "Le camp rassemble les jeunes de 12 à 35 ans, juniors et seniors. Chacun y trouve sa place, à travers trois axes :",
+    "orga_p5": "• STEAM : innover par la science, la technologie, l'ingénierie, les arts et les mathématiques.",
+    "orga_p6": "• Local Project : résoudre les problèmes de sa communauté avec les moyens de sa communauté.",
+    "orga_p7": "• Modèle Communautaire Citoyen : faire de l'entraide et du civisme un mode de vie.",
+    "orga_p8": "Cette initiative est née à Agadez et s'enracine dans son histoire. Les autorités régionales et locales, les chefferies traditionnelles et la population ont, chacune à son niveau, porté ces thématiques. Les autorités ont ouvert la voie et créé un cadre favorable. La population, riche de sa diversité, de sa solidarité et de son sens de l'hospitalité, s'est approprié la démarche. Cette alliance entre institutions et communauté fait la singularité de l'OPE à Agadez : ici, l'excellence se construit ensemble, avec les moyens et les réalités du terrain."
   },
   "mascotte_page": {
     "step": "Étape",
@@ -650,5 +718,19 @@
     "success_mascotte_date_label": "Date de soumission",
     "success_mascotte_new": "Soumettre un autre dessin de mascotte",
     "tuteur_label": "Tuteur Légal Référent"
+  },
+  "api_error": {
+    "title": "Impossible de charger les données",
+    "message": "Une erreur de connexion s'est produite. Vérifiez votre connexion Internet et réessayez.",
+    "retry": "Réessayer"
+  },
+  "pagination": {
+    "showing": "Affichage de {{start}} à {{end}} sur {{total}} {{label}}",
+    "items": "éléments",
+    "per_page": "par page",
+    "prev": "Précédent",
+    "next": "Suivant",
+    "prev_title": "Page précédente",
+    "next_title": "Page suivante"
   }
 }

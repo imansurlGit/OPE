@@ -74,7 +74,7 @@ export default function Categories() {
       },
       icon: (
         <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
-          <path d="M19 14C17.34 14 16 15.34 16 17C16 18.66 17.34 20 19 20C20.66 20 22 18.66 22 17C22 15.34 20.66 14 19 14ZM19 18.5C18.17 18.5 17.5 17.83 17.5 17C17.5 16.17 18.17 15.5 19 15.5C19.83 15.5 20.5 16.17 20.5 17C20.5 17.83 19.83 18.5 19 18.5ZM7.5 14C5.57 14 4 15.57 4 17.5C4 19.43 5.57 21 7.5 21C9.43 21 11 19.43 11 17.5C11 15.57 9.43 14 7.5 14ZM7.5 19.5C6.4 19.5 5.5 18.6 5.5 17.5C5.5 16.4 6.4 15.5 7.5 15.5C8.6 15.5 9.5 16.4 9.5 17.5C9.5 18.6 8.6 19.5 7.5 19.5ZM16.5 12H15V8H11V10H9V6H17.34L19.58 9.58C19.85 10 20 10.5 20 11V12.33C19.68 12.12 19.35 12 19 12H16.5ZM4.34 12H1.5C1.22 12 1 11.78 1 11.5C1 11.22 1.22 11 1.5 11H3.66L4.76 7.69C4.9 7.27 5.29 7 5.73 7H9V9H6.13L5.13 12H4.34Z" />
+          <path d="M19 14C17.34 14 16 15.34 16 17C16 18.66 17.34 20 19 20C20.66 20 22 18.66 22 17C22 15.34 20.66 14 19 14ZM19 18.5C18.17 18.5 17.5 17.83 17.5 17C17.5 16.17 18.17 15.5 19 15.5C19.83 15.5 20.5 16.17 20.5 17C20.5 17.83 19.83 18.5 19 18.5ZM7.5 14C5.57 14 4 15.57 4 17.5C4 19.43 5.57 21 7.5 21C9.43 21 11 19.43 11 17.5C11 15.57 9.43 14 7.5 14ZM7.5 19.5C6.4 19.5 5.5 18.6 5.5 17.5C5.5 16.4 6.4 15.5 7.5 15.5C8.6 15.5 9.5 16.4 9.5 17.5C9.5 18.6 8.6 19.5 7.5 19.5ZM16.5 12H15V8H11V10H9V6H17.34L19.58 9.58C19.85 10 20 10.5 20 11V12.33C19.68 12.12 19.35 12 19 12H16.5ZM4.34 12H1.5C1.22 12 1 11.78 1 11.5C1 11.22 1.22 1 1.5 11H3.66L4.76 7.69C4.9 7.27 5.29 7 5.73 7H9V9H6.13L5.13 12H4.34Z" />
         </svg>
       ),
     },
@@ -83,6 +83,8 @@ export default function Categories() {
       title: "MC2 - Modèle de Citoyen Communautaire",
       tag: "Modèle de Citoyen Communautaire",
       desc: t("categories_page.mcc_desc", "Forger les leaders de demain. Un accent sur le leadership, l'éthique et l'engagement civique pour bâtir une jeunesse responsable et dévouée au progrès de sa communauté."),
+      // Ajout du NB uniquement pour MC2 (remplacez le texte par votre traduction si besoin)
+      nb: t("categories_page.mcc_nb", "Note importante spécifique au modèle MC2 concernant les activités de terrain."),
       image: mc2Img,
       dropdownLabel: t("categories_page.classes_label", "Classes"),
       classes: (t("categories_page.mc2_classes", { returnObjects: true }) as string[]) || [
@@ -155,7 +157,7 @@ export default function Categories() {
                 </div>
               </div>
 
-              {/* Contenu textuel avec flex-1 pour égaliser et pousser le dropdown au même niveau */}
+              {/* Contenu textuel */}
               <div className="p-5 sm:p-6 pb-2 flex-1 flex flex-col">
                 <p
                   className={`text-[10px] font-extrabold tracking-widest uppercase mb-2 ${cat.color.tagColor}`}
@@ -168,9 +170,21 @@ export default function Categories() {
                 <p className="text-xs sm:text-sm text-ope-text-muted leading-relaxed">
                   {cat.desc}
                 </p>
+
+                {/* Affichage conditionnel du N.B. uniquement si cat.nb existe (ex: pour MC2) */}
+                {cat.nb && (
+                  <div className="mt-3 p-3 rounded-xl bg-amber-50/60 border border-amber-200/80 flex items-start gap-2.5 text-xs sm:text-sm text-amber-900 leading-relaxed shadow-2xs">
+                    <span className="shrink-0 font-extrabold uppercase px-2 py-0.5 rounded-md bg-amber-200/80 text-amber-950 text-[10px] tracking-wider mt-0.5">
+                      N.B.
+                    </span>
+                    <p className="font-medium text-amber-900">
+                      {cat.nb}
+                    </p>
+                  </div>
+                )}
               </div>
 
-              {/* Dropdown des Classes collé en bas de la carte au même niveau */}
+              {/* Dropdown des Classes */}
               <div className="p-5 sm:p-6 pt-2 pb-6 mt-auto">
                 <button
                   type="button"
@@ -193,6 +207,7 @@ export default function Categories() {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      strokeWidth={2.5}
                       d="M19 9l-7 7-7-7"
                     />
                   </svg>

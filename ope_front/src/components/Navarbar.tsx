@@ -143,7 +143,7 @@ export default function Navbar() {
 
           <span
             className="hidden lg:inline-flex items-center px-5 py-2 rounded-full text-sm font-semibold text-ope-white bg-ope-orange shrink-0 shadow-sm cursor-not-allowed select-none"
-            title="Les inscriptions sont actuellement fermées"
+            title={t("categories_page.reg_closed_title", "Les inscriptions sont actuellement fermées")}
           >
             {t("nav.join")}
           </span>
@@ -194,7 +194,7 @@ export default function Navbar() {
           ))}
           <span
             className="mt-2 mb-2 px-5 py-2.5 rounded-full text-sm font-semibold text-ope-white bg-ope-orange text-center shadow-sm cursor-not-allowed select-none block"
-            title="Les inscriptions sont actuellement fermées"
+            title={t("categories_page.reg_closed_title", "Les inscriptions sont actuellement fermées")}
           >
             {t("nav.join")}
           </span>

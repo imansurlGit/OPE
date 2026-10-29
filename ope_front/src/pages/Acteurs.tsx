@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import presiImg from "../assets/presi.jpeg";
 import kaderImg from "../assets/kader.jpeg";
+import koutataImg from "../assets/koutata.jpeg";
 
 interface Acteur {
     id: number;
@@ -55,6 +56,26 @@ export default function Acteurs() {
                 t("acteurs.sg_p6"),
                 t("acteurs.sg_p7"),
                 t("acteurs.sg_p8"),
+            ],
+        },
+        {
+            id: 3,
+            titre: t("acteurs.orga_title", "Chargé de l'organisation"),
+            sousTitre: t("acteurs.orga_subtitle", "Organisation pour la Promotion de l'Excellence (OPE)"),
+            nom: t("acteurs.orga_name", "Ousmane Koutata Abdouramane"),
+            photo: koutataImg,
+            couleur: "#0A7B8E",
+            couleurLight: "#EBF7F9",
+            exergue: t("acteurs.orga_quote", "Ensemble construisons le Niger\nSoyons positifs"),
+            motParagraphs: [
+                t("acteurs.orga_p1"),
+                t("acteurs.orga_p2"),
+                t("acteurs.orga_p3"),
+                t("acteurs.orga_p4"),
+                t("acteurs.orga_p5"),
+                t("acteurs.orga_p6"),
+                t("acteurs.orga_p7"),
+                t("acteurs.orga_p8"),
             ],
         },
     ];
@@ -135,7 +156,7 @@ export default function Acteurs() {
 
                                         {/* Phrase exergue */}
                                         <blockquote
-                                            className="text-base sm:text-xl font-bold leading-snug mb-5"
+                                            className="text-base sm:text-xl font-bold leading-snug mb-5 whitespace-pre-line"
                                             style={{ color: acteur.couleur }}
                                         >
                                             « {acteur.exergue} »

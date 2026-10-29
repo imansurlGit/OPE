@@ -343,7 +343,7 @@ export default function ConcoursMascotte() {
                 />
               </svg>
               <div>
-                <p className="font-semibold">Vérification requise</p>
+                <p className="font-semibold">{t("form.verification_required", "Vérification requise")}</p>
                 <p className="mt-0.5 text-xs sm:text-sm text-red-700">
                   {errorMessage}
                 </p>

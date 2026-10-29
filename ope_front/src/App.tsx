@@ -18,7 +18,7 @@ import Login from "./pages/Login";
 import Admin from "./pages/Admin";
 import Acteurs from "./pages/Acteurs";
 import NotFound from "./pages/NotFound";
-import MascotteCtaPopup from "./components/MascotteCtaPopup";
+//import MascotteCtaPopup from "./components/MascotteCtaPopup";
 
 function Layout() {
   const location = useLocation();
@@ -33,7 +33,7 @@ function Layout() {
     <div className="flex flex-col min-h-screen">
       <ScrollToTop />
       {!hideNavbar && <Navbar />}
-      <MascotteCtaPopup />
+      {/* <MascotteCtaPopup /> */}
       <main className="flex-1">
         <ErrorBoundary>
           <Routes>
