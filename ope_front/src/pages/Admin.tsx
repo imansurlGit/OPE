@@ -6,6 +6,7 @@ import AdminTalents from "../components/AdminTalents";
 import AdminMascotte from "../components/AdminMascotte";
 import AdminActualites from "../components/AdminActualites";
 import AdminMembres from "../components/AdminMembres";
+import AdminActeurs from "../components/AdminActeurs";
 import AdminGalerie from "../components/AdminGalerie";
 import AdminPartenaires from "../components/AdminPartenaires";
 import AdminContact from "../components/AdminContact";
@@ -22,6 +23,7 @@ export default function Admin() {
     "mascotte",
     "actualites",
     "membres",
+    "acteurs",
     "partenaires",
     "contact",
     "galerie",
@@ -116,6 +118,11 @@ export default function Admin() {
               ONGLET : ÉQUIPE CNCEIZ
               ══════════════════════════════════════════════════ */}
           {activeTab === "membres" && <AdminMembres />}
+
+          {/* ══════════════════════════════════════════════════
+              ONGLET : LES ACTEURS
+              ══════════════════════════════════════════════════ */}
+          {activeTab === "acteurs" && <AdminActeurs />}
 
           {/* ══════════════════════════════════════════════════
               ONGLET : PARTENAIRES

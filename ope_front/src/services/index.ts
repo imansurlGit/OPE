@@ -19,6 +19,8 @@ export { default as contactService } from "./contactService";
 export { default as galerieService } from "./galerieService";
 export * from "./partenaireService";
 export { default as partenaireService } from "./partenaireService";
+export * from "./acteurService";
+export { default as acteurService } from "./acteurService";
 export * from "./documentService";
 export { default as documentService } from "./documentService";
 export * from "./mascotteApi";

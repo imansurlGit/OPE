@@ -250,3 +250,23 @@ export interface DocumentFilterParams {
   annee?: number | string;
   search?: string;
 }
+
+// ── Acteurs ───────────────────────────────────────────────────────────────────
+export interface ActeurPage {
+  id: number;
+  titre: string;
+  sous_titre: string;
+  nom: string;
+  photo?: string | null;
+  couleur: string;
+  couleur_light: string;
+  exergue: string;
+  mot: string;
+  ordre: number;
+  actif: boolean;
+}
+
+export interface ActeurPageFilterParams {
+  actif?: boolean | string;
+  search?: string;
+}

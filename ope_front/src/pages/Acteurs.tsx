@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { acteurService } from "../services";
 import presiImg from "../assets/presi.jpeg";
 import kaderImg from "../assets/kader.jpeg";
 import koutataImg from "../assets/koutata.jpeg";
@@ -19,8 +20,39 @@ interface Acteur {
 export default function Acteurs() {
     const { t } = useTranslation();
     const [expanded, setExpanded] = useState<number | null>(null);
+    const [apiActeurs, setApiActeurs] = useState<Acteur[] | null>(null);
 
-    const acteurs: Acteur[] = [
+    useEffect(() => {
+        const fetchActeurs = async () => {
+            try {
+                const data = await acteurService.getActeurs({ actif: true });
+                const items = Array.isArray(data) ? data : (data as any)?.results || [];
+                if (items.length > 0) {
+                    setApiActeurs(
+                        items.map((a: any) => ({
+                            id: a.id,
+                            titre: a.titre,
+                            sousTitre: a.sous_titre,
+                            nom: a.nom,
+                            photo: a.photo || null,
+                            couleur: a.couleur || "#111111",
+                            couleurLight: a.couleur_light || "#F5F5F5",
+                            exergue: a.exergue,
+                            motParagraphs: a.mot
+                                ? a.mot.split(/\n\n+/).map((p: string) => p.trim()).filter(Boolean)
+                                : [],
+                        }))
+                    );
+                }
+            } catch (err) {
+                // En cas d'erreur ou d'absence d'acteurs en base, fallback sur les acteurs par défaut
+                console.warn("Acteurs chargés depuis la configuration par défaut", err);
+            }
+        };
+        fetchActeurs();
+    }, []);
+
+    const defaultActeurs: Acteur[] = useMemo(() => [
         {
             id: 1,
             titre: t("acteurs.presi_title", "Présidente"),
@@ -78,7 +110,9 @@ export default function Acteurs() {
                 t("acteurs.orga_p8"),
             ],
         },
-    ];
+    ], [t]);
+
+    const acteurs = apiActeurs && apiActeurs.length > 0 ? apiActeurs : defaultActeurs;
 
     return (
         <div className="pt-8 bg-ope-bg min-h-screen">
