@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import steamImg from "../assets/steam.jpeg";
 import lpImg from "../assets/lp.jpeg";
@@ -250,12 +251,12 @@ export default function Categories() {
               {t("apropos.description")}
             </p>
           </div>
-          <span
-            className="inline-flex items-center justify-center px-6 py-3 rounded-xl text-sm font-bold text-white bg-ope-orange shadow-md shrink-0 cursor-not-allowed select-none"
-            title={t("categories_page.reg_closed_title", "Les inscriptions sont actuellement fermées")}
+          <Link
+            to="/formulaire"
+            className="inline-flex items-center justify-center px-6 py-3 rounded-xl text-sm font-bold text-white bg-ope-orange hover:bg-ope-orange/90 transition-all shadow-md shrink-0 active:scale-95 cursor-pointer"
           >
             {t("categories_page.apply_house")}
-          </span>
+          </Link>
         </div>
       </section>
     </div>

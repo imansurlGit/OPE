@@ -141,12 +141,12 @@ export default function Navbar() {
         <div className="flex items-center gap-2 sm:gap-3">
           <LanguageSwitcher />
 
-          <span
-            className="hidden lg:inline-flex items-center px-5 py-2 rounded-full text-sm font-semibold text-ope-white bg-ope-orange shrink-0 shadow-sm cursor-not-allowed select-none"
-            title={t("categories_page.reg_closed_title", "Les inscriptions sont actuellement fermées")}
+          <NavLink
+            to="/formulaire"
+            className="hidden lg:inline-flex items-center px-5 py-2 rounded-full text-sm font-semibold text-ope-white bg-ope-orange hover:bg-ope-orange/90 shrink-0 shadow-sm transition-all hover:scale-105 active:scale-95"
           >
             {t("nav.join")}
-          </span>
+          </NavLink>
 
           {/* Burger mobile */}
           <button
@@ -192,12 +192,13 @@ export default function Navbar() {
               {link.label}
             </NavLink>
           ))}
-          <span
-            className="mt-2 mb-2 px-5 py-2.5 rounded-full text-sm font-semibold text-ope-white bg-ope-orange text-center shadow-sm cursor-not-allowed select-none block"
-            title={t("categories_page.reg_closed_title", "Les inscriptions sont actuellement fermées")}
+          <NavLink
+            to="/formulaire"
+            onClick={() => setMenuOpen(false)}
+            className="mt-2 mb-2 px-5 py-2.5 rounded-full text-sm font-semibold text-ope-white bg-ope-orange text-center shadow-sm hover:bg-ope-orange/90 transition-all block"
           >
             {t("nav.join")}
-          </span>
+          </NavLink>
         </div>
       </div>
     </nav>
