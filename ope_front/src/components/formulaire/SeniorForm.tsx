@@ -2,8 +2,10 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import type { SeniorData, SeniorErrors, MaisonType } from "../../types/formulaire";
 import {
-  getClassesOptionsForMaison,
+  getSeniorDomainesForMaison,
+  SENIOR_HOUSE_INFO,
   STADES_DEVELOPPEMENT_OPTIONS,
+  ANCIENNETE_ACTIVITE_OPTIONS,
   REGIONS_NIGER_OPTIONS,
 } from "../../types/formulaire";
 import {
@@ -28,6 +30,9 @@ interface SeniorFormProps {
   onFileRemove: (field: "pieceIdentite" | "photoIdentite" | "preuvesRealisation") => void;
 }
 
+const labelOf = (options: { value: string; label: string }[], value: string) =>
+  options.find((o) => o.value === value)?.label ?? value;
+
 export const SeniorForm: React.FC<SeniorFormProps> = ({
   step,
   maison,
@@ -39,36 +44,101 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  // Dynamique selon la Maison
-  const classesOptions = getClassesOptionsForMaison(maison || "steam");
+  // Un formulaire distinct par House : STEAM, LP ou MC2
+  const house = maison || "steam";
+  const isSteam = house === "steam";
+  const isLP = house === "local_project";
+  const houseInfo = SENIOR_HOUSE_INFO[house];
+  const domainesOptions = getSeniorDomainesForMaison(house);
 
-  const domaineLabel =
-    maison === "local_project"
-      ? "Filière / Classe"
-      : maison === "mouvement_citoyen"
-        ? "Activité / Engagement"
-        : "Domaine / Classe STEAM";
+  const texts = {
+    steam: {
+      step2Title: t("form.senior.step2_title", "Étape 2 : Votre innovation"),
+      step2Subtitle: t(
+        "form.senior.step2_subtitle",
+        "Décrivez votre innovation, son domaine, son stade de développement et fournissez vos preuves de réalisation.",
+      ),
+      domaineLabel: t("form.senior.domaine_steam", "Domaine STEAM concerné"),
+      domainePlaceholder: "Sélectionnez un domaine STEAM",
+      domaineAutreLabel: t("form.senior.domaine_steam_autre", "Précisez votre domaine STEAM"),
+      nomLabel: t("form.senior.innovation_nom", "Nom du produit / service / innovation"),
+      nomPlaceholder: "Ex: Système d'irrigation intelligente solaire SolarDrop",
+      descriptionLabel: t(
+        "form.senior.innovation_description",
+        "Description succincte (fonctionnement, problème résolu, public cible)",
+      ),
+      descriptionPlaceholder:
+        "Décrivez en quoi consiste votre innovation, comment elle fonctionne, quel défi concret elle relève au Niger/Sahel et qui en sont les bénéficiaires...",
+      preuvesLabel: t("form.senior.preuves_realisation", "Preuves de réalisation (photos, vidéo, document)"),
+      preuvesHelper: "Photos du prototype, vidéo, schéma technique ou note descriptive • Max 10 Mo",
+      oeuvrePlaceholder: "Ex: Drone de surveillance agricole ou Maquette robotisée",
+      standHelper: "Un espace dédié pour présenter votre innovation aux visiteurs et partenaires.",
+      prixLabel: t("form.senior.concours_prix_innovation", "Concourir au Prix de la Meilleure Innovation STEAM"),
+      prixHelper: "Votre innovation sera évaluée par le jury d'experts scientifiques du CNCEIZ 2026.",
+      summaryNom: t("form.summary_innovation", "Innovation :"),
+    },
+    local_project: {
+      step2Title: t("form.senior.lp.step2_title", "Étape 2 : Votre activité"),
+      step2Subtitle: t(
+        "form.senior.lp.step2_subtitle",
+        "Présentez votre entreprise ou activité, son marché, son impact et fournissez une preuve de commercialisation.",
+      ),
+      domaineLabel: t("form.senior.lp.domaine", "Domaine LP concerné"),
+      domainePlaceholder: "Sélectionnez un domaine LP",
+      domaineAutreLabel: t("form.senior.lp.domaine_autre", "Précisez le domaine LP"),
+      nomLabel: t("form.senior.lp.nom", "Nom de l'entreprise / activité / produit"),
+      nomPlaceholder: "Ex: Coopérative Tagant — Transformation de dattes",
+      descriptionLabel: t("form.senior.lp.description", "Description succincte (activité, marché, impact)"),
+      descriptionPlaceholder:
+        "Décrivez votre activité et vos produits ou services, votre marché (clients, zone de vente) et l'impact de votre activité sur votre communauté...",
+      preuvesLabel: t(
+        "form.senior.lp.preuves",
+        "Preuve de commercialisation (NIF, facture, registre, photos, vidéo)",
+      ),
+      preuvesHelper: "NIF, facture, registre de commerce, photos ou vidéo de l'activité • Max 10 Mo",
+      oeuvrePlaceholder: "Ex: Produits transformés ou articles artisanaux",
+      standHelper: "Un espace dédié pour exposer vos produits aux visiteurs et partenaires.",
+      prixLabel: t("form.senior.lp.prix", "Concourir au Prix de la Meilleure Entreprise LP"),
+      prixHelper: "Votre entreprise sera évaluée par le jury du CNCEIZ 2026.",
+      summaryNom: t("form.senior.lp.summary_nom", "Activité :"),
+    },
+    mouvement_citoyen: {
+      step2Title: t("form.senior.mc2.step2_title", "Étape 2 : Votre engagement citoyen"),
+      step2Subtitle: t(
+        "form.senior.mc2.step2_subtitle",
+        "Présentez l'initiative ou l'action que vous avez menée, son impact sur votre communauté et fournissez vos preuves.",
+      ),
+      domaineLabel: t("form.senior.mc2.domaine", "Domaine d'engagement"),
+      domainePlaceholder: "Sélectionnez un domaine d'engagement",
+      domaineAutreLabel: t("form.senior.mc2.domaine_autre", "Précisez le domaine d'engagement"),
+      nomLabel: t("form.senior.mc2.nom", "Nom de l'initiative / action menée"),
+      nomPlaceholder: "Ex: Opération quartier propre d'Agadez",
+      descriptionLabel: t(
+        "form.senior.mc2.description",
+        "Description de l'action et de son impact communautaire",
+      ),
+      descriptionPlaceholder:
+        "Décrivez l'action menée (lieu, période, participants), ses bénéficiaires et les changements constatés dans votre communauté...",
+      preuvesLabel: t(
+        "form.senior.mc2.preuves",
+        "Preuves de l'action (photos, attestations, articles, vidéo)",
+      ),
+      preuvesHelper: "Photos, attestations, articles de presse ou vidéo de l'action • Max 10 Mo",
+      oeuvrePlaceholder: "Ex: Exposition photo de vos actions communautaires",
+      standHelper: "Un espace dédié pour présenter votre initiative aux visiteurs et partenaires.",
+      prixLabel: t("form.senior.mc2.prix", "Concourir au Prix du Meilleur Acteur MC2"),
+      prixHelper: "Votre engagement sera évalué par le jury du CNCEIZ 2026.",
+      summaryNom: t("form.senior.mc2.summary_nom", "Initiative :"),
+    },
+  }[house];
 
-  const domaineplaceholder =
-    maison === "local_project"
-      ? "Sélectionnez une filière"
-      : maison === "mouvement_citoyen"
-        ? "Sélectionnez une activité"
-        : "Sélectionnez un domaine STEAM";
-
-  const domaineAutreLabel =
-    maison === "local_project"
-      ? "Précisez la filière"
-      : maison === "mouvement_citoyen"
-        ? "Précisez l'activité"
-        : "Précisez le domaine STEAM";
-
-  const step2Title =
-    maison === "local_project"
-      ? "Étape 2 : Votre projet local"
-      : maison === "mouvement_citoyen"
-        ? "Étape 2 : Votre engagement citoyen"
-        : "Étape 2 : Votre innovation";
+  const houseBadge = (
+    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 text-[#F15B29] text-xs font-bold mb-2">
+      <span>
+        {houseInfo.code} — {houseInfo.fullName}
+      </span>
+    </div>
+  );
 
   return (
     <div className="space-y-6">
@@ -76,6 +146,11 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
       {step === 1 && (
         <div className="space-y-5 animate-fade-up">
           <div className="border-b border-slate-100 pb-3 mb-4">
+            {houseBadge}
+            <p className="text-xs text-[#5C6B76] mb-3">
+              Camp National Citoyen de l'Excellence et de l'Innovation — Agadez, du 25 au 31 décembre
+              2026. Organisé par l'OPE (Organisation pour la Promotion de l'Excellence).
+            </p>
             <h2 className="text-lg sm:text-xl font-bold text-[#193549]">
               {t("form.senior.step1_title", "Étape 1 : Identité & Contact")}
             </h2>
@@ -181,28 +256,22 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
         </div>
       )}
 
-      {/* ── ÉTAPE 2 : PROJET / INNOVATION (dynamique selon la Maison) ── */}
+      {/* ── ÉTAPE 2 : INNOVATION (STEAM) / ACTIVITÉ (LP) / ENGAGEMENT CITOYEN (MC2) ── */}
       {step === 2 && (
         <div className="space-y-5 animate-fade-up">
           <div className="border-b border-slate-100 pb-3 mb-4">
-            <h2 className="text-lg sm:text-xl font-bold text-[#193549]">
-              {step2Title}
-            </h2>
-            <p className="text-xs sm:text-sm text-[#5C6B76]">
-              {t(
-                "form.senior.step2_subtitle",
-                "Décrivez votre projet, son domaine / sa classe, son état d'avancement et fournissez vos éléments de preuve.",
-              )}
-            </p>
+            {houseBadge}
+            <h2 className="text-lg sm:text-xl font-bold text-[#193549]">{texts.step2Title}</h2>
+            <p className="text-xs sm:text-sm text-[#5C6B76]">{texts.step2Subtitle}</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className={`grid grid-cols-1 gap-4 ${isSteam || isLP ? "sm:grid-cols-2" : ""}`}>
             <SelectField
-              label={domaineLabel}
+              label={texts.domaineLabel}
               name="domaineSteam"
               required
-              options={classesOptions}
-              placeholder={domaineplaceholder}
+              options={domainesOptions}
+              placeholder={texts.domainePlaceholder}
               value={data.domaineSteam}
               onChange={(e) =>
                 onChangeField("domaineSteam", e.target.value as SeniorData["domaineSteam"])
@@ -210,29 +279,49 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
               error={fieldErrors.domaineSteam}
             />
 
-            <SelectField
-              label={t("form.senior.stade_developpement", "Stade de développement")}
-              name="stadeDeveloppement"
-              required
-              options={STADES_DEVELOPPEMENT_OPTIONS}
-              placeholder="Sélectionnez le stade d'avancement"
-              value={data.stadeDeveloppement}
-              onChange={(e) =>
-                onChangeField(
-                  "stadeDeveloppement",
-                  e.target.value as SeniorData["stadeDeveloppement"],
-                )
-              }
-              error={fieldErrors.stadeDeveloppement}
-            />
+            {isSteam && (
+              <SelectField
+                label={t("form.senior.stade_developpement", "Stade de développement")}
+                name="stadeDeveloppement"
+                required
+                options={STADES_DEVELOPPEMENT_OPTIONS}
+                placeholder="Sélectionnez le stade d'avancement"
+                value={data.stadeDeveloppement}
+                onChange={(e) =>
+                  onChangeField(
+                    "stadeDeveloppement",
+                    e.target.value as SeniorData["stadeDeveloppement"],
+                  )
+                }
+                error={fieldErrors.stadeDeveloppement}
+              />
+            )}
+
+            {isLP && (
+              <SelectField
+                label={t("form.senior.lp.anciennete", "Ancienneté de l'activité")}
+                name="ancienneteActivite"
+                required
+                options={ANCIENNETE_ACTIVITE_OPTIONS}
+                placeholder="Sélectionnez l'ancienneté"
+                value={data.ancienneteActivite}
+                onChange={(e) =>
+                  onChangeField(
+                    "ancienneteActivite",
+                    e.target.value as SeniorData["ancienneteActivite"],
+                  )
+                }
+                error={fieldErrors.ancienneteActivite}
+              />
+            )}
           </div>
 
           {data.domaineSteam === "autre" && (
             <TextField
-              label={domaineAutreLabel}
+              label={texts.domaineAutreLabel}
               name="domaineSteamAutre"
               required
-              placeholder="Ex: Précisez votre domaine / activité..."
+              placeholder="Ex: Précisez votre domaine..."
               value={data.domaineSteamAutre}
               onChange={(e) => onChangeField("domaineSteamAutre", e.target.value)}
               error={fieldErrors.domaineSteamAutre}
@@ -240,56 +329,52 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
           )}
 
           <TextField
-            label={t("form.senior.innovation_nom", "Nom du produit / service / innovation")}
+            label={texts.nomLabel}
             name="innovationNom"
             required
-            placeholder="Ex: Système d'irrigation intelligente solaire SolarDrop"
+            placeholder={texts.nomPlaceholder}
             value={data.innovationNom}
             onChange={(e) => onChangeField("innovationNom", e.target.value)}
             error={fieldErrors.innovationNom}
           />
 
           <TextAreaField
-            label={t(
-              "form.senior.innovation_description",
-              "Description succincte (fonctionnement, problème résolu, public cible)",
-            )}
+            label={texts.descriptionLabel}
             name="innovationDescription"
             rows={4}
             required
-            placeholder="Décrivez en quoi consiste votre innovation, les technologies utilisées, quel défi concret elle relève au Niger/Sahel et qui en sont les bénéficiaires..."
+            placeholder={texts.descriptionPlaceholder}
             value={data.innovationDescription}
             onChange={(e) => onChangeField("innovationDescription", e.target.value)}
             error={fieldErrors.innovationDescription}
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className={`grid grid-cols-1 gap-4 ${isSteam ? "sm:grid-cols-2" : ""}`}>
             <FileField
-              label={t(
-                "form.senior.preuves_realisation",
-                "Preuves de réalisation (photos, vidéo, document)",
-              )}
+              label={texts.preuvesLabel}
               accept=".pdf,image/*,video/*"
               fileInfo={data.preuvesRealisation}
               onFileSelect={(file) => onFileUpload("preuvesRealisation", file)}
               onFileRemove={() => onFileRemove("preuvesRealisation")}
               error={fieldErrors.preuvesRealisation}
-              helperText="Photos du prototype, schéma technique ou note descriptive • Max 10 Mo"
+              helperText={texts.preuvesHelper}
             />
 
-            <TextField
-              label={t(
-                "form.senior.lien_portfolio",
-                "Lien portfolio / vidéo de démonstration (facultatif)",
-              )}
-              name="lienPortfolio"
-              type="url"
-              placeholder="https://drive.google.com/... ou https://youtu.be/..."
-              value={data.lienPortfolio}
-              onChange={(e) => onChangeField("lienPortfolio", e.target.value)}
-              error={fieldErrors.lienPortfolio}
-              helperText="Lien vers une vidéo de démo, GitHub, Drive ou site web du projet."
-            />
+            {isSteam && (
+              <TextField
+                label={t(
+                  "form.senior.lien_portfolio",
+                  "Lien portfolio / vidéo de démonstration (facultatif)",
+                )}
+                name="lienPortfolio"
+                type="url"
+                placeholder="https://drive.google.com/... ou https://youtu.be/..."
+                value={data.lienPortfolio}
+                onChange={(e) => onChangeField("lienPortfolio", e.target.value)}
+                error={fieldErrors.lienPortfolio}
+                helperText="Lien vers une vidéo de démo, GitHub, Drive ou site web du projet."
+              />
+            )}
           </div>
         </div>
       )}
@@ -298,6 +383,7 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
       {step === 3 && (
         <div className="space-y-6 animate-fade-up">
           <div className="border-b border-slate-100 pb-3 mb-4">
+            {houseBadge}
             <h2 className="text-lg sm:text-xl font-bold text-[#193549]">
               {t("form.senior.step3_title", "Étape 3 : Modalités de participation")}
             </h2>
@@ -319,14 +405,14 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
                 )}
                 value={data.participeDefile}
                 onChange={(val) => onChangeField("participeDefile", val)}
-                helperText="Présentation d'une œuvre innovante lors de la cérémonie officielle d'ouverture."
+                helperText="Présentation d'une œuvre lors de la cérémonie officielle d'ouverture."
               />
               {data.participeDefile && (
                 <TextField
                   label={t("form.senior.oeuvre_defile", "Œuvre à présenter au défilé")}
                   name="oeuvreDefile"
                   required
-                  placeholder="Ex: Drone de surveillance agricole ou Maquette robotisée"
+                  placeholder={texts.oeuvrePlaceholder}
                   value={data.oeuvreDefile}
                   onChange={(e) => onChangeField("oeuvreDefile", e.target.value)}
                   error={fieldErrors.oeuvreDefile}
@@ -350,18 +436,15 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
               label={t("form.senior.souhaite_stand", "Souhaitez-vous un stand d'exposition ?")}
               value={data.souhaiteStand}
               onChange={(val) => onChangeField("souhaiteStand", val)}
-              helperText="Un espace dédié pour présenter votre innovation aux visiteurs et partenaires."
+              helperText={texts.standHelper}
             />
 
-            {/* Prix innovation */}
+            {/* Prix de la House */}
             <YesNoField
-              label={t(
-                "form.senior.concours_prix_innovation",
-                "Concourir au Prix de la Meilleure Innovation STEAM",
-              )}
+              label={texts.prixLabel}
               value={data.concoursPrixInnovation}
               onChange={(val) => onChangeField("concoursPrixInnovation", val)}
-              helperText="Votre projet sera évalué par le jury d'experts scientifiques du CNCEIZ 2026."
+              helperText={texts.prixHelper}
             />
 
             {/* Disponibilité camp */}
@@ -409,19 +492,39 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
                 <strong className="text-[#193549]">{data.regionVille}</strong>
               </div>
               <div>
+                <span className="text-slate-400">{t("form.summary_house", "Maison :")}</span>{" "}
+                <strong className="text-[#F15B29]">{houseInfo.code}</strong>
+              </div>
+              <div>
                 <span className="text-slate-400">{t("form.summary_domain", "Domaine :")}</span>{" "}
                 <strong className="text-[#193549]">
-                  {data.domaineSteam === "autre" ? data.domaineSteamAutre : data.domaineSteam}
+                  {data.domaineSteam === "autre"
+                    ? data.domaineSteamAutre
+                    : labelOf(domainesOptions, data.domaineSteam)}
                 </strong>
               </div>
               <div>
-                <span className="text-slate-400">{t("form.summary_innovation", "Innovation :")}</span>{" "}
+                <span className="text-slate-400">{texts.summaryNom}</span>{" "}
                 <strong className="text-[#F15B29]">{data.innovationNom}</strong>
               </div>
-              <div>
-                <span className="text-slate-400">{t("form.summary_stage", "Stade :")}</span>{" "}
-                <strong className="text-[#193549]">{data.stadeDeveloppement}</strong>
-              </div>
+              {isSteam && (
+                <div>
+                  <span className="text-slate-400">{t("form.summary_stage", "Stade :")}</span>{" "}
+                  <strong className="text-[#193549]">
+                    {labelOf(STADES_DEVELOPPEMENT_OPTIONS, data.stadeDeveloppement)}
+                  </strong>
+                </div>
+              )}
+              {isLP && (
+                <div>
+                  <span className="text-slate-400">
+                    {t("form.senior.lp.summary_anciennete", "Ancienneté :")}
+                  </span>{" "}
+                  <strong className="text-[#193549]">
+                    {labelOf(ANCIENNETE_ACTIVITE_OPTIONS, data.ancienneteActivite)}
+                  </strong>
+                </div>
+              )}
             </div>
           </div>
         </div>

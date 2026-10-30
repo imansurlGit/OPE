@@ -12,6 +12,8 @@ export type StadeDeveloppement =
   | "en_test"
   | "";
 
+export type AncienneteActivite = "moins_1_an" | "1_3_ans" | "plus_3_ans" | "";
+
 export interface UploadedFileInfo {
   name: string;
   size: string;
@@ -75,14 +77,15 @@ export interface SeniorData {
   pieceIdentite: UploadedFileInfo | null;
   photoIdentite: UploadedFileInfo | null;
 
-  // Étape 2 : Votre innovation
+  // Étape 2 : Votre innovation (STEAM) / activité (LP) / engagement citoyen (MC2)
   domaineSteam: DomaineSteam;
   domaineSteamAutre: string;
   innovationNom: string;
   innovationDescription: string;
-  stadeDeveloppement: StadeDeveloppement;
+  stadeDeveloppement: StadeDeveloppement; // STEAM uniquement
+  ancienneteActivite: AncienneteActivite; // LP uniquement
   preuvesRealisation: UploadedFileInfo | null;
-  lienPortfolio: string;
+  lienPortfolio: string; // STEAM uniquement
 
   // Étape 3 : Modalités de participation
   participeDefile: boolean;
@@ -116,6 +119,17 @@ export const SENIOR_STEPS: FormStepConfig[] = [
   { key: "innovation", label: "Votre projet / innovation", shortLabel: "Projet" },
   { key: "modalites", label: "Modalités de participation", shortLabel: "Modalités" },
 ];
+
+const SENIOR_STEP2_LABELS: Record<string, { label: string; shortLabel: string }> = {
+  steam: { label: "Votre innovation", shortLabel: "Innovation" },
+  local_project: { label: "Votre activité", shortLabel: "Activité" },
+  mouvement_citoyen: { label: "Votre engagement citoyen", shortLabel: "Engagement" },
+};
+
+export function getSeniorSteps(maison?: MaisonType): FormStepConfig[] {
+  const step2 = SENIOR_STEP2_LABELS[maison || "steam"] ?? SENIOR_STEP2_LABELS.steam;
+  return SENIOR_STEPS.map((st) => (st.key === "innovation" ? { ...st, ...step2 } : st));
+}
 
 export const INITIAL_JUNIOR_DATA: JuniorData = {
   categorie: "junior",
@@ -173,6 +187,7 @@ export const INITIAL_SENIOR_DATA: SeniorData = {
   innovationNom: "",
   innovationDescription: "",
   stadeDeveloppement: "",
+  ancienneteActivite: "",
   preuvesRealisation: null,
   lienPortfolio: "",
   participeDefile: false,
@@ -292,6 +307,90 @@ export const STADES_DEVELOPPEMENT_OPTIONS: { value: StadeDeveloppement; label: s
   { value: "prototype", label: "Prototype" },
   { value: "commercialise", label: "Produit commercialisé" },
   { value: "en_test", label: "En cours de test" },
+];
+
+// ── Catégorie Senior : une House = un formulaire (STEAM, LP, MC2) ──
+
+export const SENIOR_HOUSE_INFO: Record<string, { code: string; fullName: string }> = {
+  steam: { code: "STEAM", fullName: "Sciences, Technologies, Ingénierie, Art et Mathématiques" },
+  local_project: { code: "LP", fullName: "Local Project" },
+  mouvement_citoyen: { code: "MC2", fullName: "Modèle de Citoyen Communautaire" },
+};
+
+// Libellés courts par House senior, partagés par les écrans d'administration
+export const SENIOR_HOUSE_LABELS: Record<
+  string,
+  { titre: string; domaine: string; nom: string; description: string; preuves: string; prix: string }
+> = {
+  steam: {
+    titre: "Innovation — House STEAM",
+    domaine: "Domaine STEAM concerné",
+    nom: "Produit / service / innovation",
+    description: "Description (fonctionnement, problème résolu, public cible)",
+    preuves: "Preuves de réalisation",
+    prix: "Prix de la Meilleure Innovation STEAM",
+  },
+  local_project: {
+    titre: "Activité — House LP",
+    domaine: "Domaine LP concerné",
+    nom: "Entreprise / activité / produit",
+    description: "Description (activité, marché, impact)",
+    preuves: "Preuve de commercialisation",
+    prix: "Prix de la Meilleure Entreprise LP",
+  },
+  mouvement_citoyen: {
+    titre: "Engagement citoyen — House MC2",
+    domaine: "Domaine d'engagement",
+    nom: "Initiative / action menée",
+    description: "Description de l'action et de son impact communautaire",
+    preuves: "Preuves de l'action",
+    prix: "Prix du Meilleur Acteur MC2",
+  },
+};
+
+// Distinct de CLASSES_BY_MAISON (utilisé par le formulaire Junior)
+export const SENIOR_DOMAINES_BY_MAISON: Record<string, { value: string; label: string }[]> = {
+  steam: [
+    { value: "robotique", label: "Robotique" },
+    { value: "ia", label: "Intelligence Artificielle" },
+    { value: "aeronautique", label: "Aéronautique" },
+    { value: "technologie_solaire", label: "Technologie solaire" },
+    { value: "biotechnologie", label: "Biotechnologie" },
+    { value: "art", label: "Art" },
+    { value: "maths_logique", label: "Mathématiques et Logique" },
+    { value: "sciences_spatiales", label: "Aéronautique et sciences spatiales" },
+    { value: "autre", label: "Autre" },
+  ],
+  local_project: [
+    { value: "agrobusiness", label: "Agrobusiness" },
+    { value: "elevage", label: "Élevage" },
+    { value: "artisanat", label: "Artisanat" },
+    { value: "marketing", label: "Marketing" },
+    { value: "autre", label: "Autre" },
+  ],
+  mouvement_citoyen: [
+    { value: "debats_communautaires", label: "Débats communautaires" },
+    {
+      value: "actions_sociales",
+      label:
+        "Actions sociales et citoyennes (fabrication de poubelles, réhabilitation de tables-bancs, don, plantation d'arbres)",
+    },
+    { value: "7km_paix", label: "7 km de la Paix" },
+    { value: "sensibilisation_paix", label: "Sensibilisation à la Paix" },
+    { value: "sensibilisation_education", label: "Sensibilisation à l'Éducation" },
+    { value: "volontariat", label: "Volontariat" },
+    { value: "autre", label: "Autre" },
+  ],
+};
+
+export function getSeniorDomainesForMaison(maison?: string): { value: string; label: string }[] {
+  return SENIOR_DOMAINES_BY_MAISON[maison || "steam"] ?? SENIOR_DOMAINES_BY_MAISON.steam;
+}
+
+export const ANCIENNETE_ACTIVITE_OPTIONS: { value: AncienneteActivite; label: string }[] = [
+  { value: "moins_1_an", label: "Moins d'1 an" },
+  { value: "1_3_ans", label: "1 à 3 ans" },
+  { value: "plus_3_ans", label: "Plus de 3 ans" },
 ];
 
 export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 Mo

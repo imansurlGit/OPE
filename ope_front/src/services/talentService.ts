@@ -104,7 +104,7 @@ class TalentService {
     const filles = candidatures.filter((c) => c.sexe === "F").length;
     const garcons = candidatures.filter((c) => c.sexe === "M").length;
 
-    const regionsSet = new Set(candidatures.map((c) => c.region).filter(Boolean));
+    const regionsSet = new Set(candidatures.map((c) => c.region_ville || c.region).filter(Boolean));
     const regionsCount = regionsSet.size;
 
     return {

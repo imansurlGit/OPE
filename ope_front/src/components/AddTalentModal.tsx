@@ -4,12 +4,33 @@ import {
   REGIONS_NIGER_OPTIONS,
   MAISON_OPTIONS,
   CLASSES_JUNIOR_OPTIONS,
-  DOMAINES_STEAM_OPTIONS,
+  getSeniorDomainesForMaison,
+  SENIOR_HOUSE_LABELS,
   STADES_DEVELOPPEMENT_OPTIONS,
+  ANCIENNETE_ACTIVITE_OPTIONS,
   PHONE_REGEX,
   EMAIL_REGEX,
 } from "../types/formulaire";
 import { talentService, type Candidature } from "../services";
+
+// Exemples propres à chaque House senior
+const SENIOR_PLACEHOLDERS: Record<string, { nom: string; description: string; oeuvre: string }> = {
+  steam: {
+    nom: "Ex: Drone solaire de surveillance agricole",
+    description: "Décrivez en quelques lignes le fonctionnement, le problème résolu et le public cible...",
+    oeuvre: "Ex: Prototype motorisé ou maquette fonctionnelle",
+  },
+  local_project: {
+    nom: "Ex: Coopérative Tagant — Transformation de dattes",
+    description: "Décrivez l'activité, le marché (clients, zone de vente) et son impact...",
+    oeuvre: "Ex: Produits transformés ou articles artisanaux",
+  },
+  mouvement_citoyen: {
+    nom: "Ex: Opération quartier propre d'Agadez",
+    description: "Décrivez l'action menée, ses bénéficiaires et son impact sur la communauté...",
+    oeuvre: "Ex: Exposition photo des actions communautaires",
+  },
+};
 
 interface AddTalentModalProps {
   isOpen: boolean;
@@ -36,11 +57,16 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
   const [domaineSteamAutre, setDomaineSteamAutre] = useState("");
   const [innovationNom, setInnovationNom] = useState("");
   const [innovationDescription, setInnovationDescription] = useState("");
-  const [stadeDeveloppement, setStadeDeveloppement] = useState("prototype");
-  const [lienPortfolio, setLienPortfolio] = useState("");
+  const [stadeDeveloppement, setStadeDeveloppement] = useState("prototype"); // STEAM
+  const [ancienneteActivite, setAncienneteActivite] = useState(""); // LP
+  const [lienPortfolio, setLienPortfolio] = useState(""); // STEAM
   const [participeDefile, setParticipeDefile] = useState(false);
   const [oeuvreDefile, setOeuvreDefile] = useState("");
+  const [facilitateurJuniors, setFacilitateurJuniors] = useState(false);
+  const [souhaiteStand, setSouhaiteStand] = useState(false);
+  const [concoursPrix, setConcoursPrix] = useState(false);
   const [photoIdentite, setPhotoIdentite] = useState<File | null>(null);
+  const [pieceIdentite, setPieceIdentite] = useState<File | null>(null);
   const [preuvesRealisation, setPreuvesRealisation] = useState<File | null>(null);
 
   // Junior
@@ -57,6 +83,20 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   if (!isOpen) return null;
+
+  // Champs senior dynamiques selon la House
+  const isSteam = maison === "steam";
+  const isLP = maison === "local_project";
+  const houseLabels = SENIOR_HOUSE_LABELS[maison] ?? SENIOR_HOUSE_LABELS.steam;
+  const placeholders = SENIOR_PLACEHOLDERS[maison] ?? SENIOR_PLACEHOLDERS.steam;
+  const domainesOptions = getSeniorDomainesForMaison(maison);
+
+  const handleMaisonChange = (value: string) => {
+    setMaison(value);
+    // Les domaines diffèrent d'une House à l'autre
+    setDomaineSteam(getSeniorDomainesForMaison(value)[0]?.value || "");
+    setDomaineSteamAutre("");
+  };
 
   const validate = (): boolean => {
     const errs: Record<string, string> = {};
@@ -79,19 +119,25 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
         errs.telephone = "Format de numéro de téléphone invalide.";
       }
 
-      if (!domaineSteam) errs.domaineSteam = "Le domaine STEAM est obligatoire.";
+      if (!domaineSteam) errs.domaineSteam = "Le domaine est obligatoire.";
       if (domaineSteam === "autre" && !domaineSteamAutre.trim()) {
-        errs.domaineSteamAutre = "Veuillez préciser le domaine STEAM.";
+        errs.domaineSteamAutre = "Veuillez préciser le domaine.";
       }
 
       if (!innovationNom.trim()) {
-        errs.innovationNom = "Le nom de l'innovation / projet est obligatoire.";
+        errs.innovationNom = `Le champ « ${houseLabels.nom} » est obligatoire.`;
       }
       if (!innovationDescription.trim()) {
-        errs.innovationDescription = "La description du projet est obligatoire.";
+        errs.innovationDescription = "La description est obligatoire.";
       }
-      if (!stadeDeveloppement) {
+      if (isSteam && !stadeDeveloppement) {
         errs.stadeDeveloppement = "Le stade de développement est obligatoire.";
+      }
+      if (isLP && !ancienneteActivite) {
+        errs.ancienneteActivite = "L'ancienneté de l'activité est obligatoire.";
+      }
+      if (participeDefile && !oeuvreDefile.trim()) {
+        errs.oeuvreDefile = "Veuillez préciser l'œuvre à présenter au défilé.";
       }
     } else {
       // Junior
@@ -136,18 +182,26 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
         }
         formData.append("innovation_nom", innovationNom.trim());
         formData.append("innovation_description", innovationDescription.trim());
-        formData.append("stade_developpement", stadeDeveloppement);
-        if (lienPortfolio.trim()) {
-          formData.append("lien_portfolio", lienPortfolio.trim());
+        if (isSteam) {
+          formData.append("stade_developpement", stadeDeveloppement);
+          if (lienPortfolio.trim()) {
+            formData.append("lien_portfolio", lienPortfolio.trim());
+          }
+        } else if (isLP) {
+          formData.append("anciennete_activite", ancienneteActivite);
         }
         formData.append("participe_defile", String(participeDefile));
         if (participeDefile && oeuvreDefile.trim()) {
           formData.append("oeuvre_defile", oeuvreDefile.trim());
         }
+        formData.append("facilitateur_juniors", String(facilitateurJuniors));
+        formData.append("souhaite_stand", String(souhaiteStand));
+        formData.append("concours_prix_innovation", String(concoursPrix));
         formData.append("disponible_camps", "true");
         formData.append("accepte_conditions", "true");
 
         if (photoIdentite) formData.append("photo_identite", photoIdentite);
+        if (pieceIdentite) formData.append("piece_identite", pieceIdentite);
         if (preuvesRealisation) formData.append("preuves_realisation", preuvesRealisation);
       } else {
         // Junior
@@ -247,7 +301,7 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-[#f15b29]" />
-              Parcours Senior • Innovation STEAM
+              Parcours Senior • STEAM, LP ou MC2
             </button>
             <button
               type="button"
@@ -276,7 +330,7 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
               </label>
               <select
                 value={maison}
-                onChange={(e) => setMaison(e.target.value)}
+                onChange={(e) => handleMaisonChange(e.target.value)}
                 className={`w-full px-3 py-2 rounded-xl border bg-white font-bold text-xs focus:outline-none cursor-pointer ${
                   errors.maison ? "border-rose-500" : "border-gray-300 focus:border-[#f15b29]"
                 }`}
@@ -441,55 +495,87 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
           {categorie === "senior" && (
             <div className="space-y-3">
               <h3 className="text-xs font-black uppercase tracking-wider text-gray-500 border-b border-gray-100 pb-1">
-                2. Innovation STEAM & Projet
+                2. {houseLabels.titre}
               </h3>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className={`grid grid-cols-1 gap-3 ${isSteam || isLP ? "sm:grid-cols-2" : ""}`}>
                 <div>
                   <label className="block text-[11px] font-bold text-gray-700 mb-1">
-                    Domaine STEAM *
+                    {houseLabels.domaine} *
                   </label>
                   <select
                     value={domaineSteam}
                     onChange={(e) => setDomaineSteam(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-gray-300 bg-white font-semibold text-xs focus:border-[#f15b29] focus:outline-none cursor-pointer"
+                    className={`w-full px-3 py-2 rounded-xl border bg-white font-semibold text-xs focus:outline-none cursor-pointer ${
+                      errors.domaineSteam ? "border-rose-500" : "border-gray-300 focus:border-[#f15b29]"
+                    }`}
                   >
-                    {DOMAINES_STEAM_OPTIONS.map((d) => (
+                    {domainesOptions.map((d) => (
                       <option key={d.value} value={d.value}>
                         {d.label}
                       </option>
                     ))}
                   </select>
+                  {errors.domaineSteam && (
+                    <p className="text-rose-600 text-[10px] mt-0.5">{errors.domaineSteam}</p>
+                  )}
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-gray-700 mb-1">
-                    Stade de développement *
-                  </label>
-                  <select
-                    value={stadeDeveloppement}
-                    onChange={(e) => setStadeDeveloppement(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-gray-300 bg-white font-semibold text-xs focus:border-[#f15b29] focus:outline-none cursor-pointer"
-                  >
-                    {STADES_DEVELOPPEMENT_OPTIONS.map((s) => (
-                      <option key={s.value} value={s.value}>
-                        {s.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                {isSteam && (
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-700 mb-1">
+                      Stade de développement *
+                    </label>
+                    <select
+                      value={stadeDeveloppement}
+                      onChange={(e) => setStadeDeveloppement(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl border border-gray-300 bg-white font-semibold text-xs focus:border-[#f15b29] focus:outline-none cursor-pointer"
+                    >
+                      {STADES_DEVELOPPEMENT_OPTIONS.map((s) => (
+                        <option key={s.value} value={s.value}>
+                          {s.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {isLP && (
+                  <div>
+                    <label className="block text-[11px] font-bold text-gray-700 mb-1">
+                      Ancienneté de l'activité *
+                    </label>
+                    <select
+                      value={ancienneteActivite}
+                      onChange={(e) => setAncienneteActivite(e.target.value)}
+                      className={`w-full px-3 py-2 rounded-xl border bg-white font-semibold text-xs focus:outline-none cursor-pointer ${
+                        errors.ancienneteActivite ? "border-rose-500" : "border-gray-300 focus:border-[#f15b29]"
+                      }`}
+                    >
+                      <option value="">Sélectionnez l'ancienneté</option>
+                      {ANCIENNETE_ACTIVITE_OPTIONS.map((a) => (
+                        <option key={a.value} value={a.value}>
+                          {a.label}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.ancienneteActivite && (
+                      <p className="text-rose-600 text-[10px] mt-0.5">{errors.ancienneteActivite}</p>
+                    )}
+                  </div>
+                )}
               </div>
 
               {domaineSteam === "autre" && (
                 <div>
                   <label className="block text-[11px] font-bold text-gray-700 mb-1">
-                    Préciser le domaine STEAM *
+                    Préciser le domaine *
                   </label>
                   <input
                     type="text"
                     value={domaineSteamAutre}
                     onChange={(e) => setDomaineSteamAutre(e.target.value)}
-                    placeholder="Ex: Éco-matériaux locaux"
+                    placeholder="Précisez le domaine..."
                     className="w-full px-3 py-2 rounded-xl border border-gray-300 bg-white text-xs focus:border-[#f15b29] focus:outline-none"
                   />
                   {errors.domaineSteamAutre && (
@@ -500,13 +586,13 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
 
               <div>
                 <label className="block text-[11px] font-bold text-gray-700 mb-1">
-                  Nom du produit / prototype / innovation *
+                  {houseLabels.nom} *
                 </label>
                 <input
                   type="text"
                   value={innovationNom}
                   onChange={(e) => setInnovationNom(e.target.value)}
-                  placeholder="Ex: Drone solaire de surveillance agricole"
+                  placeholder={placeholders.nom}
                   className={`w-full px-3 py-2 rounded-xl border bg-white text-xs focus:outline-none ${
                     errors.innovationNom ? "border-rose-500 bg-rose-50/20" : "border-gray-300 focus:border-[#f15b29]"
                   }`}
@@ -518,13 +604,13 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
 
               <div>
                 <label className="block text-[11px] font-bold text-gray-700 mb-1">
-                  Description succincte de l'innovation *
+                  {houseLabels.description} *
                 </label>
                 <textarea
                   rows={2}
                   value={innovationDescription}
                   onChange={(e) => setInnovationDescription(e.target.value)}
-                  placeholder="Décrivez en quelques lignes le fonctionnement, le problème résolu et l'impact..."
+                  placeholder={placeholders.description}
                   className={`w-full px-3 py-2 rounded-xl border bg-white text-xs focus:outline-none ${
                     errors.innovationDescription
                       ? "border-rose-500 bg-rose-50/20"
@@ -536,7 +622,7 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
                 )}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label className="block text-[11px] font-bold text-gray-700 mb-1">
                     Photo d'identité (facultatif)
@@ -551,7 +637,19 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
 
                 <div>
                   <label className="block text-[11px] font-bold text-gray-700 mb-1">
-                    Preuve / Document du projet (facultatif)
+                    Pièce d'identité (facultatif)
+                  </label>
+                  <input
+                    type="file"
+                    accept=".pdf,image/*"
+                    onChange={(e) => setPieceIdentite(e.target.files?.[0] || null)}
+                    className="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-[11px] file:font-bold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 cursor-pointer"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-700 mb-1">
+                    {houseLabels.preuves} (facultatif)
                   </label>
                   <input
                     type="file"
@@ -562,43 +660,69 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
                 </div>
               </div>
 
-              <div>
-                <label className="block text-[11px] font-bold text-gray-700 mb-1">
-                  Lien portfolio / vidéo de démo (facultatif)
-                </label>
-                <input
-                  type="url"
-                  value={lienPortfolio}
-                  onChange={(e) => setLienPortfolio(e.target.value)}
-                  placeholder="https://..."
-                  className="w-full px-3 py-2 rounded-xl border border-gray-300 bg-white text-xs focus:border-[#f15b29] focus:outline-none"
-                />
-              </div>
-
-              <div className="pt-1 flex items-center gap-3">
-                <label className="flex items-center gap-2 cursor-pointer font-bold text-gray-700 text-xs select-none">
+              {isSteam && (
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-700 mb-1">
+                    Lien portfolio / vidéo de démo (facultatif)
+                  </label>
                   <input
-                    type="checkbox"
-                    checked={participeDefile}
-                    onChange={(e) => setParticipeDefile(e.target.checked)}
-                    className="w-4 h-4 rounded text-[#f15b29] focus:ring-[#f15b29] border-gray-300"
+                    type="url"
+                    value={lienPortfolio}
+                    onChange={(e) => setLienPortfolio(e.target.value)}
+                    placeholder="https://..."
+                    className="w-full px-3 py-2 rounded-xl border border-gray-300 bg-white text-xs focus:border-[#f15b29] focus:outline-none"
                   />
-                  <span>Présentation au défilé scientifique d'ouverture</span>
-                </label>
+                </div>
+              )}
+
+              {/* Modalités de participation */}
+              <div className="pt-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {[
+                  {
+                    label: "Défilé scientifique et technologique d'ouverture",
+                    checked: participeDefile,
+                    onChange: setParticipeDefile,
+                  },
+                  {
+                    label: "Facilitateur auprès des délégués Juniors",
+                    checked: facilitateurJuniors,
+                    onChange: setFacilitateurJuniors,
+                  },
+                  { label: "Stand d'exposition", checked: souhaiteStand, onChange: setSouhaiteStand },
+                  { label: `Concourt au ${houseLabels.prix}`, checked: concoursPrix, onChange: setConcoursPrix },
+                ].map((opt) => (
+                  <label
+                    key={opt.label}
+                    className="flex items-center gap-2 cursor-pointer font-bold text-gray-700 text-xs select-none"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={opt.checked}
+                      onChange={(e) => opt.onChange(e.target.checked)}
+                      className="w-4 h-4 rounded text-[#f15b29] focus:ring-[#f15b29] border-gray-300"
+                    />
+                    <span>{opt.label}</span>
+                  </label>
+                ))}
               </div>
 
               {participeDefile && (
                 <div>
                   <label className="block text-[11px] font-bold text-gray-700 mb-1">
-                    Œuvre à présenter au défilé
+                    Œuvre à présenter au défilé *
                   </label>
                   <input
                     type="text"
                     value={oeuvreDefile}
                     onChange={(e) => setOeuvreDefile(e.target.value)}
-                    placeholder="Ex: Prototype motorisé ou maquette fonctionnelle"
-                    className="w-full px-3 py-2 rounded-xl border border-gray-300 bg-white text-xs focus:border-[#f15b29] focus:outline-none"
+                    placeholder={placeholders.oeuvre}
+                    className={`w-full px-3 py-2 rounded-xl border bg-white text-xs focus:outline-none ${
+                      errors.oeuvreDefile ? "border-rose-500 bg-rose-50/20" : "border-gray-300 focus:border-[#f15b29]"
+                    }`}
                   />
+                  {errors.oeuvreDefile && (
+                    <p className="text-rose-600 text-[10px] mt-0.5">{errors.oeuvreDefile}</p>
+                  )}
                 </div>
               )}
             </div>

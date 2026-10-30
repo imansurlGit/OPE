@@ -18,7 +18,7 @@ import {
   EMAIL_REGEX,
   URL_REGEX,
   JUNIOR_STEPS,
-  SENIOR_STEPS,
+  getSeniorSteps,
 } from "../types/formulaire";
 
 
@@ -230,25 +230,51 @@ export function useCandidatureForm(
       }
     } else if (currentStep === 2) {
       if (!seniorData.domaineSteam) {
-        errs.domaineSteam = t("form.senior.err_domaine", "Le domaine ou la classe est obligatoire.");
+        errs.domaineSteam =
+          maison === "local_project"
+            ? t("form.senior.lp.err_domaine", "Le domaine LP est obligatoire.")
+            : maison === "mouvement_citoyen"
+              ? t("form.senior.mc2.err_domaine", "Le domaine d'engagement est obligatoire.")
+              : t("form.senior.err_domaine", "Le domaine ou la classe est obligatoire.");
       }
       if (seniorData.domaineSteam === "autre" && !seniorData.domaineSteamAutre.trim()) {
-        errs.domaineSteamAutre = t("form.senior.err_domaine_autre", "Veuillez préciser le domaine / la classe.");
+        errs.domaineSteamAutre =
+          maison === "local_project"
+            ? t("form.senior.lp.err_domaine_autre", "Veuillez préciser le domaine LP.")
+            : maison === "mouvement_citoyen"
+              ? t("form.senior.mc2.err_domaine_autre", "Veuillez préciser le domaine d'engagement.")
+              : t("form.senior.err_domaine_autre", "Veuillez préciser le domaine / la classe.");
       }
       if (!seniorData.innovationNom.trim()) {
-        errs.innovationNom = t("form.senior.err_innovation_nom", "Le nom de l'innovation est obligatoire.");
+        errs.innovationNom =
+          maison === "local_project"
+            ? t("form.senior.lp.err_nom", "Le nom de l'entreprise / activité / produit est obligatoire.")
+            : maison === "mouvement_citoyen"
+              ? t("form.senior.mc2.err_nom", "Le nom de l'initiative / action menée est obligatoire.")
+              : t("form.senior.err_innovation_nom", "Le nom de l'innovation est obligatoire.");
       }
       if (!seniorData.innovationDescription.trim()) {
-        errs.innovationDescription = t(
-          "form.senior.err_innovation_desc",
-          "La description de l'innovation est obligatoire.",
-        );
+        errs.innovationDescription =
+          maison === "local_project"
+            ? t("form.senior.lp.err_description", "La description de l'activité est obligatoire.")
+            : maison === "mouvement_citoyen"
+              ? t("form.senior.mc2.err_description", "La description de l'action est obligatoire.")
+              : t("form.senior.err_innovation_desc", "La description de l'innovation est obligatoire.");
       }
-      if (!seniorData.stadeDeveloppement) {
-        errs.stadeDeveloppement = t("form.senior.err_stade", "Le stade de développement est obligatoire.");
-      }
-      if (seniorData.lienPortfolio.trim() && !URL_REGEX.test(seniorData.lienPortfolio.trim())) {
-        errs.lienPortfolio = t("form.senior.err_url_format", "Format d'URL invalide.");
+      if (maison === "local_project") {
+        if (!seniorData.ancienneteActivite) {
+          errs.ancienneteActivite = t(
+            "form.senior.lp.err_anciennete",
+            "L'ancienneté de l'activité est obligatoire.",
+          );
+        }
+      } else if (maison !== "mouvement_citoyen") {
+        if (!seniorData.stadeDeveloppement) {
+          errs.stadeDeveloppement = t("form.senior.err_stade", "Le stade de développement est obligatoire.");
+        }
+        if (seniorData.lienPortfolio.trim() && !URL_REGEX.test(seniorData.lienPortfolio.trim())) {
+          errs.lienPortfolio = t("form.senior.err_url_format", "Format d'URL invalide.");
+        }
       }
     } else if (currentStep === 3) {
       if (seniorData.participeDefile && !seniorData.oeuvreDefile.trim()) {
@@ -283,7 +309,7 @@ export function useCandidatureForm(
 
   const handleNext = () => {
     if (validateCurrentStep()) {
-      const maxSteps = categorie === "junior" ? JUNIOR_STEPS.length : SENIOR_STEPS.length;
+      const maxSteps = categorie === "junior" ? JUNIOR_STEPS.length : getSeniorSteps(maison).length;
       if (step < maxSteps) {
         setStep((s) => s + 1);
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -376,8 +402,12 @@ export function useCandidatureForm(
         formData.append("domaine_steam_autre", seniorData.domaineSteamAutre.trim());
         formData.append("innovation_nom", seniorData.innovationNom.trim());
         formData.append("innovation_description", seniorData.innovationDescription.trim());
-        formData.append("stade_developpement", seniorData.stadeDeveloppement);
-        formData.append("lien_portfolio", seniorData.lienPortfolio.trim());
+        if (maison === "steam") {
+          formData.append("stade_developpement", seniorData.stadeDeveloppement);
+          formData.append("lien_portfolio", seniorData.lienPortfolio.trim());
+        } else if (maison === "local_project") {
+          formData.append("anciennete_activite", seniorData.ancienneteActivite);
+        }
 
         formData.append("participe_defile", String(seniorData.participeDefile));
         formData.append("oeuvre_defile", seniorData.oeuvreDefile.trim());

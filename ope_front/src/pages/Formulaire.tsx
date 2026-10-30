@@ -5,7 +5,7 @@ import { CategoryChoice } from "../components/formulaire/CategoryChoice";
 import { JuniorForm } from "../components/formulaire/JuniorForm";
 import { SeniorForm } from "../components/formulaire/SeniorForm";
 import { SuccessView } from "../components/formulaire/SuccessView";
-import { JUNIOR_STEPS, SENIOR_STEPS } from "../types/formulaire";
+import { JUNIOR_STEPS, SENIOR_HOUSE_INFO, getSeniorSteps } from "../types/formulaire";
 
 export default function Formulaire() {
   const { t } = useTranslation();
@@ -33,7 +33,7 @@ export default function Formulaire() {
     handleSubmit,
   } = useCandidatureForm();
 
-  const activeSteps = categorie === "junior" ? JUNIOR_STEPS : SENIOR_STEPS;
+  const activeSteps = categorie === "junior" ? JUNIOR_STEPS : getSeniorSteps(maison);
   const currentStepConfig = activeSteps[step - 1] || activeSteps[0];
   const maxSteps = activeSteps.length;
 
@@ -99,10 +99,10 @@ export default function Formulaire() {
                 <span className="text-base sm:text-lg font-extrabold text-[#193549] tracking-tight block">
                   CNCEIZ Agadez 2026
                 </span>
-                <span className="text-xs font-semibold text-[#F15B29]">
+                <span className="text-xs font-semibold text-[#F15B29] block">
                   {categorie === "junior"
                     ? "Parcours Junior — Concours de la Mascotte"
-                    : "Parcours Senior — Innovation STEAM"}
+                    : `Candidature Délégué Senior — ${SENIOR_HOUSE_INFO[maison || "steam"].code}`}
                 </span>
                 {maison && (
                   <span className="text-xs font-semibold text-[#5C6B76]">

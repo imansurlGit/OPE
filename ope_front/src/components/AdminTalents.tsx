@@ -3,6 +3,12 @@ import { createPortal } from "react-dom";
 import { talentService, type Candidature } from "../services";
 import Pagination from "./Pagination";
 import { AddTalentModal } from "./AddTalentModal";
+import {
+  SENIOR_HOUSE_INFO,
+  SENIOR_HOUSE_LABELS,
+  STADES_DEVELOPPEMENT_OPTIONS,
+  ANCIENNETE_ACTIVITE_OPTIONS,
+} from "../types/formulaire";
 
 const REGIONS = [
   "Toutes",
@@ -14,6 +20,7 @@ const REGIONS = [
   "Tahoua",
   "Tillabéri",
   "Zinder",
+  "Diaspora / Autre",
 ];
 
 const getMaisonLabel = (maison?: string) =>
@@ -22,6 +29,65 @@ const getMaisonLabel = (maison?: string) =>
     local_project: "Local Project",
     mouvement_citoyen: "Modèle Citoyen Communautaire ou MC2",
   })[maison || ""] || maison || "";
+
+// L'API renvoie region_ville / telephone ; region / telephone_candidat sont des noms legacy
+const getRegion = (c: Candidature) => c.region_ville || c.region || "";
+const getTelephone = (c: Candidature) => c.telephone || c.telephone_candidat || "";
+
+// Helper lisible pour domaine_steam
+const getDomaineLabel = (key?: string) => {
+  const MAP: Record<string, string> = {
+    robotique: "Robotique",
+    ia: "Intelligence Artificielle",
+    aerospatial: "Aéronautique",
+    aeronautique: "Aéronautique",
+    sciences_spatiales: "Aéronautique & sciences spatiales",
+    solaire: "Énergies renouvelables",
+    energies_renouvelables: "Énergies renouvelables",
+    technologie_solaire: "Technologie solaire",
+    biotech: "Biotechnologie",
+    biotechnologie: "Biotechnologie",
+    art: "Art",
+    maths_logique: "Maths & Logique",
+    agriculture: "Agriculture",
+    agrobusiness: "Agrobusiness",
+    elevage: "Élevage",
+    artisanat: "Artisanat",
+    marketing: "Marketing",
+    entrepreneuriat: "Entrepreneuriat",
+    marketing_digital: "Marketing digital",
+    debats_communautaires: "Débats communautaires",
+    actions_sociales: "Actions sociales et citoyennes",
+    formation_citoyennete: "Formation citoyenneté",
+    fabrication_poubelles: "Fabrication de poubelles",
+    "7km_paix": "7 km de la Paix",
+    rehabilitation_tables_bancs: "Réhabilitation tables-bancs",
+    don: "Don",
+    plantation_arbres: "Plantation d'arbres",
+    sensibilisation_paix: "Sensibilisation à la paix",
+    sensibilisation_education: "Sensibilisation à l'éducation",
+    volontariat: "Volontariat",
+    autre: "Autre",
+  };
+  return key ? MAP[key] || key : undefined;
+};
+
+// Domaine lisible, avec la précision saisie quand le candidat a choisi « Autre »
+const getDomaineComplet = (c: Candidature) =>
+  c.domaine_steam === "autre" && c.domaine_steam_autre
+    ? `Autre — ${c.domaine_steam_autre}`
+    : getDomaineLabel(c.domaine_steam) || "";
+
+const optionLabel = (options: { value: string; label: string }[], value?: string) =>
+  options.find((o) => o.value === value)?.label || value || "";
+
+// Stade (STEAM) ou ancienneté (LP) d'une candidature senior ; statut_projet pour le legacy
+const getProjetBadge = (c: Candidature) =>
+  c.maison === "local_project" && c.anciennete_activite
+    ? `Ancienneté : ${optionLabel(ANCIENNETE_ACTIVITE_OPTIONS, c.anciennete_activite)}`
+    : c.stade_developpement
+      ? optionLabel(STADES_DEVELOPPEMENT_OPTIONS, c.stade_developpement)
+      : c.statut_projet || "";
 
 export default function AdminTalents() {
   const [candidatures, setCandidatures] = useState<Candidature[]>([]);
@@ -101,7 +167,7 @@ export default function AdminTalents() {
       // Filtre Région
       if (
         selectedRegion !== "Toutes" &&
-        c.region?.toLowerCase() !== selectedRegion.toLowerCase()
+        getRegion(c).toLowerCase() !== selectedRegion.toLowerCase()
       ) {
         return false;
       }
@@ -111,9 +177,9 @@ export default function AdminTalents() {
         const fullName = `${c.prenom || ""} ${c.nom || ""}`.toLowerCase();
         const ref = (c.reference || "").toLowerCase();
         const email = (c.email || "").toLowerCase();
-        const ville = (c.ville_village || "").toLowerCase();
-        const projet = (c.description_projet || "").toLowerCase();
-        const house = (getMaisonLabel(c.maison) || c.house_visee || "").toLowerCase();
+        const ville = `${getRegion(c)} ${c.ville_village || ""}`.toLowerCase();
+        const projet = `${c.innovation_nom || ""} ${c.innovation_description || c.description_projet || ""}`.toLowerCase();
+        const house = `${getMaisonLabel(c.maison) || c.house_visee || ""} ${getDomaineLabel(c.domaine_steam) || ""}`.toLowerCase();
 
         return (
           fullName.includes(q) ||
@@ -143,6 +209,24 @@ export default function AdminTalents() {
   const stats = useMemo(() => {
     return talentService.computeStats(candidatures);
   }, [candidatures]);
+
+  // Libellés de la House du candidat ouvert dans le modal (seniors uniquement)
+  const selectedHouseLabels =
+    selectedCandidate?.categorie === "senior"
+      ? SENIOR_HOUSE_LABELS[selectedCandidate.maison || ""]
+      : undefined;
+
+  const selectedPieces = selectedCandidate
+    ? [
+        { label: "Photo d'identité", url: selectedCandidate.photo_identite },
+        { label: "Pièce d'identité", url: selectedCandidate.piece_identite },
+        {
+          label: selectedHouseLabels?.preuves || "Preuves de réalisation",
+          url: selectedCandidate.preuves_realisation,
+        },
+        { label: "Lien portfolio / démo", url: selectedCandidate.lien_portfolio },
+      ].filter((p): p is { label: string; url: string } => Boolean(p.url))
+    : [];
 
   // Ouverture du modal détaillé
   const handleOpenDetail = (cand: Candidature) => {
@@ -224,35 +308,47 @@ export default function AdminTalents() {
       };
 
       const fmtDomaine = (d?: string) => {
-        switch (d) {
-          case "STEAM": case "steam": return "House STEAM (Sciences & Technologie)";
-          case "LP": case "local_project": return "House LP (Entrepreneuriat Local)";
-          case "MC2": case "mouvement_citoyen": return "House MC2 (Citoyenneté & Culture)";
-          default: return d || "";
-        }
+        const key =
+          d === "STEAM" ? "steam" : d === "LP" ? "local_project" : d === "MC2" ? "mouvement_citoyen" : d || "";
+        const info = SENIOR_HOUSE_INFO[key];
+        return info ? `House ${info.code} (${info.fullName})` : d || "";
       };
+
+      // Les modalités de participation ne concernent que les seniors
+      const fmtOuiNon = (c: Candidature, v?: boolean) =>
+        c.categorie === "senior" ? (v ? "Oui" : "Non") : "";
 
       // ── En-tête ──
       const COLS = [
-        "N° Dossier", "Nom", "Prénom", "Sexe",
-        "Maison d'Excellence", "Projet / Maison spécifique",
-        "Région", "Ville / Village",
-        "Téléphone", "Email",
+        "N° Dossier", "Catégorie", "Nom", "Prénom", "Sexe",
+        "Maison d'Excellence", "Domaine", "Projet / Activité / Initiative",
+        "Stade / Ancienneté",
+        "Région", "Téléphone", "Email",
+        "Défilé d'ouverture", "Œuvre au défilé", "Facilitateur Juniors", "Stand d'exposition",
+        "Prix de la House", "Disponible précamps & Camp",
         "Statut", "Score /100", "Date d'inscription",
       ];
 
       // ── Données ──
       const dataRows = filteredCandidatures.map((c) => [
         c.reference,
+        c.categorie === "junior" ? "Junior" : "Senior",
         c.nom,
         c.prenom,
         fmtSexe(c.sexe),
         fmtDomaine(c.maison || c.domaine),
-        getMaisonLabel(c.maison) || c.house_visee || "",
-        c.region || "",
-        c.ville_village || "",
-        c.telephone_candidat || "",
-        c.email,
+        getDomaineComplet(c),
+        c.innovation_nom || c.mascotte_nom || c.house_visee || "",
+        getProjetBadge(c),
+        getRegion(c),
+        getTelephone(c),
+        c.email || "",
+        fmtOuiNon(c, c.participe_defile),
+        c.oeuvre_defile || "",
+        fmtOuiNon(c, c.facilitateur_juniors),
+        fmtOuiNon(c, c.souhaite_stand),
+        fmtOuiNon(c, c.concours_prix_innovation),
+        fmtOuiNon(c, c.disponible_camps),
         fmtStatut(c.statut),
         c.score_evaluation ?? 0,
         fmtDate(c.created_at),
@@ -326,39 +422,6 @@ export default function AdminTalents() {
       const fileDate = new Date().toLocaleDateString("fr-FR").replace(/\//g, "-");
       XLSX.writeFile(wb, `OPE_1000_Talents_CNCEIZ2026_${fileDate}.xlsx`, { bookType: "xlsx", cellStyles: true });
     });
-  };
-
-  // Helper lisible pour domaine_steam
-  const getDomaineLabel = (key?: string) => {
-    const MAP: Record<string, string> = {
-      robotique: "Robotique",
-      ia: "Intelligence Artificielle",
-      aerospatial: "Aéronautique",
-      aeronautique: "Aéronautique",
-      solaire: "Énergies renouvelables",
-      energies_renouvelables: "Énergies renouvelables",
-      biotech: "Biotechnologie",
-      biotechnologie: "Biotechnologie",
-      art: "Art",
-      maths_logique: "Maths & Logique",
-      agriculture: "Agriculture",
-      elevage: "Élevage",
-      artisanat: "Artisanat",
-      entrepreneuriat: "Entrepreneuriat",
-      marketing_digital: "Marketing digital",
-      debats_communautaires: "Débats communautaires",
-      formation_citoyennete: "Formation citoyenneté",
-      fabrication_poubelles: "Fabrication de poubelles",
-      "7km_paix": "7 km de la Paix",
-      rehabilitation_tables_bancs: "Réhabilitation tables-bancs",
-      don: "Don",
-      plantation_arbres: "Plantation d'arbres",
-      sensibilisation_paix: "Sensibilisation à la paix",
-      sensibilisation_education: "Sensibilisation à l'éducation",
-      volontariat: "Volontariat",
-      autre: "Autre",
-    };
-    return key ? MAP[key] || key : undefined;
   };
 
   // Helper badge Catégorie Junior / Senior
@@ -775,9 +838,12 @@ export default function AdminTalents() {
                         <span className={`inline-block px-2 py-0.5 rounded-md text-[10px] font-black uppercase border ${getDomaineBadge(cand.maison || cand.domaine || "")}`}>
                           {getMaisonLabel(cand.maison) || cand.domaine}
                         </span>
-                        {cand.domaine_steam && (
-                          <p className="text-[11px] text-gray-400 font-semibold truncate" title={getDomaineLabel(cand.domaine_steam)}>
-                            {getDomaineLabel(cand.domaine_steam)}
+                        {(cand.innovation_nom || cand.domaine_steam) && (
+                          <p
+                            className="text-[11px] text-gray-500 font-semibold truncate"
+                            title={cand.innovation_nom || getDomaineLabel(cand.domaine_steam)}
+                          >
+                            {cand.innovation_nom || getDomaineLabel(cand.domaine_steam)}
                           </p>
                         )}
                       </div>
@@ -785,8 +851,10 @@ export default function AdminTalents() {
 
                     {/* Origine */}
                     <td className="py-3 px-4 whitespace-nowrap">
-                      <p className="font-bold text-gray-900">{cand.region || "—"}</p>
-                      <p className="text-[11px] text-gray-400">{cand.ville_village || "—"}</p>
+                      <p className="font-bold text-gray-900">{getRegion(cand) || "—"}</p>
+                      {cand.ville_village && (
+                        <p className="text-[11px] text-gray-400">{cand.ville_village}</p>
+                      )}
                     </td>
 
                     {/* Score */}
@@ -852,10 +920,15 @@ export default function AdminTalents() {
 
                 <div className="space-y-1.5 my-3">
                   <p className="text-xs font-bold text-gray-800 line-clamp-1">
-                    {getMaisonLabel(cand.maison) || cand.house_visee || "Projet en cours"}
+                    {cand.innovation_nom || getMaisonLabel(cand.maison) || cand.house_visee || "Projet en cours"}
                   </p>
+                  {cand.domaine_steam && (
+                    <p className="text-[11px] font-semibold text-gray-400 line-clamp-1">
+                      {getDomaineComplet(cand)}
+                    </p>
+                  )}
                   <p className="text-[11px] text-gray-500 line-clamp-2 leading-relaxed">
-                    {cand.description_projet || cand.motivation || "Aucune description"}
+                    {cand.innovation_description || cand.description_projet || cand.motivation || "Aucune description"}
                   </p>
                 </div>
               </div>
@@ -864,7 +937,7 @@ export default function AdminTalents() {
                 <div className="flex items-center gap-1.5">
                   {renderCategorieBadge(cand.categorie)}
                   <span className="text-[11px] font-semibold text-gray-400">
-                    {cand.region} · {cand.ville_village}
+                    {[getRegion(cand), cand.ville_village].filter(Boolean).join(" · ")}
                   </span>
                 </div>
                 {renderStatutBadge(cand.statut)}
@@ -916,7 +989,7 @@ export default function AdminTalents() {
                     </span>
                   </div>
                   <p className="text-xs text-gray-500 font-mono mt-0.5">
-                    Dossier N° {selectedCandidate.reference} · Région de {selectedCandidate.region}
+                    Dossier N° {selectedCandidate.reference} · Région de {getRegion(selectedCandidate) || "—"}
                   </p>
                 </div>
               </div>
@@ -1000,30 +1073,38 @@ export default function AdminTalents() {
                   </div>
                   <div>
                     <span className="text-gray-400 block text-[10px]">Région</span>
-                    <span className="font-bold text-gray-900">{selectedCandidate.region || "—"}</span>
+                    <span className="font-bold text-gray-900">{getRegion(selectedCandidate) || "—"}</span>
                   </div>
-                  <div>
-                    <span className="text-gray-400 block text-[10px]">Ville / Village</span>
-                    <span className="font-bold text-gray-900">{selectedCandidate.ville_village || "—"}</span>
-                  </div>
+                  {selectedCandidate.ville_village && (
+                    <div>
+                      <span className="text-gray-400 block text-[10px]">Ville / Village</span>
+                      <span className="font-bold text-gray-900">{selectedCandidate.ville_village}</span>
+                    </div>
+                  )}
                   <div>
                     <span className="text-gray-400 block text-[10px]">Téléphone</span>
-                    <span className="font-bold text-gray-900">{selectedCandidate.telephone_candidat || "Non renseigné"}</span>
+                    <span className="font-bold text-gray-900">{getTelephone(selectedCandidate) || "Non renseigné"}</span>
                   </div>
                   <div>
                     <span className="text-gray-400 block text-[10px]">Email</span>
-                    <span className="font-bold text-gray-900">{selectedCandidate.email}</span>
+                    <span className="font-bold text-gray-900 break-all">{selectedCandidate.email || "—"}</span>
                   </div>
-                  <div>
-                    <span className="text-gray-400 block text-[10px]">Tuteur / Parent</span>
-                    <span className="font-bold text-gray-900">{selectedCandidate.telephone_tuteur || "Majeur"}</span>
-                  </div>
-                  <div>
-                    <span className="text-gray-400 block text-[10px]">Établissement / Classe</span>
-                    <span className="font-bold text-gray-900">
-                      {selectedCandidate.etablissement || "—"} ({selectedCandidate.classe || "—"})
-                    </span>
-                  </div>
+                  {selectedCandidate.categorie === "junior" && (
+                    <>
+                      <div>
+                        <span className="text-gray-400 block text-[10px]">Tuteur / Parent</span>
+                        <span className="font-bold text-gray-900">
+                          {[selectedCandidate.nom_tuteur, selectedCandidate.telephone_tuteur].filter(Boolean).join(" · ") || "—"}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-gray-400 block text-[10px]">Établissement / Classe</span>
+                        <span className="font-bold text-gray-900">
+                          {selectedCandidate.etablissement || "—"} ({selectedCandidate.classe || "—"})
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {selectedCandidate.biographie && (
@@ -1037,26 +1118,40 @@ export default function AdminTalents() {
               {/* 3. Projet & House */}
               <div>
                 <h3 className="text-xs font-black uppercase tracking-wider text-[#2F6084] mb-3 pb-1 border-b border-[#d0e4f0]">
-                  2. House visée & Projet de Candidature
+                  2. {selectedHouseLabels?.titre || "House visée & Projet de Candidature"}
                 </h3>
                 <div className="space-y-2.5">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-start justify-between gap-3">
                     <div>
-                      <span className="text-gray-400 block text-[10px]">House Spécifique</span>
-                      <span className="font-extrabold text-gray-900 text-sm">
-                        {getMaisonLabel(selectedCandidate.maison) || selectedCandidate.house_visee || "Non spécifiée"}
+                      <span className="text-gray-400 block text-[10px]">
+                        {selectedHouseLabels?.nom || "House Spécifique"}
                       </span>
+                      <span className="font-extrabold text-gray-900 text-sm">
+                        {(selectedHouseLabels && selectedCandidate.innovation_nom) ||
+                          getMaisonLabel(selectedCandidate.maison) ||
+                          selectedCandidate.house_visee ||
+                          "Non spécifiée"}
+                      </span>
+                      {selectedCandidate.domaine_steam && (
+                        <span className="block text-[11px] text-gray-500 font-semibold mt-0.5">
+                          Domaine : {getDomaineComplet(selectedCandidate)}
+                        </span>
+                      )}
                     </div>
-                    <span className="px-2.5 py-1 rounded-lg bg-blue-50 text-[#2F6084] font-bold text-xs border border-blue-100">
-                      {selectedCandidate.statut_projet || "En cours"}
-                    </span>
+                    {getProjetBadge(selectedCandidate) && (
+                      <span className="px-2.5 py-1 rounded-lg bg-blue-50 text-[#2F6084] font-bold text-xs border border-blue-100 shrink-0">
+                        {getProjetBadge(selectedCandidate)}
+                      </span>
+                    )}
                   </div>
 
-                  {selectedCandidate.description_projet && (
+                  {(selectedCandidate.innovation_description || selectedCandidate.description_projet) && (
                     <div className="p-3.5 rounded-xl bg-white border border-[#d0e4f0]">
-                      <span className="text-gray-400 block text-[10px] font-bold">Description du projet :</span>
+                      <span className="text-gray-400 block text-[10px] font-bold">
+                        {selectedHouseLabels?.description || "Description du projet"} :
+                      </span>
                       <p className="text-xs text-gray-800 mt-1 leading-relaxed whitespace-pre-line">
-                        {selectedCandidate.description_projet}
+                        {selectedCandidate.innovation_description || selectedCandidate.description_projet}
                       </p>
                     </div>
                   )}
@@ -1069,8 +1164,66 @@ export default function AdminTalents() {
                       </p>
                     </div>
                   )}
+
+                  {/* Pièces jointes */}
+                  {selectedPieces.length > 0 && (
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {selectedPieces.map((p) => (
+                        <a
+                          key={p.label}
+                          href={p.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#d0e4f0] bg-[#f4f8fb] hover:bg-white text-[#2F6084] font-bold text-[11px] transition-colors"
+                        >
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                          {p.label}
+                        </a>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
+
+              {/* 4. Modalités de participation (seniors) */}
+              {selectedCandidate.categorie === "senior" && (
+                <div>
+                  <h3 className="text-xs font-black uppercase tracking-wider text-[#f15b29] mb-3 pb-1 border-b border-[#d0e4f0]">
+                    3. Modalités de participation
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
+                    {[
+                      {
+                        label: "Défilé scientifique et technologique d'ouverture",
+                        value: selectedCandidate.participe_defile,
+                        detail: selectedCandidate.oeuvre_defile,
+                      },
+                      { label: "Facilitateur auprès des Juniors", value: selectedCandidate.facilitateur_juniors },
+                      { label: "Stand d'exposition", value: selectedCandidate.souhaite_stand },
+                      {
+                        label: `Concourt au ${selectedHouseLabels?.prix || "Prix de la House"}`,
+                        value: selectedCandidate.concours_prix_innovation,
+                      },
+                      { label: "Disponible précamps & Camp", value: selectedCandidate.disponible_camps },
+                      { label: "Conditions de participation acceptées", value: selectedCandidate.accepte_conditions },
+                    ].map((m) => (
+                      <div key={m.label} className="flex items-start justify-between gap-3 py-1.5 border-b border-slate-100">
+                        <div>
+                          <span className="text-gray-600">{m.label}</span>
+                          {m.value && m.detail && (
+                            <span className="block text-[11px] text-gray-400">Œuvre : {m.detail}</span>
+                          )}
+                        </div>
+                        <span className={`font-bold shrink-0 ${m.value ? "text-emerald-700" : "text-gray-400"}`}>
+                          {m.value ? "Oui" : "Non"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Pied Modal : Actions */}

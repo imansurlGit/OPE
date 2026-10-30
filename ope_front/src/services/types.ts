@@ -76,6 +76,7 @@ export interface Candidature {
   innovation_nom?: string;
   innovation_description?: string;
   stade_developpement?: string;
+  anciennete_activite?: string;
   preuves_realisation?: string | null;
   lien_portfolio?: string;
   participe_defile?: boolean;
