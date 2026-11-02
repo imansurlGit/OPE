@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { FormulaireLink } from "../components/FormulaireLink";
 import { useTranslation } from "react-i18next";
 import steamImg from "../assets/steam.jpeg";
 import lpImg from "../assets/lp.jpeg";
@@ -251,12 +251,9 @@ export default function Categories() {
               {t("apropos.description")}
             </p>
           </div>
-          <Link
-            to="/formulaire"
-            className="inline-flex items-center justify-center px-6 py-3 rounded-xl text-sm font-bold text-white bg-ope-orange hover:bg-ope-orange/90 transition-all shadow-md shrink-0 active:scale-95 cursor-pointer"
-          >
+          <FormulaireLink className="inline-flex items-center justify-center px-6 py-3 rounded-xl text-sm font-bold text-white bg-ope-orange hover:bg-ope-orange/90 transition-all shadow-md shrink-0 active:scale-95 cursor-pointer">
             {t("categories_page.apply_house")}
-          </Link>
+          </FormulaireLink>
         </div>
       </section>
     </div>

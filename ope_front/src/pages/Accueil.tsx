@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { FormulaireLink } from "../components/FormulaireLink";
 import { useTranslation } from "react-i18next";
 import heroImg from "../assets/agadez_drone.jpeg";
 import campNationalCitoyen from "../assets/camp_natio.png";
@@ -293,13 +294,12 @@ export default function Accueil() {
                             {t("hero.cta_mascotte")}
                         </Link>
 
-                        <Link
-                            to="/formulaire"
+                        <FormulaireLink
                             className="flex-1 w-1/4 sm:flex-none inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white text-center select-none transition-transform hover:scale-105"
                             style={{ backgroundColor: ORANGE, boxShadow: "0 4px 16px rgba(241,91,41,0.40)" }}
                         >
                             {t("hero.cta_register")}
-                        </Link>
+                        </FormulaireLink>
                     </div>
 
                     <div className="w-full flex items-center justify-between mt-1 sm:mt-2 text-white font-extrabold uppercase text-[10px] sm:text-lg tracking-tight">

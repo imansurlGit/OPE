@@ -1,5 +1,20 @@
+from django.utils import timezone
 from rest_framework import serializers
 from . import models
+
+# Tranche d'âge autorisée par catégorie (âge révolu à la date de candidature), bornes incluses
+TRANCHES_AGE = {
+    "junior": (12, 18),
+    "senior": (18, None),
+}
+
+
+def calculer_age(date_naissance, reference=None):
+    reference = reference or timezone.localdate()
+    return reference.year - date_naissance.year - (
+        (reference.month, reference.day) < (date_naissance.month, date_naissance.day)
+    )
+
 
 class CandidatureSerializer(serializers.ModelSerializer):
     domaine_steam = serializers.CharField(max_length=150, required=False, allow_blank=True)
@@ -36,8 +51,35 @@ class CandidatureSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
         data = data.copy() if hasattr(data, "copy") else dict(data)
         data.pop("age", None)
-        data.pop("date_naissance", None)
+        if data.get("date_naissance") == "":
+            data["date_naissance"] = None
         return super().to_internal_value(data)
+
+    def validate_date_naissance(self, value):
+        if value is None:
+            return value
+        if value > timezone.localdate():
+            raise serializers.ValidationError("La date de naissance ne peut pas être dans le futur.")
+        if value.year < 1900:
+            raise serializers.ValidationError("Veuillez saisir une date de naissance valide.")
+        return value
+
+    def _check_tranche_age(self, data, instance):
+        """Junior : 12 à 18 ans inclus. Senior : 18 ans et plus."""
+        if "date_naissance" not in data and "categorie" not in data:
+            return
+        categorie = data.get("categorie", getattr(instance, "categorie", None))
+        date_naissance = data.get("date_naissance", getattr(instance, "date_naissance", None))
+        if not date_naissance or categorie not in TRANCHES_AGE:
+            return
+        age_min, age_max = TRANCHES_AGE[categorie]
+        age = calculer_age(date_naissance)
+        if age < age_min or (age_max is not None and age > age_max):
+            if categorie == "junior":
+                message = f"Les candidats Juniors doivent avoir entre {age_min} et {age_max} ans inclus (âge actuel : {age} ans)."
+            else:
+                message = f"Les candidats Seniors doivent avoir au moins {age_min} ans (âge actuel : {age} ans)."
+            raise serializers.ValidationError({"date_naissance": message})
 
     def validate(self, data):
         instance = getattr(self, "instance", None)
@@ -58,6 +100,7 @@ class CandidatureSerializer(serializers.ModelSerializer):
                 valid_maisons = {choice[0] for choice in models.Candidature.MAISON_CHOICES}
                 if data["maison"] not in valid_maisons:
                     raise serializers.ValidationError({"maison": "La maison doit être valide."})
+            self._check_tranche_age(data, instance)
             return data
 
         categorie = data.get("categorie", getattr(instance, "categorie", None))
@@ -86,12 +129,12 @@ class CandidatureSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"maison": "La maison est obligatoire et doit être valide."})
 
         request = self.context.get("request")
-        is_admin = bool(
-            request and (
-                (request.user and request.user.is_authenticated) or
-                request.headers.get("X-Admin-Action") == "true"
-            )
-        )
+        is_admin = bool(request and request.user and request.user.is_authenticated)
+
+        date_naissance = data.get("date_naissance", getattr(instance, "date_naissance", None))
+        if not date_naissance and not is_admin:
+            raise serializers.ValidationError({"date_naissance": "La date de naissance est obligatoire."})
+        self._check_tranche_age(data, instance)
 
         if categorie == "junior":
             tel_tuteur = data.get("telephone_tuteur", getattr(instance, "telephone_tuteur", ""))
@@ -144,9 +187,15 @@ class CandidatureSerializer(serializers.ModelSerializer):
             if not innovation_description or not str(innovation_description).strip():
                 raise serializers.ValidationError({"innovation_description": "La description du projet est obligatoire."})
 
-            stade = data.get("stade_developpement", getattr(instance, "stade_developpement", ""))
-            if not stade:
-                raise serializers.ValidationError({"stade_developpement": "Le stade de développement est obligatoire."})
+            # Champs spécifiques à chaque House senior
+            if maison == "steam":
+                stade = data.get("stade_developpement", getattr(instance, "stade_developpement", ""))
+                if not stade:
+                    raise serializers.ValidationError({"stade_developpement": "Le stade de développement est obligatoire."})
+            elif maison == "local_project" and not is_admin:
+                anciennete = data.get("anciennete_activite", getattr(instance, "anciennete_activite", ""))
+                if not anciennete:
+                    raise serializers.ValidationError({"anciennete_activite": "L'ancienneté de l'activité est obligatoire."})
 
             participe_defile = data.get("participe_defile", getattr(instance, "participe_defile", False))
             if participe_defile:
@@ -163,6 +212,38 @@ class CandidatureSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError({"accepte_conditions": "Vous devez accepter les conditions de participation."})
 
         return data
+
+class CandidaturePublicSerializer(serializers.ModelSerializer):
+    """
+    Champs exposés aux visiteurs sur la page publique « Les 1000 Talents ».
+    Aucune donnée de contact, d'identité ni d'évaluation (email, téléphones, date de naissance,
+    pièce d'identité, notes, score, statut).
+    """
+    class Meta:
+        model = models.Candidature
+        fields = [
+            "id",
+            "reference",
+            "categorie",
+            "maison",
+            "nom",
+            "prenom",
+            "region_ville",
+            "etablissement",
+            "domaine_steam",
+            "domaine_steam_autre",
+            "innovation_nom",
+            "innovation_description",
+            "stade_developpement",
+            "anciennete_activite",
+            "photo_identite",
+            "mascotte_nom",
+            "mascotte_pourquoi",
+            "mascotte_signification",
+            "mascotte_dessin",
+            "afficher_sur_site",
+        ]
+        read_only_fields = fields
 
 class ActualiteSerializer(serializers.ModelSerializer):
     class Meta:

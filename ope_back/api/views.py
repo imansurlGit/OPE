@@ -8,16 +8,39 @@ from rest_framework.decorators import action
 from . import models, serializers as sz
 
 class CandidatureViewSet(viewsets.ModelViewSet):
-    serializer_class = sz.CandidatureSerializer
+    """
+    Candidatures (Juniors & Seniors) :
+    - POST /api/candidatures/ : public (formulaire de candidature).
+    - GET /api/candidatures/ : public, limité aux talents publiés (afficher_sur_site) et aux champs publics.
+    - Tout le reste (fiche complète, modification, suppression, stats, carte) : administrateurs authentifiés.
+    """
+
+    def is_admin_request(self):
+        user = getattr(self.request, "user", None)
+        return bool(user and user.is_authenticated)
+
+    def get_permissions(self):
+        if self.action in ("create", "list"):
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
+
+    def get_serializer_class(self):
+        if self.action == "list" and not self.is_admin_request():
+            return sz.CandidaturePublicSerializer
+        return sz.CandidatureSerializer
 
     def get_queryset(self):
         qs = models.Candidature.objects.all().order_by("-created_at")
+        # Visiteur : uniquement les talents que l'administration a choisi d'afficher sur le site
+        if not self.is_admin_request():
+            qs = qs.filter(afficher_sur_site=True)
         categorie = self.request.query_params.get("categorie")
         maison = self.request.query_params.get("maison")
         domaine_steam = self.request.query_params.get("domaine_steam") or self.request.query_params.get("domaine") or self.request.query_params.get("classe")
         statut = self.request.query_params.get("statut")
         region = self.request.query_params.get("region")
         search = self.request.query_params.get("search")
+        afficher_sur_site = self.request.query_params.get("afficher_sur_site")
 
         if categorie and categorie != "all":
             qs = qs.filter(categorie=categorie)
@@ -29,6 +52,8 @@ class CandidatureViewSet(viewsets.ModelViewSet):
             qs = qs.filter(statut=statut)
         if region and region != "all":
             qs = qs.filter(region_ville__icontains=region)
+        if afficher_sur_site in ("true", "false"):
+            qs = qs.filter(afficher_sur_site=(afficher_sur_site == "true"))
         if search:
             search_clean = search.strip()
             qs = qs.filter(
@@ -42,26 +67,17 @@ class CandidatureViewSet(viewsets.ModelViewSet):
             )
         return qs
 
-    def get_permissions(self):
-        if self.action in ['list', 'retrieve', 'create', 'card', 'stats', 'partial_update', 'update', 'destroy']:
-            permission_classes = [permissions.AllowAny]
-        else:
-            permission_classes = [permissions.IsAuthenticated]
-        return [perm() for perm in permission_classes]
-
     def create(self, request, *args, **kwargs):
         data = request.data.copy() if hasattr(request.data, 'copy') else dict(request.data)
 
-        is_admin_action = (
-            (request.user and request.user.is_authenticated) or
-            request.headers.get("X-Admin-Action") == "true"
-        )
+        is_admin_action = self.is_admin_request()
 
-        # Interdire au client public ordinaire de forcer statut, score ou note_interne
+        # Interdire au client public ordinaire de forcer statut, score, note_interne ou la publication
         if not is_admin_action:
             data.pop("statut", None)
             data.pop("score_evaluation", None)
             data.pop("note_interne", None)
+            data.pop("afficher_sur_site", None)
         else:
             # Pour l'administration, valider par défaut les consentements s'ils ne sont pas spécifiés
             if "disponible_camps" not in data:
@@ -73,9 +89,8 @@ class CandidatureViewSet(viewsets.ModelViewSet):
             if "accord_utilisation_dessin" not in data:
                 data["accord_utilisation_dessin"] = True
 
-        # Ignorer age et date_naissance pour rétrocompatibilité
+        # Ignorer age pour rétrocompatibilité (l'âge est calculé à partir de date_naissance)
         data.pop("age", None)
-        data.pop("date_naissance", None)
 
         # Conversion des booleans venant de multipart/form-data
         bool_fields = [
@@ -87,6 +102,7 @@ class CandidatureViewSet(viewsets.ModelViewSet):
             "concours_prix_innovation",
             "disponible_camps",
             "accepte_conditions",
+            "afficher_sur_site",
         ]
         for bool_field in bool_fields:
             if bool_field in data:

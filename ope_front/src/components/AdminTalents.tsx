@@ -8,6 +8,8 @@ import {
   SENIOR_HOUSE_LABELS,
   STADES_DEVELOPPEMENT_OPTIONS,
   ANCIENNETE_ACTIVITE_OPTIONS,
+  formatDateNaissance,
+  getAgeFromDateNaissance,
 } from "../types/formulaire";
 
 const REGIONS = [
@@ -33,6 +35,12 @@ const getMaisonLabel = (maison?: string) =>
 // L'API renvoie region_ville / telephone ; region / telephone_candidat sont des noms legacy
 const getRegion = (c: Candidature) => c.region_ville || c.region || "";
 const getTelephone = (c: Candidature) => c.telephone || c.telephone_candidat || "";
+// Date de naissance : "14/05/1998 (28 ans)"
+const getDateNaissanceLabel = (c: Candidature) => {
+  const date = formatDateNaissance(c.date_naissance);
+  const age = getAgeFromDateNaissance(c.date_naissance);
+  return date && age !== null ? `${date} (${age} ans)` : date;
+};
 
 // Helper lisible pour domaine_steam
 const getDomaineLabel = (key?: string) => {
@@ -87,12 +95,94 @@ const getProjetBadge = (c: Candidature) =>
       ? optionLabel(STADES_DEVELOPPEMENT_OPTIONS, c.stade_developpement)
       : c.statut_projet || "";
 
+// ── note_interne (lecture seule dans l'admin) ──
+// Le formulaire Junior y enregistre ses réponses complémentaires en lignes « Clé: valeur »
+// (voir useCandidatureForm). Les autres lignes sont des remarques internes.
+const NOTE_DETAIL_KEYS = [
+  "Ville/Village",
+  "Nationalité",
+  "Point focal",
+  "Situation projet",
+  "Filière visée",
+  "Moyenne scolaire",
+  "Contact recommandation",
+  "Engagement type",
+  "Accès numérique",
+  "Biographie",
+  "Motivation",
+] as const;
+type NoteDetailKey = (typeof NOTE_DETAIL_KEYS)[number];
+const NOTE_MULTILINE_KEYS: NoteDetailKey[] = ["Biographie", "Motivation"];
+
+interface NoteInterne {
+  details: Partial<Record<NoteDetailKey, string>>;
+  remarques: string;
+}
+
+const splitNoteInterne = (c?: Candidature | null): NoteInterne => {
+  const note = (c?.note_interne || "").replace(/\r\n/g, "\n");
+  // Seuls les Juniors ont des réponses complémentaires : pour un Senior, tout est remarque
+  if (c?.categorie !== "junior") return { details: {}, remarques: note.trim() };
+
+  const remarques: string[] = [];
+  const details: NoteInterne["details"] = {};
+  let current: NoteDetailKey | null = null;
+
+  for (const line of note.split("\n")) {
+    const key = NOTE_DETAIL_KEYS.find((k) => line.startsWith(`${k}:`));
+    if (key) {
+      current = key;
+      details[key] = line.slice(key.length + 1).trim();
+    } else if (current && NOTE_MULTILINE_KEYS.includes(current) && line.trim()) {
+      details[current] = `${details[current]}\n${line}`;
+    } else {
+      current = null;
+      remarques.push(line);
+    }
+  }
+
+  return { details, remarques: remarques.join("\n").trim() };
+};
+
+const SITUATION_LABELS: Record<string, { defaut: string; mc2: string }> = {
+  projet_actif: { defaut: "Projet déjà réalisé / en activité", mc2: "Action citoyenne déjà menée" },
+  idee_projet: { defaut: "Idée de projet à développer", mc2: "Idée d'action à mener" },
+  vocation_claire: { defaut: "Pas encore de projet, vocation claire", mc2: "Pas encore d'action, vocation citoyenne claire" },
+};
+const ENGAGEMENT_LABELS: Record<string, string> = { ponctuel: "Ponctuel", regulier: "Régulier" };
+const ACCES_NUMERIQUE_LABELS: Record<string, string> = {
+  personnel: "Oui, personnellement",
+  aide_tiers: "Oui, avec l'aide d'un tiers",
+  sur_place: "Non, s'organisera sur place",
+};
+
+// Réponses « parcours » d'un Junior, avec des libellés lisibles (vides ignorées)
+const getJuniorParcours = (c: Candidature, details: NoteInterne["details"]) => {
+  const situation = details["Situation projet"];
+  const situationLabel = situation && SITUATION_LABELS[situation];
+  return [
+    {
+      label: "Situation du projet",
+      value: situationLabel ? (c.maison === "mouvement_citoyen" ? situationLabel.mc2 : situationLabel.defaut) : situation,
+    },
+    { label: "Type d'engagement", value: ENGAGEMENT_LABELS[details["Engagement type"] || ""] || details["Engagement type"] },
+    { label: "Filière visée", value: details["Filière visée"] },
+    { label: "Moyenne scolaire", value: details["Moyenne scolaire"] },
+    { label: "Contact de recommandation", value: details["Contact recommandation"] },
+    {
+      label: "Accès smartphone / tablette",
+      value: ACCES_NUMERIQUE_LABELS[details["Accès numérique"] || ""] || details["Accès numérique"],
+    },
+  ].filter((item): item is { label: string; value: string } => Boolean(item.value));
+};
+
 export default function AdminTalents() {
   const [candidatures, setCandidatures] = useState<Candidature[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDomaine, setSelectedDomaine] = useState<string>("all");
   const [selectedStatut, setSelectedStatut] = useState<string>("all");
+  const [selectedVisibilite, setSelectedVisibilite] = useState<"all" | "visible" | "masque">("all");
   const [selectedRegion, setSelectedRegion] = useState<string>("Toutes");
   const [viewMode, setViewMode] = useState<"table" | "cards">("table");
   const [selectedCandidate, setSelectedCandidate] = useState<Candidature | null>(null);
@@ -108,8 +198,8 @@ export default function AdminTalents() {
 
   // Formulaire d'édition dans le modal
   const [editStatut, setEditStatut] = useState<Candidature["statut"]>("admis");
-  const [editNote, setEditNote] = useState("");
   const [editScore, setEditScore] = useState<number>(0);
+  const [editAfficher, setEditAfficher] = useState(false);
 
   // Charger les vraies candidatures depuis le service
   const fetchCandidatures = async () => {
@@ -162,6 +252,10 @@ export default function AdminTalents() {
       ) {
         return false;
       }
+      // Filtre Visibilité sur le site public
+      if (selectedVisibilite !== "all" && Boolean(c.afficher_sur_site) !== (selectedVisibilite === "visible")) {
+        return false;
+      }
       // Filtre Région
       if (
         selectedRegion !== "Toutes" &&
@@ -190,12 +284,12 @@ export default function AdminTalents() {
       }
       return true;
     });
-  }, [candidatures, selectedDomaine, selectedStatut, selectedRegion, searchQuery]);
+  }, [candidatures, selectedDomaine, selectedStatut, selectedVisibilite, selectedRegion, searchQuery]);
 
   // Réinitialiser la page lors du changement de filtre
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedDomaine, selectedStatut, selectedRegion, searchQuery]);
+  }, [selectedDomaine, selectedStatut, selectedVisibilite, selectedRegion, searchQuery]);
 
   // Candidatures paginées
   const paginatedCandidatures = useMemo(() => {
@@ -226,12 +320,15 @@ export default function AdminTalents() {
       ].filter((p): p is { label: string; url: string } => Boolean(p.url))
     : [];
 
+  const selectedNote = splitNoteInterne(selectedCandidate);
+  const selectedParcours = selectedCandidate ? getJuniorParcours(selectedCandidate, selectedNote.details) : [];
+
   // Ouverture du modal détaillé
   const handleOpenDetail = (cand: Candidature) => {
     setSelectedCandidate(cand);
     setEditStatut(cand.statut);
-    setEditNote(cand.note_interne || "");
     setEditScore(cand.score_evaluation || 0);
+    setEditAfficher(Boolean(cand.afficher_sur_site));
   };
 
   // Enregistrement de la décision/mise à jour du statut via le service
@@ -242,8 +339,8 @@ export default function AdminTalents() {
     try {
       const updated = await talentService.updateTalent(selectedCandidate.id, {
         statut: editStatut,
-        note_interne: editNote,
-        score_evaluation: editScore,
+        score_evaluation: editScore, // note_interne n'est jamais modifiée depuis l'admin
+        afficher_sur_site: editAfficher,
       });
 
       // Mettre à jour localement
@@ -318,13 +415,13 @@ export default function AdminTalents() {
 
       // ── En-tête ──
       const COLS = [
-        "N° Dossier", "Catégorie", "Nom", "Prénom", "Sexe",
+        "N° Dossier", "Catégorie", "Nom", "Prénom", "Sexe", "Date de naissance", "Âge",
         "Maison d'Excellence", "Domaine", "Projet / Activité / Initiative",
         "Stade / Ancienneté",
         "Région", "Téléphone", "Email",
         "Défilé d'ouverture", "Œuvre au défilé", "Facilitateur Juniors", "Stand d'exposition",
         "Prix de la House", "Disponible précamps & Camp",
-        "Statut", "Score /100", "Date d'inscription",
+        "Statut", "Score /100", "Affiché sur le site", "Date d'inscription",
       ];
 
       // ── Données ──
@@ -334,6 +431,8 @@ export default function AdminTalents() {
         c.nom,
         c.prenom,
         fmtSexe(c.sexe),
+        formatDateNaissance(c.date_naissance),
+        getAgeFromDateNaissance(c.date_naissance) ?? "",
         fmtDomaine(c.maison || c.domaine),
         getDomaineComplet(c),
         c.innovation_nom || c.mascotte_nom || c.house_visee || "",
@@ -349,6 +448,7 @@ export default function AdminTalents() {
         fmtOuiNon(c, c.disponible_camps),
         fmtStatut(c.statut),
         c.score_evaluation ?? 0,
+        c.afficher_sur_site ? "Oui" : "Non",
         fmtDate(c.created_at),
       ]);
 
@@ -460,6 +560,19 @@ export default function AdminTalents() {
         );
     }
   };
+
+  const renderVisibiliteTag = (visible?: boolean) =>
+    visible ? (
+      <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700" title="Affiché sur la page publique « Les 1000 Talents »">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+        Sur le site
+      </span>
+    ) : (
+      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-gray-400" title="Masqué de la page publique">
+        <span className="w-1.5 h-1.5 rounded-full bg-gray-300" />
+        Masqué du site
+      </span>
+    );
 
   const getDomaineBadge = (domaine: string) => {
     switch (domaine) {
@@ -684,6 +797,17 @@ export default function AdminTalents() {
               <option value="soumis">Dossier soumis</option>
             </select>
 
+            {/* Visibilité sur le site public */}
+            <select
+              value={selectedVisibilite}
+              onChange={(e) => setSelectedVisibilite(e.target.value as typeof selectedVisibilite)}
+              className="px-3 py-2.5 rounded-xl border border-[#d0e4f0] bg-white text-xs font-bold text-gray-700 focus:outline-none focus:border-[#f15b29] cursor-pointer"
+            >
+              <option value="all">Site : tous</option>
+              <option value="visible">Affichés sur le site</option>
+              <option value="masque">Masqués du site</option>
+            </select>
+
             {/* Région */}
             <select
               value={selectedRegion}
@@ -866,6 +990,7 @@ export default function AdminTalents() {
                     {/* Statut */}
                     <td className="py-3 px-4 whitespace-nowrap">
                       {renderStatutBadge(cand.statut)}
+                      <div className="mt-1 pl-1">{renderVisibiliteTag(cand.afficher_sur_site)}</div>
                     </td>
 
                     {/* Bouton Voir */}
@@ -938,7 +1063,10 @@ export default function AdminTalents() {
                     {[getRegion(cand), cand.ville_village].filter(Boolean).join(" · ")}
                   </span>
                 </div>
-                {renderStatutBadge(cand.statut)}
+                <div className="flex flex-col items-end gap-1">
+                  {renderStatutBadge(cand.statut)}
+                  {renderVisibiliteTag(cand.afficher_sur_site)}
+                </div>
               </div>
             </div>
           ))}
@@ -1043,18 +1171,45 @@ export default function AdminTalents() {
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-gray-600 mb-1 uppercase tracking-wider">
-                    Remarques internes / Notes d'évaluation :
-                  </label>
-                  <textarea
-                    rows={2}
-                    value={editNote}
-                    onChange={(e) => setEditNote(e.target.value)}
-                    placeholder="Observations du comité de sélection..."
-                    className="w-full p-2.5 rounded-xl border border-gray-300 bg-white text-xs focus:border-[#f15b29] focus:outline-none"
-                  />
+                <div className="flex items-center justify-between gap-4 p-3 rounded-xl bg-white border border-gray-200">
+                  <div>
+                    <span id="label-afficher-site" className="block text-xs font-bold text-gray-900">
+                      Afficher sur le site public
+                    </span>
+                    <span className="block text-[11px] text-gray-500">
+                      {editAfficher
+                        ? "Le talent apparaît sur la page « Les 1000 Talents »."
+                        : "Le talent n'apparaît pas sur la page « Les 1000 Talents »."}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={editAfficher}
+                    aria-labelledby="label-afficher-site"
+                    onClick={() => setEditAfficher((v) => !v)}
+                    className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f15b29] focus-visible:ring-offset-2 ${
+                      editAfficher ? "bg-emerald-500" : "bg-gray-300"
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                        editAfficher ? "translate-x-5" : "translate-x-0.5"
+                      }`}
+                    />
+                  </button>
                 </div>
+
+                {selectedNote.remarques && (
+                  <div>
+                    <span className="block text-[11px] font-bold text-gray-600 mb-1 uppercase tracking-wider">
+                      Remarques internes / Notes d'évaluation
+                    </span>
+                    <p className="p-3 rounded-xl bg-white border border-slate-200 text-xs text-gray-700 leading-relaxed whitespace-pre-line">
+                      {selectedNote.remarques}
+                    </p>
+                  </div>
+                )}
               </div>
 
               {/* 2. Identité & Coordonnées */}
@@ -1070,13 +1225,27 @@ export default function AdminTalents() {
                     </span>
                   </div>
                   <div>
+                    <span className="text-gray-400 block text-[10px]">Date de naissance</span>
+                    <span className="font-bold text-gray-900">
+                      {getDateNaissanceLabel(selectedCandidate) || "Non renseignée"}
+                    </span>
+                  </div>
+                  <div>
                     <span className="text-gray-400 block text-[10px]">Région</span>
                     <span className="font-bold text-gray-900">{getRegion(selectedCandidate) || "—"}</span>
                   </div>
-                  {selectedCandidate.ville_village && (
+                  {(selectedCandidate.ville_village || selectedNote.details["Ville/Village"]) && (
                     <div>
                       <span className="text-gray-400 block text-[10px]">Ville / Village</span>
-                      <span className="font-bold text-gray-900">{selectedCandidate.ville_village}</span>
+                      <span className="font-bold text-gray-900">
+                        {selectedCandidate.ville_village || selectedNote.details["Ville/Village"]}
+                      </span>
+                    </div>
+                  )}
+                  {selectedNote.details["Nationalité"] && (
+                    <div>
+                      <span className="text-gray-400 block text-[10px]">Nationalité</span>
+                      <span className="font-bold text-gray-900">{selectedNote.details["Nationalité"]}</span>
                     </div>
                   )}
                   <div>
@@ -1101,14 +1270,22 @@ export default function AdminTalents() {
                           {selectedCandidate.etablissement || "—"} ({selectedCandidate.classe || "—"})
                         </span>
                       </div>
+                      {selectedNote.details["Point focal"] && (
+                        <div>
+                          <span className="text-gray-400 block text-[10px]">Point focal OPE</span>
+                          <span className="font-bold text-gray-900">{selectedNote.details["Point focal"]}</span>
+                        </div>
+                      )}
                     </>
                   )}
                 </div>
 
-                {selectedCandidate.biographie && (
+                {(selectedCandidate.biographie || selectedNote.details.Biographie) && (
                   <div className="mt-3 p-3 rounded-xl bg-[#f4f8fb]/60 border border-[#d0e4f0]">
                     <span className="text-gray-400 block text-[10px] font-bold">Biographie :</span>
-                    <p className="text-xs text-gray-700 mt-0.5">{selectedCandidate.biographie}</p>
+                    <p className="text-xs text-gray-700 mt-0.5 whitespace-pre-line">
+                      {selectedCandidate.biographie || selectedNote.details.Biographie}
+                    </p>
                   </div>
                 )}
               </div>
@@ -1154,11 +1331,22 @@ export default function AdminTalents() {
                     </div>
                   )}
 
-                  {selectedCandidate.motivation && (
+                  {selectedParcours.length > 0 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 p-3.5 rounded-xl bg-[#f4f8fb]/60 border border-[#d0e4f0]">
+                      {selectedParcours.map((item) => (
+                        <div key={item.label}>
+                          <span className="text-gray-400 block text-[10px]">{item.label}</span>
+                          <span className="font-bold text-gray-900">{item.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {(selectedCandidate.motivation || selectedNote.details.Motivation) && (
                     <div className="p-3.5 rounded-xl bg-white border border-[#d0e4f0]">
                       <span className="text-gray-400 block text-[10px] font-bold">Motivation pour Agadez 2026 :</span>
                       <p className="text-xs text-gray-800 mt-1 leading-relaxed whitespace-pre-line">
-                        {selectedCandidate.motivation}
+                        {selectedCandidate.motivation || selectedNote.details.Motivation}
                       </p>
                     </div>
                   )}

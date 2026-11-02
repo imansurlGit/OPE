@@ -19,6 +19,9 @@ import {
   URL_REGEX,
   JUNIOR_STEPS,
   getSeniorSteps,
+  getAgeFromDateNaissance,
+  isAgeAllowed,
+  AGE_LIMITS,
 } from "../types/formulaire";
 
 
@@ -158,6 +161,27 @@ export function useCandidatureForm(
   );
 
   // ── VALIDATION D'ÉTAPE ──
+  // Date de naissance obligatoire + tranche d'âge (Junior : 12 à 18 ans inclus, Senior : 18 ans et plus)
+  const getDateNaissanceError = (cat: "junior" | "senior", dateNaissance: string): string | undefined => {
+    if (!dateNaissance) return t("form.err_dob", "Veuillez renseigner votre date de naissance.");
+    const age = getAgeFromDateNaissance(dateNaissance);
+    if (age === null) return t("form.err_dob_invalid", "Veuillez saisir une date de naissance valide.");
+    if (isAgeAllowed(cat, age)) return undefined;
+    const { min, max } = AGE_LIMITS[cat];
+    return cat === "junior"
+      ? t("form.err_age_junior", {
+          defaultValue: "Les candidats Juniors doivent avoir entre {{min}} et {{max}} ans inclus (âge actuel : {{age}} ans).",
+          min,
+          max,
+          age,
+        })
+      : t("form.err_age_senior", {
+          defaultValue: "Les candidats Seniors doivent avoir au moins {{min}} ans (âge actuel : {{age}} ans).",
+          min,
+          age,
+        });
+  };
+
   const validateJuniorStep = (currentStep: number): boolean => {
     const errs: JuniorErrors = {};
 
@@ -165,6 +189,8 @@ export function useCandidatureForm(
       if (!juniorData.nom.trim()) errs.nom = t("form.err_nom", "Le nom est obligatoire.");
       if (!juniorData.prenom.trim()) errs.prenom = t("form.err_prenom", "Le prénom est obligatoire.");
       if (!juniorData.sexe) errs.sexe = t("form.senior.err_sexe", "Le sexe est obligatoire.");
+      const dateNaissanceError = getDateNaissanceError("junior", juniorData.dateNaissance);
+      if (dateNaissanceError) errs.dateNaissance = dateNaissanceError;
       if (!juniorData.regionVille || !juniorData.regionVille.trim()) {
         errs.regionVille = t("form.junior.err_region", "La région de résidence est obligatoire.");
       }
@@ -215,6 +241,8 @@ export function useCandidatureForm(
       if (!seniorData.nom.trim()) errs.nom = t("form.err_nom", "Le nom est obligatoire.");
       if (!seniorData.prenom.trim()) errs.prenom = t("form.err_prenom", "Le prénom est obligatoire.");
       if (!seniorData.sexe) errs.sexe = t("form.senior.err_sexe", "Le sexe est obligatoire.");
+      const dateNaissanceError = getDateNaissanceError("senior", seniorData.dateNaissance);
+      if (dateNaissanceError) errs.dateNaissance = dateNaissanceError;
       if (!seniorData.regionVille || !seniorData.regionVille.trim()) {
         errs.regionVille = t("form.senior.err_region", "La région de résidence est obligatoire.");
       }
@@ -344,6 +372,7 @@ export function useCandidatureForm(
         formData.append("nom", juniorData.nom.trim());
         formData.append("prenom", juniorData.prenom.trim());
         formData.append("sexe", juniorData.sexe);
+        formData.append("date_naissance", juniorData.dateNaissance);
         formData.append("region_ville", juniorData.regionVille.trim());
         formData.append("telephone", (juniorData.telephoneCandidat || juniorData.telephoneTuteur).trim());
         formData.append("telephone_tuteur", juniorData.telephoneTuteur.trim());
@@ -394,6 +423,7 @@ export function useCandidatureForm(
         formData.append("nom", seniorData.nom.trim());
         formData.append("prenom", seniorData.prenom.trim());
         formData.append("sexe", seniorData.sexe);
+        formData.append("date_naissance", seniorData.dateNaissance);
         formData.append("region_ville", seniorData.regionVille.trim());
         formData.append("telephone", seniorData.telephone.trim());
         formData.append("email", seniorData.email.trim());

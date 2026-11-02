@@ -68,6 +68,7 @@ export interface Candidature {
 
   // Senior
   sexe?: "M" | "F" | "";
+  date_naissance?: string | null; // AAAA-MM-JJ
   email?: string;
   piece_identite?: string | null;
   photo_identite?: string | null;
@@ -90,6 +91,7 @@ export interface Candidature {
   // Admin / Suivi
   note_interne?: string;
   score_evaluation?: number;
+  afficher_sur_site?: boolean; // visible sur la page publique « Les 1000 Talents »
   created_at?: string;
   updated_at?: string;
 
@@ -119,6 +121,7 @@ export interface TalentFilterParams {
   statut?: string;
   region?: string;
   search?: string;
+  afficher_sur_site?: boolean;
 }
 
 export interface TalentStats {

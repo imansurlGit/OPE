@@ -1,5 +1,4 @@
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://127.0.0.1:7777/api";
+import api from "./api";
 
 export interface TimelinePoint {
   label: string;
@@ -37,10 +36,9 @@ export interface DashboardStats {
 }
 
 const dashboardService = {
+  // Statistiques réservées à l'administration : envoyées avec le jeton de connexion
   async getStats(): Promise<DashboardStats> {
-    const res = await fetch(`${API_BASE_URL}/candidatures/stats/`);
-    if (!res.ok) throw new Error(`Stats API error: ${res.status}`);
-    return res.json();
+    return api.get<DashboardStats>("candidatures/stats/");
   },
 };
 

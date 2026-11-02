@@ -49,14 +49,20 @@ class Candidature(models.Model):
         ("biotechnologie", "Biotechnologie"),
         ("art", "Art"),
         ("maths_logique", "Mathématiques et Logique"),
+        ("technologie_solaire", "Technologie solaire"),
+        ("sciences_spatiales", "Aéronautique et sciences spatiales"),
         # LP - Local Project
         ("agriculture", "Agriculture"),
+        ("agrobusiness", "Agrobusiness"),
         ("elevage", "Élevage"),
         ("artisanat", "Artisanat"),
         ("entrepreneuriat", "Entrepreneuriat"),
-        ("marketing_digital", "Marketing digital"),
         # MC2 - Modèle de Citoyen Communautaire
         ("debats_communautaires", "Débats communautaires"),
+        (
+            "actions_sociales",
+            "Actions sociales et citoyennes (fabrication de poubelles, réhabilitation de tables-bancs, don, plantation d'arbres)",
+        ),
         ("formation_citoyennete", "Formation sur la citoyenneté, développement personnel et leadership"),
         ("fabrication_poubelles", "Fabrication de poubelles"),
         ("7km_paix", "7 km de la Paix"),
@@ -74,6 +80,12 @@ class Candidature(models.Model):
         ("prototype", "Prototype"),
         ("commercialise", "Produit commercialisé"),
         ("en_test", "En cours de test"),
+    ]
+
+    ANCIENNETE_CHOICES = [
+        ("moins_1_an", "Moins d'1 an"),
+        ("1_3_ans", "1 à 3 ans"),
+        ("plus_3_ans", "Plus de 3 ans"),
     ]
 
     REGION_CHOICES = [
@@ -138,8 +150,9 @@ class Candidature(models.Model):
     autorisation_parent = models.BooleanField(default=False, verbose_name="Autorisation parentale confirmée")
     accord_utilisation_dessin = models.BooleanField(default=False, verbose_name="Accord utilisation dessin par l'OPE")
 
-    # --- Champs Senior (Innovation STEAM) ---
+    # --- Champs Senior (STEAM, LP, MC2) ---
     sexe = models.CharField(max_length=1, choices=SEXE_CHOICES, blank=True, verbose_name="Sexe")
+    date_naissance = models.DateField(blank=True, null=True, verbose_name="Date de naissance")
     email = models.EmailField(blank=True, verbose_name="Adresse e-mail")
     piece_identite = models.FileField(
         upload_to="candidatures/pieces/",
@@ -181,6 +194,12 @@ class Candidature(models.Model):
         blank=True,
         verbose_name="Stade de développement",
     )
+    anciennete_activite = models.CharField(
+        max_length=20,
+        choices=ANCIENNETE_CHOICES,
+        blank=True,
+        verbose_name="Ancienneté de l'activité (LP)",
+    )
     preuves_realisation = models.FileField(
         upload_to="candidatures/preuves/",
         blank=True,
@@ -212,7 +231,7 @@ class Candidature(models.Model):
     )
     concours_prix_innovation = models.BooleanField(
         default=False,
-        verbose_name="Candidature au Prix de la Meilleure Innovation STEAM",
+        verbose_name="Candidature au Prix de la House (Innovation STEAM / Entreprise LP / Acteur MC2)",
     )
     disponible_camps = models.BooleanField(
         default=False,
@@ -235,6 +254,11 @@ class Candidature(models.Model):
         default=0,
         validators=[MinValueValidator(0), MaxValueValidator(100)],
         verbose_name="Score /100",
+    )
+    afficher_sur_site = models.BooleanField(
+        default=False,
+        verbose_name="Afficher sur le site public",
+        help_text="Seuls les talents cochés apparaissent sur la page publique « Les 1000 Talents ».",
     )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Date de soumission")
     updated_at = models.DateTimeField(auto_now=True)

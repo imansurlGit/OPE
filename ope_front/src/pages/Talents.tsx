@@ -324,22 +324,22 @@ export default function Talents() {
     }, 1200);
   };
 
-  // Charger les vrais talents depuis le backend API (uniquement les candidats admis)
+  // Charger les vrais talents depuis le backend API (uniquement ceux publiés par l'admin)
   useEffect(() => {
     let isMounted = true;
     setIsLoading(true);
     setError(null);
 
     talentService
-      .getTalents({ statut: "admis" })
+      .getPublicTalents()
       .then((data) => {
         if (!isMounted) return;
         const rawItems: Candidature[] = Array.isArray(data)
           ? data
           : (data as any)?.results || [];
 
-        // Ne conserver que les candidats dont le statut est "admis"
-        const admitted = rawItems.filter((c) => c.statut === "admis");
+        // Ne conserver que les talents cochés « Afficher sur le site » dans l'admin
+        const admitted = rawItems.filter((c) => c.afficher_sur_site === true);
 
         const mapped = admitted.map((c) => mapCandidatureToTalent(c));
         setTalents(shuffleArray(mapped));

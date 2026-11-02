@@ -7,6 +7,10 @@ import {
   STADES_DEVELOPPEMENT_OPTIONS,
   ANCIENNETE_ACTIVITE_OPTIONS,
   REGIONS_NIGER_OPTIONS,
+  AGE_LIMITS,
+  getTodayIsoDate,
+  getAgeFromDateNaissance,
+  formatDateNaissance,
 } from "../../types/formulaire";
 import {
   TextField,
@@ -183,7 +187,7 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <SelectField
               label={t("form.senior.sexe", "Sexe")}
               name="sexe"
@@ -196,6 +200,21 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
               value={data.sexe}
               onChange={(e) => onChangeField("sexe", e.target.value as SeniorData["sexe"])}
               error={fieldErrors.sexe}
+            />
+            <TextField
+              label={t("form.field_dob", "Date de naissance")}
+              name="dateNaissance"
+              type="date"
+              required
+              min="1900-01-01"
+              max={getTodayIsoDate()}
+              value={data.dateNaissance}
+              onChange={(e) => onChangeField("dateNaissance", e.target.value)}
+              error={fieldErrors.dateNaissance}
+              helperText={t("form.dob_help_senior", {
+                defaultValue: "{{min}} ans ou plus.",
+                min: AGE_LIMITS.senior.min,
+              })}
             />
             <SelectField
               label={t("form.senior.region", "Région de résidence")}
@@ -482,6 +501,14 @@ export const SeniorForm: React.FC<SeniorFormProps> = ({
               <div>
                 <span className="text-slate-400">{t("form.summary_candidate", "Candidat :")}</span>{" "}
                 <strong className="text-[#193549]">{data.prenom} {data.nom}</strong>
+              </div>
+              <div>
+                <span className="text-slate-400">{t("form.summary_dob", "Né(e) le :")}</span>{" "}
+                <strong className="text-[#193549]">
+                  {formatDateNaissance(data.dateNaissance)}
+                  {getAgeFromDateNaissance(data.dateNaissance) !== null &&
+                    ` (${getAgeFromDateNaissance(data.dateNaissance)} ${t("form.age_ans", "ans")})`}
+                </strong>
               </div>
               <div>
                 <span className="text-slate-400">{t("form.summary_email_phone", "Email & Tél :")}</span>{" "}

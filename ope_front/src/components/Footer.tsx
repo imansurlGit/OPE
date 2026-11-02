@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { FormulaireLink } from "./FormulaireLink";
 
 export default function Footer() {
     const { t } = useTranslation();
@@ -78,12 +79,9 @@ export default function Footer() {
                                 </Link>
                             </li>
                             <li>
-                                <Link
-                                    to="/formulaire"
-                                    className="text-white/80 hover:text-ope-orange transition-colors inline-block"
-                                >
+                                <FormulaireLink className="text-white/80 hover:text-ope-orange transition-colors inline-block">
                                     {t("footer.apply_camp")}
-                                </Link>
+                                </FormulaireLink>
                             </li>
                             <li>
                                 <Link to="/apropos" className="text-white/80 hover:text-ope-orange transition-colors">

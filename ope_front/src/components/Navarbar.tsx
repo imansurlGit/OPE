@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import logoOpe from "../assets/logo_ope.png";
 import logoEvent from "../assets/logo_event.jpeg";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { FormulaireLink } from "./FormulaireLink";
 
 export default function Navbar() {
   const { t } = useTranslation();
@@ -141,12 +142,9 @@ export default function Navbar() {
         <div className="flex items-center gap-2 sm:gap-3">
           <LanguageSwitcher />
 
-          <NavLink
-            to="/formulaire"
-            className="hidden lg:inline-flex items-center px-5 py-2 rounded-full text-sm font-semibold text-ope-white bg-ope-orange hover:bg-ope-orange/90 shrink-0 shadow-sm transition-all hover:scale-105 active:scale-95"
-          >
+          <FormulaireLink className="hidden lg:inline-flex items-center px-5 py-2 rounded-full text-sm font-semibold text-ope-white bg-ope-orange hover:bg-ope-orange/90 shrink-0 shadow-sm transition-all hover:scale-105 active:scale-95">
             {t("nav.join")}
-          </NavLink>
+          </FormulaireLink>
 
           {/* Burger mobile */}
           <button
@@ -192,13 +190,12 @@ export default function Navbar() {
               {link.label}
             </NavLink>
           ))}
-          <NavLink
-            to="/formulaire"
+          <FormulaireLink
             onClick={() => setMenuOpen(false)}
             className="mt-2 mb-2 px-5 py-2.5 rounded-full text-sm font-semibold text-ope-white bg-ope-orange text-center shadow-sm hover:bg-ope-orange/90 transition-all block"
           >
             {t("nav.join")}
-          </NavLink>
+          </FormulaireLink>
         </div>
       </div>
     </nav>

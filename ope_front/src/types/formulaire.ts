@@ -26,6 +26,7 @@ export interface JuniorData {
   nom: string;
   prenom: string;
   sexe: "M" | "F" | "";
+  dateNaissance: string; // Format AAAA-MM-JJ (12 à 18 ans inclus)
   regionVille: string; // Région / Zone de pré-camp
   villeVillage: string;
   nationalite: string;
@@ -71,6 +72,7 @@ export interface SeniorData {
   nom: string;
   prenom: string;
   sexe: "M" | "F" | "";
+  dateNaissance: string; // Format AAAA-MM-JJ (18 ans et plus)
   regionVille: string;
   telephone: string;
   email: string;
@@ -136,6 +138,7 @@ export const INITIAL_JUNIOR_DATA: JuniorData = {
   nom: "",
   prenom: "",
   sexe: "",
+  dateNaissance: "",
   regionVille: "",
   villeVillage: "",
   nationalite: "Nigérienne",
@@ -177,6 +180,7 @@ export const INITIAL_SENIOR_DATA: SeniorData = {
   nom: "",
   prenom: "",
   sexe: "",
+  dateNaissance: "",
   regionVille: "",
   telephone: "",
   email: "",
@@ -391,6 +395,46 @@ export const ANCIENNETE_ACTIVITE_OPTIONS: { value: AncienneteActivite; label: st
   { value: "1_3_ans", label: "1 à 3 ans" },
   { value: "plus_3_ans", label: "Plus de 3 ans" },
 ];
+
+// Date de naissance — format API / input date : AAAA-MM-JJ
+const DATE_NAISSANCE_REGEX = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+/** Date du jour au format AAAA-MM-JJ (heure locale), pour l'attribut `max` des champs date. */
+export function getTodayIsoDate(): string {
+  const today = new Date();
+  return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+}
+
+/** Âge révolu à partir d'une date AAAA-MM-JJ, ou null si la date est absente, invalide ou dans le futur. */
+export function getAgeFromDateNaissance(dateNaissance?: string | null): number | null {
+  const match = DATE_NAISSANCE_REGEX.exec(dateNaissance ?? "");
+  if (!match) return null;
+  const [year, month, day] = [Number(match[1]), Number(match[2]), Number(match[3])];
+  if (year < 1900 || month < 1 || month > 12 || day < 1 || day > 31) return null;
+  const today = new Date();
+  let age = today.getFullYear() - year;
+  const thisMonth = today.getMonth() + 1;
+  if (thisMonth < month || (thisMonth === month && today.getDate() < day)) age -= 1;
+  return age >= 0 ? age : null;
+}
+
+// Tranche d'âge autorisée par catégorie (âge révolu à la date de candidature), bornes incluses.
+// Doit rester alignée avec TRANCHES_AGE dans ope_back/api/serializers.py
+export const AGE_LIMITS: Record<"junior" | "senior", { min: number; max?: number }> = {
+  junior: { min: 12, max: 18 },
+  senior: { min: 18 },
+};
+
+export function isAgeAllowed(categorie: "junior" | "senior", age: number): boolean {
+  const { min, max } = AGE_LIMITS[categorie];
+  return age >= min && (max === undefined || age <= max);
+}
+
+/** Affiche une date AAAA-MM-JJ au format JJ/MM/AAAA (sans décalage de fuseau horaire). */
+export function formatDateNaissance(dateNaissance?: string | null): string {
+  const match = DATE_NAISSANCE_REGEX.exec(dateNaissance ?? "");
+  return match ? `${match[3]}/${match[2]}/${match[1]}` : "";
+}
 
 export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 Mo
 export const PHONE_REGEX = /^(?:\+?\d{1,4}[ -]?)?(?:\d{2}[ -]?){3,5}\d{2}$/;

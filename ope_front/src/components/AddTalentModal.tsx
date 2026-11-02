@@ -10,6 +10,10 @@ import {
   ANCIENNETE_ACTIVITE_OPTIONS,
   PHONE_REGEX,
   EMAIL_REGEX,
+  getTodayIsoDate,
+  getAgeFromDateNaissance,
+  isAgeAllowed,
+  AGE_LIMITS,
 } from "../types/formulaire";
 import { talentService, type Candidature } from "../services";
 
@@ -49,6 +53,10 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
   const [prenom, setPrenom] = useState("");
   const [regionVille, setRegionVille] = useState("Agadez");
   const [telephone, setTelephone] = useState("");
+
+  // Senior
+  const [dateNaissance, setDateNaissance] = useState(""); // facultatif côté admin, tranche d'âge contrôlée
+  const [afficherSurSite, setAfficherSurSite] = useState(true); // talent ajouté par le comité = admis
 
   // Senior
   const [sexe, setSexe] = useState<"M" | "F">("M");
@@ -105,6 +113,18 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
     if (!prenom.trim()) errs.prenom = "Le prénom est obligatoire.";
     if (!regionVille) errs.regionVille = "La région de résidence est obligatoire.";
     if (!maison) errs.maison = "La maison est obligatoire.";
+    if (dateNaissance) {
+      const age = getAgeFromDateNaissance(dateNaissance);
+      if (age === null) {
+        errs.dateNaissance = "Veuillez saisir une date de naissance valide.";
+      } else if (!isAgeAllowed(categorie, age)) {
+        const { min, max } = AGE_LIMITS[categorie];
+        errs.dateNaissance =
+          categorie === "junior"
+            ? `Un Junior doit avoir entre ${min} et ${max} ans inclus (âge : ${age} ans).`
+            : `Un Senior doit avoir au moins ${min} ans (âge : ${age} ans).`;
+      }
+    }
 
     if (categorie === "senior") {
       if (!email.trim()) {
@@ -169,7 +189,11 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
       formData.append("nom", nom.trim());
       formData.append("prenom", prenom.trim());
       formData.append("region_ville", regionVille);
+      if (dateNaissance) {
+        formData.append("date_naissance", dateNaissance);
+      }
       formData.append("statut", "admis");
+      formData.append("afficher_sur_site", String(afficherSurSite));
       formData.append("note_interne", "Ajouté manuellement par le comité d'organisation");
 
       if (categorie === "senior") {
@@ -378,7 +402,7 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label className="block text-[11px] font-bold text-gray-700 mb-1">
                   Région de résidence (Obligatoire) *
@@ -433,6 +457,30 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
                   </select>
                 </div>
               )}
+
+              <div>
+                <label className="block text-[11px] font-bold text-gray-700 mb-1">
+                  Date de naissance{" "}
+                  <span className="font-normal text-gray-400">
+                    ({categorie === "junior"
+                      ? `${AGE_LIMITS.junior.min}–${AGE_LIMITS.junior.max} ans`
+                      : `${AGE_LIMITS.senior.min} ans et +`})
+                  </span>
+                </label>
+                <input
+                  type="date"
+                  min="1900-01-01"
+                  max={getTodayIsoDate()}
+                  value={dateNaissance}
+                  onChange={(e) => setDateNaissance(e.target.value)}
+                  className={`w-full px-3 py-2 rounded-xl border bg-white text-xs focus:outline-none ${
+                    errors.dateNaissance ? "border-rose-500 bg-rose-50/20" : "border-gray-300 focus:border-[#f15b29]"
+                  }`}
+                />
+                {errors.dateNaissance && (
+                  <p className="text-rose-600 text-[10px] mt-0.5">{errors.dateNaissance}</p>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -832,6 +880,22 @@ export const AddTalentModal: React.FC<AddTalentModalProps> = ({
               </div>
             </div>
           )}
+
+          {/* Publication sur le site public */}
+          <label className="flex items-start gap-2.5 p-3 rounded-xl border border-gray-200 bg-slate-50 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={afficherSurSite}
+              onChange={(e) => setAfficherSurSite(e.target.checked)}
+              className="w-4 h-4 mt-0.5 rounded text-[#f15b29] focus:ring-[#f15b29] border-gray-300"
+            />
+            <span>
+              <span className="block font-bold text-gray-900 text-xs">Afficher sur le site public</span>
+              <span className="block text-[11px] text-gray-500">
+                Le talent apparaîtra sur la page « Les 1000 Talents ». Modifiable ensuite depuis sa fiche.
+              </span>
+            </span>
+          </label>
 
           {/* Boutons d'Action */}
           <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-3 sticky bottom-0 bg-white py-2">

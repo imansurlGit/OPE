@@ -5,7 +5,15 @@ class TalentService {
   private endpoint = "candidatures/";
 
   /**
-   * Récupère la liste des talents/candidatures avec filtrage optionnel
+   * Talents publiés sur le site (page publique) : accès sans connexion,
+   * le serveur ne renvoie que les talents « afficher_sur_site » et leurs champs publics.
+   */
+  public async getPublicTalents(): Promise<Candidature[]> {
+    return api.get<Candidature[]>(`${this.endpoint}?afficher_sur_site=true`, { requiresAuth: false });
+  }
+
+  /**
+   * Récupère la liste complète des candidatures avec filtrage optionnel (administration, connexion requise)
    */
   public async getTalents(filters?: TalentFilterParams): Promise<Candidature[]> {
     const params = new URLSearchParams();
@@ -24,27 +32,28 @@ class TalentService {
     if (filters?.search && filters.search.trim()) {
       params.append("search", filters.search.trim());
     }
+    if (filters?.afficher_sur_site !== undefined) {
+      params.append("afficher_sur_site", String(filters.afficher_sur_site));
+    }
 
     const queryString = params.toString();
     const url = queryString ? `${this.endpoint}?${queryString}` : this.endpoint;
 
-    return api.get<Candidature[]>(url, { requiresAuth: false });
+    return api.get<Candidature[]>(url);
   }
 
   /**
-   * Récupère un talent/candidat par son ID
+   * Récupère un talent/candidat par son ID (administration)
    */
   public async getTalentById(id: number | string): Promise<Candidature> {
-    return api.get<Candidature>(`${this.endpoint}${id}/`, { requiresAuth: false });
+    return api.get<Candidature>(`${this.endpoint}${id}/`);
   }
 
   /**
-   * Récupère les données publiques d'un badge/carte par sa référence (ex: CNCEIZ-2026-XXXXX)
+   * Récupère la fiche d'un badge/carte par sa référence (ex: CNCEIZ-2026-XXXXX) — administration
    */
   public async getTalentCard(reference: string): Promise<Candidature> {
-    return api.get<Candidature>(`${this.endpoint}card/${encodeURIComponent(reference)}/`, {
-      requiresAuth: false,
-    });
+    return api.get<Candidature>(`${this.endpoint}card/${encodeURIComponent(reference)}/`);
   }
 
   /**
@@ -53,12 +62,8 @@ class TalentService {
   public async createTalent(
     data: FormData | Record<string, any>
   ): Promise<Candidature> {
-    return api.post<Candidature>(this.endpoint, data, {
-      requiresAuth: false,
-      headers: {
-        "X-Admin-Action": "true",
-      },
-    });
+    // Connexion admin requise : le serveur assouplit alors les règles (consentements, statut, publication)
+    return api.post<Candidature>(this.endpoint, data);
   }
 
   /**
@@ -68,16 +73,14 @@ class TalentService {
     id: number | string,
     data: Partial<Candidature>
   ): Promise<Candidature> {
-    return api.patch<Candidature>(`${this.endpoint}${id}/`, data, {
-      requiresAuth: false,
-    });
+    return api.patch<Candidature>(`${this.endpoint}${id}/`, data);
   }
 
   /**
    * Supprime un talent/candidat
    */
   public async deleteTalent(id: number | string): Promise<void> {
-    return api.delete<void>(`${this.endpoint}${id}/`, { requiresAuth: false });
+    return api.delete<void>(`${this.endpoint}${id}/`);
   }
 
   /**
