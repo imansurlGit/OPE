@@ -365,7 +365,6 @@ export const SENIOR_DOMAINES_BY_MAISON: Record<string, { value: string; label: s
     { value: "agrobusiness", label: "Agrobusiness" },
     { value: "elevage", label: "Élevage" },
     { value: "artisanat", label: "Artisanat" },
-    { value: "marketing", label: "Marketing" },
     { value: "autre", label: "Autre" },
   ],
   mouvement_citoyen: [
