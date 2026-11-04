@@ -1,6 +1,9 @@
+import copy
+
 from django.utils import timezone
 from rest_framework import serializers
 from . import models
+from .validators import validate_photo_identite
 
 # Tranche d'âge autorisée par catégorie (âge révolu à la date de candidature), bornes incluses
 TRANCHES_AGE = {
@@ -16,9 +19,19 @@ def calculer_age(date_naissance, reference=None):
     )
 
 
+def normaliser_lien(lien):
+    """Le formulaire accepte « monsite.com » : complète ce que URLField exige."""
+    lien = str(lien).strip().replace(" ", "%20")
+    if not lien or lien.lower().startswith(("http://", "https://")):
+        return lien
+    return f"https://{lien}"
+
+
 class CandidatureSerializer(serializers.ModelSerializer):
     domaine_steam = serializers.CharField(max_length=150, required=False, allow_blank=True)
     domaine_steam_autre = serializers.CharField(max_length=150, required=False, allow_blank=True)
+    # FileField et non ImageField : le formulaire accepte toute image, y compris le HEIC que Pillow ne lit pas
+    photo_identite = serializers.FileField(required=False, allow_null=True, validators=[validate_photo_identite])
 
     class Meta:
         model = models.Candidature
@@ -30,10 +43,10 @@ class CandidatureSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
         extra_kwargs = {
-            "mascotte_dessin": {"required": False, "allow_null": True},
-            "piece_identite": {"required": False, "allow_null": True},
-            "photo_identite": {"required": False, "allow_null": True},
-            "preuves_realisation": {"required": False, "allow_null": True},
+            # max_length à None : un nom de fichier long est raccourci à l'enregistrement, pas refusé
+            "mascotte_dessin": {"required": False, "allow_null": True, "max_length": None},
+            "piece_identite": {"required": False, "allow_null": True, "max_length": None},
+            "preuves_realisation": {"required": False, "allow_null": True, "max_length": None},
             "email": {"required": False, "allow_blank": True},
             "telephone": {"required": False, "allow_blank": True},
             "region_ville": {"required": False, "allow_blank": True},
@@ -49,10 +62,13 @@ class CandidatureSerializer(serializers.ModelSerializer):
                 field.required = False
 
     def to_internal_value(self, data):
-        data = data.copy() if hasattr(data, "copy") else dict(data)
+        # Copie superficielle : QueryDict.copy() fait un deepcopy, qui plante sur les fichiers > 2,5 Mo
+        data = copy.copy(data)
         data.pop("age", None)
         if data.get("date_naissance") == "":
             data["date_naissance"] = None
+        if data.get("lien_portfolio"):
+            data["lien_portfolio"] = normaliser_lien(data["lien_portfolio"])
         return super().to_internal_value(data)
 
     def validate_date_naissance(self, value):
@@ -143,7 +159,8 @@ class CandidatureSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError({"telephone_tuteur": "Le téléphone du parent/tuteur ou du candidat est obligatoire."})
 
             domaine = data.get("domaine_steam", getattr(instance, "domaine_steam", ""))
-            if not domaine or not str(domaine).strip():
+            # « Ajouter un talent » (admin) n'envoie pas de domaine pour un Junior
+            if (not domaine or not str(domaine).strip()) and not is_admin:
                 raise serializers.ValidationError({"domaine_steam": "La House visée est obligatoire."})
             if domaine == "autre":
                 autre = data.get("domaine_steam_autre", getattr(instance, "domaine_steam_autre", ""))
@@ -355,6 +372,7 @@ class CandidatMascotteSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ["id", "reference", "created_at", "updated_at"]
         extra_kwargs = {
+            "mascotte_dessin": {"max_length": None},
             "statut": {"required": False},
             "etablissement": {"required": False, "allow_blank": True},
             "region_ville": {"required": False, "allow_blank": True},

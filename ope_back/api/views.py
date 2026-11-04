@@ -1,3 +1,5 @@
+import copy
+
 from django.db.models import Q, Count
 from django.db.models.functions import TruncDate, TruncWeek, TruncMonth
 from django.utils import timezone
@@ -68,16 +70,19 @@ class CandidatureViewSet(viewsets.ModelViewSet):
         return qs
 
     def create(self, request, *args, **kwargs):
-        data = request.data.copy() if hasattr(request.data, 'copy') else dict(request.data)
+        # Copie superficielle : QueryDict.copy() fait un deepcopy, qui plante sur les fichiers > 2,5 Mo
+        data = copy.copy(request.data)
 
         is_admin_action = self.is_admin_request()
 
-        # Interdire au client public ordinaire de forcer statut, score, note_interne ou la publication
+        # Interdire au client public ordinaire de forcer statut, score ou la publication
         if not is_admin_action:
             data.pop("statut", None)
             data.pop("score_evaluation", None)
-            data.pop("note_interne", None)
             data.pop("afficher_sur_site", None)
+            # Le formulaire Junior range ses réponses complémentaires dans note_interne
+            if data.get("categorie") != "junior":
+                data.pop("note_interne", None)
         else:
             # Pour l'administration, valider par défaut les consentements s'ils ne sont pas spécifiés
             if "disponible_camps" not in data:

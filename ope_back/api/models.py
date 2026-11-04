@@ -4,6 +4,7 @@ from .validators import (
     validate_file_size,
     validate_image_extension,
     validate_doc_or_image_extension,
+    validate_preuve_realisation,
     validate_mascotte_dessin,
     validate_telephone_tuteur,
 )
@@ -28,13 +29,6 @@ class Candidature(models.Model):
     STATUT_CHOICES = [
         ("soumis", "Dossier soumis"),
         ("admis", "Admis au Camp National"),
-    ]
-
-    CLASSE_CHOICES = [
-        ("6e", "6e"),
-        ("5e", "5e"),
-        ("4e", "4e"),
-        ("3e", "3e"),
     ]
 
     DOMAINE_STEAM_CHOICES = [
@@ -133,7 +127,8 @@ class Candidature(models.Model):
     )
 
     # --- Champs Junior (Concours Mascotte) ---
-    classe = models.CharField(max_length=10, choices=CLASSE_CHOICES, blank=True, verbose_name="Classe")
+    # Saisie libre dans le formulaire (4ème, Seconde, Terminale D...)
+    classe = models.CharField(max_length=100, blank=True, verbose_name="Classe")
     etablissement = models.CharField(max_length=200, blank=True, verbose_name="Nom du collège / établissement")
     telephone_tuteur = models.CharField(max_length=30, blank=True, verbose_name="Téléphone parent / tuteur")
     nom_tuteur = models.CharField(max_length=150, blank=True, verbose_name="Nom du parent / tuteur")
@@ -204,7 +199,7 @@ class Candidature(models.Model):
         upload_to="candidatures/preuves/",
         blank=True,
         null=True,
-        validators=[validate_doc_or_image_extension],
+        validators=[validate_preuve_realisation],
         verbose_name="Preuves de réalisation",
     )
     lien_portfolio = models.URLField(

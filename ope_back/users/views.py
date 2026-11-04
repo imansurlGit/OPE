@@ -1,3 +1,5 @@
+import copy
+
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -63,7 +65,7 @@ class CustomRefreshView(TokenRefreshView):
 
     def post(self, request, *args, **kwargs):
         # Si le refresh_token n'est pas envoyé dans le body JSON, le lire depuis le cookie HTTP
-        req_data = request.data.copy() if hasattr(request.data, 'copy') else dict(request.data)
+        req_data = copy.copy(request.data)
         if not req_data.get('refresh') and 'refresh_token' in request.COOKIES:
             req_data['refresh'] = request.COOKIES['refresh_token']
 
